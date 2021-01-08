@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Using KSQL, Apache Kafka, a Raspberry Pi and a software defined radio to find the plane that wakes Snowy the cat</title>
+		<link rel="alternate" type="application/rss+xml" title="RSS" href="https://saubury.github.io/index.xml">
+		<link rel="canonical" href="https://saubury.github.io/201805_usingksqlapachekafkafindtheplanethatwakessnowy/201805_usingksqlapachekafkafindtheplanethatwakessnowy/">
+		
+		<link rel="shortcut icon" type="image/png" href="https://saubury.github.io/apple-touch-icon-precomposed.png">
+		
+		
+		<meta name="generator" content="Hugo 0.68.3" />
+
+		
+		<meta property="og:title" content="Using KSQL, Apache Kafka, a Raspberry Pi and a software defined radio to find the plane that wakes Snowy the cat" />
+		<meta property="og:type" content="article" />
+		<meta property="og:image" content="https://saubury.github.io/201805_UsingKsqlApacheKafkaFindThePlaneThatWakesSnowy/00000000.png" />
+		<meta property="og:description" content="" />
+		<meta property="og:url" content="https://saubury.github.io/201805_usingksqlapachekafkafindtheplanethatwakessnowy/201805_usingksqlapachekafkafindtheplanethatwakessnowy/" />
+		<meta property="og:site_name" content="Using KSQL, Apache Kafka, a Raspberry Pi and a software defined radio to find the plane that wakes Snowy the cat" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:site" content="@" />
+
+
+		
+		<link rel="stylesheet" href="https://saubury.github.io/css/tachyons.min.css" />
+		<link rel="stylesheet" href="https://saubury.github.io/css/story.css" />
+		<link rel="stylesheet" href="https://saubury.github.io/css/descartes.css" />
+		
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+		<link href="https://fonts.googleapis.com/css?family=Quattrocento+Sans:400,400i,700,700i|Quattrocento:400,700|Spectral:400,400i,700,700i&amp;subset=latin-ext" rel="stylesheet">
+		
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		
+		<script src="https://saubury.github.io/js/story.js"></script>
+
+	</head>
+	<body class="ma0 bg-white section-201805_UsingKsqlApacheKafkaFindThePlaneThatWakesSnowy page-kind-page is-page-true ">
+		
+		<header class="cover bg-top" style="background-image: url('https://saubury.github.io/201805_UsingKsqlApacheKafkaFindThePlaneThatWakesSnowy/00000000.png'); background-position: center;">
+			<div class="bg-black-30 bb bt">
+
+				<nav class="hide-print sans-serif  border-box pa3 ph5-l">
+					<a href="https://saubury.github.io/" title="Home">
+						<img src="https://saubury.github.io/img/logo.jpg" class="w2 h2 br-100" alt="Simon Aubury Site" />
+					</a>
+					<div class="fr h2 pv2 tr">
+						<a class="link f5 ml2 dim near-white" href="https://twitter.com/simonaubury/"><i class="fab fa-twitter-square"></i></a>
+						<a class="link f5 ml2 dim near-white" href="https://github.com/saubury/"><i class="fab fa-github-square"></i></a>
+						<a class="link f5 ml2 dim near-white" href="https://www.linkedin.com/in/simonaubury/"><i class="fab fa-linkedin"></i></a>
+						<a class="link f5 ml2 dim near-white fas fa-rss-square" href="https://saubury.github.io/index.xml" title="RSS Feed"></a>
+						<a class="link f5 ml2 dim near-white fas fa-search" href="https://saubury.github.io/search/" role="search" title="Search"></a>
+					</div>
+				</nav>
+
+				<div id="hdr" class="tc-l pv4-ns pv5-l pv2 ph3 ph4-ns">
+					<h1 class="near-white mt1-ns f2 fw3 mb0 mt0 lh-title">Using KSQL, Apache Kafka, a Raspberry Pi and a software defined radio to find the plane that wakes Snowy the cat</h1>
+					<h2 class="near-white mt3-l mb4-l fw1 f6 f3-l measure-wide-l center lh-copy mt2 mb3">
+						
+						
+							
+								Published
+								<time datetime="2018-05-20T17:53:07&#43;11:00">May 20, 2018</time>
+								<span class="display-print">by </span>
+								
+								<span class="display-print">at https://saubury.github.io/201805_usingksqlapachekafkafindtheplanethatwakessnowy/201805_usingksqlapachekafkafindtheplanethatwakessnowy/</span>
+							
+						
+					</h2>
+				</div>
+
+				
+				
+				
+				
+
+			</div>
+		</header>
+		
+		<main role="main">
+		
+<article class="center bg-white br-3 pv1 ph4 lh-copy f5 nested-links mw7">
+	<h1 id="using-ksql-apache-kafka-a-raspberry-pi-and-a-software-defined-radio-to-find-the-plane-that-wakes-snowy-the-cat">Using KSQL, Apache Kafka, a Raspberry Pi and a software defined radio to find the plane that wakes Snowy the cat</h1>
+<p>Using open-source streaming solutions to map the correlation between aircraft traffic and cat behaviour</p>
+<p>Aircraft determine their position using GPS; and periodically transmit that position along with identity string, altitude, speed etc as ADS-B signals.</p>
+<p>Cats behave erratically, but generally display their displeasure by jumping on your face. The post describes how we can use open source streaming solutions (Apache Kafka), KSQL (streaming SQL engine) and a Raspberry Pi to process aircraft movements in real-time to determine which plane is upsetting my cat.</p>
+<h2 id="overview">Overview</h2>
+<p><img src="/201805_UsingKsqlApacheKafkaFindThePlaneThatWakesSnowy/00000000.png" alt="Planes to graphs using Kafka & KSQL"><em>Planes to graphs using Kafka &amp; KSQL</em></p>
+<p>I built a receiver to listen to aircraft transponder messages (ADS-B signals) as the planes fly overhead. These aircraft transmissions are not coordinated — the messages appear as a jumble of interwoven transmissions. Specifically I wanted to capture the <em>location</em> and <em>callsign</em> transmissions.</p>
+<p>But unravelling these mixed streams is complex — it’s like trying to understand a conversation when everyone’s talking at the same time at a party. I decided to use a combination of Kafka and KSQL to find the plane that freaks out my cat.</p>
+<h2 id="ads-b-capture-using-a-raspberry-pi">ADS-B capture using a Raspberry Pi</h2>
+<p>To capture the aircraft transmissions I used a Raspberry Pi and a RTL2832U — a USB dongle originally sold to watch digital TV on a computer. On the Pi I installed <a href="http://www.rtl-sdr.com/adsb-aircraft-radar-with-rtl-sdr/">*Dump1090 </a>*— a program which accesses ADS-B data via the RTL2832U and a small antennae</p>
+<p><img src="/201805_UsingKsqlApacheKafkaFindThePlaneThatWakesSnowy/00000001.jpeg" alt="Raspberry Pi and a RTL2832U as a software defined radio (SDR)"><em>Raspberry Pi and a RTL2832U as a software defined radio (SDR)</em></p>
+<h2 id="ads-b-signals-to-kafka-topics">ADS-B signals to Kafka Topics</h2>
+<p>Now I’ve got a stream of raw ADS-B signals we need to have a look at the traffic. Kafka is a pretty awesome stream processing platform. I started by <a href="https://github.com/saubury/plane-kafka/blob/master/raspberry-pi/plane-kafka.py">separating</a> the incoming ADS-B signals into two kafka topics, location-topic (aircraft code with height and location) and callsign-topic (aircraft code and callsign).</p>
+<p><img src="/201805_UsingKsqlApacheKafkaFindThePlaneThatWakesSnowy/00000002.png" alt=""></p>
+<p>I wanted to understand what the planes were and what routes they were flying. Luckily I found a <a href="https://openflights.org/data.html">database</a> of airframes (eg, ICAO code ‘7C6DB8’ is a Boeing 737). This <a href="https://github.com/saubury/plane-kafka/blob/master/scripts/02_do_load">mapping </a>I loaded into the <em>icao-to-aircraft</em> topic.</p>
+<p><a href="https://www.confluent.io/product/ksql/">KSQL </a>provides a “SQL engine” that enables real-time data processing against Apache Kafka topics. That means we can query our aircraft topic like this</p>
+<pre><code>create stream icao_to_aircraft_stream 
+  with (KAFKA_TOPIC='icao-to-aircraft', VALUE_FORMAT='AVRO');
+
+select manufacturer, aircraft, registration 
+from icao_to_aircraft_stream 
+where icao = '7C6DB8';
+
+Boeing | B738 | VH-VYI
+</code></pre>
+<p>Similarly, into the <em>callsign-details</em> topic I loaded callsign details (eg, ‘QFA563’ is a Qantas flight from Brisbane to Sydney).</p>
+<pre><code>create stream callsign_details_stream 
+  with (KAFKA_TOPIC='callsign-details', VALUE_FORMAT='AVRO');
+
+select operatorname, fromairport, toairport 
+from callsign_details_stream 
+where callsign = 'QFA563';
+
+Qantas | Brisbane | Sydney
+</code></pre>
+<p>Let’s have a peek at the “location-topic” stream. You can see a steady stream of incoming messages reporting location updates from passing aircraft.</p>
+<pre><code>kafka-avro-console-consumer --bootstrap-server localhost:9092 --property --topic location-topic
+
+{&quot;ico&quot;:&quot;7C6DB8&quot;,&quot;height&quot;:&quot;6250&quot;,&quot;location&quot;:&quot;-33.807724,151.091495&quot;}
+</code></pre>
+<p>The equivalent KSQL syntax is</p>
+<pre><code>select timestamptostring(rowtime, 'yyyy-MM-dd HH:mm:ss')
+, ico
+, height
+, location 
+from location_stream 
+where ico = '7C6DB8';
+
+2018-05-19 07:13:33 | 7C6DB8 | 6250.0 | -33.807724,151.091495
+</code></pre>
+<h2 id="ksql--crossing-the-streams-">KSQL — Crossing the streams …</h2>
+<p>The real power of KSQL comes from combining the incoming stream of location data against the static details topics (see <a href="https://github.com/saubury/plane-kafka/blob/master/scripts/03_ksql.sql">03_ksql.sq)</a>. That is, adding useful details to the raw data stream. This is very similar to a “left join” in database language. In fact, the syntax for KSQL is indeed a left join…</p>
+<pre><code>create stream location_and_details_stream as 
+select l.ico
+, l.height
+, l.location
+, t.aircraft
+from location_stream l 
+left join icao_to_aircraft t on l.ico = t.icao;
+</code></pre>
+<p>And a KSQL query the stream like this</p>
+<pre><code>select timestamptostring(rowtime, 'yy-MM-dd HH:mm:ss') 
+, manufacturer 
+, aircraft 
+, registration 
+, height 
+, location 
+from location_and_details_stream;
+
+18-05-27 09:53:28 | Boeing | B738 | VH-YIA | 7225 | -33.821,151.052
+18-05-27 09:53:31 | Boeing | B738 | VH-YIA | 7375 | -33.819,151.049
+18-05-27 09:53:32 | Boeing | B738 | VH-YIA | 7425 | -33.818,151.048
+</code></pre>
+<p>Equally, we can combine the incoming callsign identity stream against the static callsign_details topic</p>
+<pre><code>create stream ident_callsign_stream as 
+select i.ico
+, c.operatorname
+, c.callsign
+, c.fromairport
+, c.toairport 
+from ident_stream i 
+left join callsign_details c on i.indentification = c.callsign;
+
+select timestamptostring(rowtime, 'yy-MM-dd HH:mm:ss') \
+, operatorname \
+, callsign \
+, fromairport \
+, toairport \
+from ident_callsign_stream ;
+
+18-05-27 13:33:19 | Qantas          | QFA926 | Sydney  | Cairns
+18-05-27 13:44:11 | China Eastern   | CES777 | Kunming | Sydney
+18-05-27 14:00:54 | Air New Zealand | ANZ110 | Sydney | Auckland
+</code></pre>
+<p>Now we have a constantly updating topic with flight details — we can make some pretty dashboards. I used <a href="https://www.confluent.io/product/connectors/">Kafka Connect</a> to pump Kafka topics into <a href="https://www.elastic.co/products/kibana">Elastic Kibana</a> (<a href="https://github.com/saubury/plane-kafka/tree/master/scripts">full scripts</a>).</p>
+<h2 id="kibana-dashboard">Kibana Dashboard</h2>
+<p>Here’s a sample of dashboards displaying aircraft location on a map. In addition a bar-chart of manufactures, an altitude line plot and a destination word-cloud.</p>
+<p><img src="/201805_UsingKsqlApacheKafkaFindThePlaneThatWakesSnowy/00000003.gif" alt="Kibana Display"><em>Kibana Display</em></p>
+<h2 id="findings--conclusion">Findings &amp; Conclusion</h2>
+<p>As best as I can remember, today my cat woke me at a little past 6am. I can use KSQL to find a low flying aircraft (below 3500ft) around this time …</p>
+<pre><code>select timestamptostring(rowtime, 'yyyy-MM-dd HH:mm:ss')
+, manufacturer 
+, aircraft 
+, registration 
+, height 
+from location_and_details_stream 
+where height &lt; 3500
+and rowtime &gt; stringtotimestamp('18-05-27 06:10', 'yy-MM-dd HH:mm') and rowtime &lt; stringtotimestamp('18-05-27 06:20', 'yy-MM-dd HH:mm');
+
+2018-05-27 06:15:39 | Airbus | A388 | A6-EOD | 2100.0
+2018-05-27 06:15:58 | Airbus | A388 | A6-EOD | 3050.0
+</code></pre>
+<p>Terrific, I can locate a craft over my house at 6:15 am. It’s a A380 (which is a huge plane) on a flight to Dubai that’s waking my cat. I can confirm this by reviewing the same time period in Kibana which shows a flight path directly over my house.</p>
+<p><img src="/201805_UsingKsqlApacheKafkaFindThePlaneThatWakesSnowy/00000004.png" alt="Kibana map between 6:10 and 6:20"><em>Kibana map between 6:10 and 6:20</em></p>
+<h2 id="ready-to-try-it">Ready to try it?</h2>
+<p>Got a similar pet problem; or just curious how Kafka and KSQL work together? You can find a combined docker setup, helper images, KSQL and Elastic setup at:-</p>
+<p><a href="https://github.com/saubury/plane-kafka">https://github.com/saubury/plane-kafka</a></p>
+
+</article>
+
+		</main>
+		
+				<div class="hide-print sans-serif f6 f5-l mt5 ph3 pb6 center nested-copy-line-height lh-copy nested-links mw-100 measure-wide">
+		<div class="about-the-author">
+		
+			
+			
+				
+					
+				
+			
+		
+		</div>
+		
+	</div>
+
+		
+		
+		
+		<footer class="hide-print sans-serif f6 fw1 bg-black near-white bottom-0 w-100 pa3" role="contentinfo">
+			<p class="w-50 fr tr">
+			<a class="no-underline near-white" href="https://github.com/xaprb/story"><img class="dib" title="Made with Hugo and Story" alt="Story logo" src="https://saubury.github.io/img/story-logo-white.svg" style="width: 1.5rem; height: 1.5rem" /></a>
+			</p>
+			<p class="w-50 near-white">
+				&copy; 2021 
+			</p>
+		</footer>
+		
+	
+	
+	</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Home Power Monitoring using a Raspberry Pi</title>
+		<link rel="alternate" type="application/rss+xml" title="RSS" href="https://saubury.github.io/index.xml">
+		<link rel="canonical" href="https://saubury.github.io/201809_homepowermonitoringusingaraspberrypi/201809_homepowermonitoringusingaraspberrypi/">
+		
+		<link rel="shortcut icon" type="image/png" href="https://saubury.github.io/apple-touch-icon-precomposed.png">
+		
+		
+		<meta name="generator" content="Hugo 0.68.3" />
+
+		
+		<meta property="og:title" content="Home Power Monitoring using a Raspberry Pi" />
+		<meta property="og:type" content="article" />
+		<meta property="og:image" content="https://saubury.github.io/201809_HomePowerMonitoringUsingARaspberryPi/00000000.png" />
+		<meta property="og:description" content="" />
+		<meta property="og:url" content="https://saubury.github.io/201809_homepowermonitoringusingaraspberrypi/201809_homepowermonitoringusingaraspberrypi/" />
+		<meta property="og:site_name" content="Home Power Monitoring using a Raspberry Pi" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:site" content="@" />
+
+
+		
+		<link rel="stylesheet" href="https://saubury.github.io/css/tachyons.min.css" />
+		<link rel="stylesheet" href="https://saubury.github.io/css/story.css" />
+		<link rel="stylesheet" href="https://saubury.github.io/css/descartes.css" />
+		
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+		<link href="https://fonts.googleapis.com/css?family=Quattrocento+Sans:400,400i,700,700i|Quattrocento:400,700|Spectral:400,400i,700,700i&amp;subset=latin-ext" rel="stylesheet">
+		
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		
+		<script src="https://saubury.github.io/js/story.js"></script>
+
+	</head>
+	<body class="ma0 bg-white section-201809_HomePowerMonitoringUsingARaspberryPi page-kind-page is-page-true ">
+		
+		<header class="cover bg-top" style="background-image: url('https://saubury.github.io/201809_HomePowerMonitoringUsingARaspberryPi/00000000.png'); background-position: center;">
+			<div class="bg-black-30 bb bt">
+
+				<nav class="hide-print sans-serif  border-box pa3 ph5-l">
+					<a href="https://saubury.github.io/" title="Home">
+						<img src="https://saubury.github.io/img/logo.jpg" class="w2 h2 br-100" alt="Simon Aubury Site" />
+					</a>
+					<div class="fr h2 pv2 tr">
+						<a class="link f5 ml2 dim near-white" href="https://twitter.com/simonaubury/"><i class="fab fa-twitter-square"></i></a>
+						<a class="link f5 ml2 dim near-white" href="https://github.com/saubury/"><i class="fab fa-github-square"></i></a>
+						<a class="link f5 ml2 dim near-white" href="https://www.linkedin.com/in/simonaubury/"><i class="fab fa-linkedin"></i></a>
+						<a class="link f5 ml2 dim near-white fas fa-rss-square" href="https://saubury.github.io/index.xml" title="RSS Feed"></a>
+						<a class="link f5 ml2 dim near-white fas fa-search" href="https://saubury.github.io/search/" role="search" title="Search"></a>
+					</div>
+				</nav>
+
+				<div id="hdr" class="tc-l pv4-ns pv5-l pv2 ph3 ph4-ns">
+					<h1 class="near-white mt1-ns f2 fw3 mb0 mt0 lh-title">Home Power Monitoring using a Raspberry Pi</h1>
+					<h2 class="near-white mt3-l mb4-l fw1 f6 f3-l measure-wide-l center lh-copy mt2 mb3">
+						
+						
+							
+								Published
+								<time datetime="2018-09-01T12:00:00&#43;11:00">Sep 1, 2018</time>
+								<span class="display-print">by </span>
+								
+								<span class="display-print">at https://saubury.github.io/201809_homepowermonitoringusingaraspberrypi/201809_homepowermonitoringusingaraspberrypi/</span>
+							
+						
+					</h2>
+				</div>
+
+				
+				
+				
+				
+
+			</div>
+		</header>
+		
+		<main role="main">
+		
+<article class="center bg-white br-3 pv1 ph4 lh-copy f5 nested-links mw7">
+	<h1 id="home-power-monitoring-using-a-raspberry-pi">Home Power Monitoring using a Raspberry Pi.</h1>
+<p>Home electricity usage monitoring using a Raspberry Pi. Plus some shaky maths to find out when we left the heater on.</p>
+<p>As we approached the colder months I wanted a way of monitoring our household power consumption. Our electric heaters are fairly ancient, and I had no accurate way of monitoring their cost (either financially or environmentally).</p>
+<p><img src="/201809_HomePowerMonitoringUsingARaspberryPi/00000000.png" alt="I want to know this number!"><em>I want to know this number!</em></p>
+<p>We don’t have a “smart” power meter, and our wall heaters are certainly not clever either. However our power meter has a tiny red light-emitting diode (LED) that blinks each time we consume 1Wh of power.</p>
+<p><img src="/201809_HomePowerMonitoringUsingARaspberryPi/00000001.png" alt="Our power meter has a light — that blinks!"><em>Our power meter has a light — that blinks!</em></p>
+<p>The LED pulse corresponds to a defined amount of energy passing through the meter. That is, each pulse equals one 1Wh of usage, and 1000 pulses means 1 kWh of power has been used. I *could *sit outside and count the pulses … or work out a way to automatically process the rate LED flashes.</p>
+<p>For the very modest price of 50 cents I purchased a couple of Light Dependent Resistors (LDR’s). A LDR is a type of resistor whose resistance varies according to light. Resistance will increase with an increase in light intensity (and the reverse is true too). So, a bit of Google magic leads me to this this helpful site <a href="https://iotguider.in/raspberrypi/interfacing-light-dependent-resistor-ldr-in-raspberry-pi/">Interfacing Light Dependent Resistor LDR in Raspberry Pi</a>.</p>
+<p><img src="/201809_HomePowerMonitoringUsingARaspberryPi/00000002.png" alt="Light Dependent Resistors and 1uF Capacitor"><em>Light Dependent Resistors and 1uF Capacitor</em></p>
+<p>By constructing two of these circuits allowed me to monitor both LED’s on the power-board. The Raspberry Pi is a tiny computer that is perfect for the tedious task of methodically capturing “blinks” and writing the hourly total to a data store (or streaming to an MQTT broker).</p>
+<p>A powerful feature of the Raspberry Pi is the row of GPIO (general-purpose input/output) pins along the top edge of the board. This is an interface between the physical world of lights and wires and the software world of zero’s and one’s</p>
+<p><img src="/201809_HomePowerMonitoringUsingARaspberryPi/00000003.png" alt="LDR attached to a Raspberry Pi"><em>LDR attached to a Raspberry Pi</em></p>
+<p>Hardware — done! Let’s move onto the software.</p>
+<h3 id="let-them-eat-code">Let them eat code</h3>
+<p>TL;DR — Python is awesome for event driven coding — allowing code to respond to electrical pulses on the GPIO pins on the Raspberry Pi. A function is written to handle the a light pulse (ie., increase a counter) and this function is attached to an event handler for the appropriate GPIO pin. A quick code segment below (<a href="https://github.com/saubury/power-pi">full repository</a>)</p>
+<!-- raw HTML omitted -->
+<h3 id="the-pretty-graphs">The Pretty Graphs</h3>
+<p>Running this code for 3 months allowed me to start understanding the rate of power usage each hour. The graph below is daily power consumption trends using a month of data. The horizontal axis is 24 hours, with midnight on the left to 11pm on the right. Minimum consumption is shown in blue, average consumption in orange and maximum consumption in white.</p>
+<p>![Hourly power consumption trends using 1 month of data — midnight (left) to 11pm (right). Minimum consumption shown in blue, average consumption in orange and maximum consumption in white.](/201809_HomePowerMonitoringUsingARaspberryPi/00000004.*</p>
+<p>With an hourly breakdown of the power consumption for each day of winter, I began noticing some themes.</p>
+<ul>
+<li>
+<p>Nothing happens before 5am</p>
+</li>
+<li>
+<p>Average evening load is around twice morning consumption</p>
+</li>
+<li>
+<p>The maximum power consumption noted (3,745 kWh on 16th at 8pm) correlated to accidentally leaving the heater on</p>
+</li>
+<li>
+<p>The consistently low consumption (blue line on the 11th) correlated to a mini holiday</p>
+</li>
+</ul>
+<h3 id="next-steps">Next steps</h3>
+<p>Analysing power consumption got me thinking about behaviour trends and providing more immediate feedback to the household.</p>
+<p>My next project will take this data in real-time a provide some actionable feedback … like tell me when we do something silly or forgetful. Perhaps a nice alarm when we leave the heater on accidentally!</p>
+<p>Interested in doing something similar — this project hosted at <a href="https://github.com/saubury/power-pi">https://github.com/saubury/power-pi</a></p>
+
+</article>
+
+		</main>
+		
+				<div class="hide-print sans-serif f6 f5-l mt5 ph3 pb6 center nested-copy-line-height lh-copy nested-links mw-100 measure-wide">
+		<div class="about-the-author">
+		
+			
+			
+				
+					
+				
+			
+		
+		</div>
+		
+	</div>
+
+		
+		
+		
+		<footer class="hide-print sans-serif f6 fw1 bg-black near-white bottom-0 w-100 pa3" role="contentinfo">
+			<p class="w-50 fr tr">
+			<a class="no-underline near-white" href="https://github.com/xaprb/story"><img class="dib" title="Made with Hugo and Story" alt="Story logo" src="https://saubury.github.io/img/story-logo-white.svg" style="width: 1.5rem; height: 1.5rem" /></a>
+			</p>
+			<p class="w-50 near-white">
+				&copy; 2021 
+			</p>
+		</footer>
+		
+	
+	
+	</body>
+</html>

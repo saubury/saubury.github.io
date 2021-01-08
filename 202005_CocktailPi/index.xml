@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>202005_CocktailPis on Simon Aubury Site</title>
+    <link>https://saubury.github.io/202005_cocktailpi/</link>
+    <description>Recent content in 202005_CocktailPis on Simon Aubury Site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 18 May 2020 12:00:00 +1100</lastBuildDate>
+    
+	<atom:link href="https://saubury.github.io/202005_cocktailpi/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>🍹 Cocktail Pi</title>
+      <link>https://saubury.github.io/202005_cocktailpi/202005_cocktailpi/</link>
+      <pubDate>Mon, 18 May 2020 12:00:00 +1100</pubDate>
+      
+      <guid>https://saubury.github.io/202005_cocktailpi/202005_cocktailpi/</guid>
+      <description>🍹 Cocktail Pi Cocktails based on your mood created by a Raspberry Pi bartender. Drinks are selected based on your emotion and multilingual voice prompts let you know when your drink is available.
+How to build a fully automated home build cocktail maker. Code available at **https://github.com/saubury/cocktail-pi**🍸
+Pumps I used 4 peristaltic pumps to provide a “food safe” way to pump the liquids from the drink bottles. These pumps provide a steady rate of flow of liquids when powered.</description>
+    </item>
+    
+  </channel>
+</rss>

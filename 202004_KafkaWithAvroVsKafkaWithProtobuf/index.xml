@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>202004_KafkaWithAvroVsKafkaWithProtobufs on Simon Aubury Site</title>
+    <link>https://saubury.github.io/202004_kafkawithavrovskafkawithprotobuf/</link>
+    <description>Recent content in 202004_KafkaWithAvroVsKafkaWithProtobufs on Simon Aubury Site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 02 May 2020 12:00:00 +1100</lastBuildDate>
+    
+	<atom:link href="https://saubury.github.io/202004_kafkawithavrovskafkawithprotobuf/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Kafka with AVRO vs., Kafka with Protobuf vs., Kafka with JSON Schema</title>
+      <link>https://saubury.github.io/202004_kafkawithavrovskafkawithprotobuf/202004_kafkawithavrovskafkawithprotobuf/</link>
+      <pubDate>Sat, 02 May 2020 12:00:00 +1100</pubDate>
+      
+      <guid>https://saubury.github.io/202004_kafkawithavrovskafkawithprotobuf/202004_kafkawithavrovskafkawithprotobuf/</guid>
+      <description>Kafka with AVRO vs., Kafka with Protobuf vs., Kafka with JSON Schema Kafka serialisation schemes — playing with AVRO, Protobuf, JSON Schema in Confluent Streaming Platform. The code for these examples available at https://github.com/saubury/kafka-serialization
+Apache Avro was has been the default Kafka serialisation mechanism for a long time. Confluent just updated their Kafka streaming platform with additional support for serialising data with Protocol buffers (or protobuf) and JSON Schema serialisation.</description>
+    </item>
+    
+  </channel>
+</rss>

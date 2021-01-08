@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>201809_HomePowerMonitoringUsingARaspberryPis on Simon Aubury Site</title>
+    <link>https://saubury.github.io/201809_homepowermonitoringusingaraspberrypi/</link>
+    <description>Recent content in 201809_HomePowerMonitoringUsingARaspberryPis on Simon Aubury Site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 01 Sep 2018 12:00:00 +1100</lastBuildDate>
+    
+	<atom:link href="https://saubury.github.io/201809_homepowermonitoringusingaraspberrypi/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Home Power Monitoring using a Raspberry Pi</title>
+      <link>https://saubury.github.io/201809_homepowermonitoringusingaraspberrypi/201809_homepowermonitoringusingaraspberrypi/</link>
+      <pubDate>Sat, 01 Sep 2018 12:00:00 +1100</pubDate>
+      
+      <guid>https://saubury.github.io/201809_homepowermonitoringusingaraspberrypi/201809_homepowermonitoringusingaraspberrypi/</guid>
+      <description>Home Power Monitoring using a Raspberry Pi. Home electricity usage monitoring using a Raspberry Pi. Plus some shaky maths to find out when we left the heater on.
+As we approached the colder months I wanted a way of monitoring our household power consumption. Our electric heaters are fairly ancient, and I had no accurate way of monitoring their cost (either financially or environmentally).
+I want to know this number!</description>
+    </item>
+    
+  </channel>
+</rss>
