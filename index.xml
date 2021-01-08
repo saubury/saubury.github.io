@@ -1,153 +1,142 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Simon Aubury Site</title>
-    <link>https://saubury.github.io/</link>
-    <description>Recent content on Simon Aubury Site</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Mon, 21 Sep 2020 12:00:00 +1100</lastBuildDate>
-    
-	<atom:link href="https://saubury.github.io/index.xml" rel="self" type="application/rss+xml" />
-    
-    
-    <item>
-      <title>Pi Peripheral</title>
-      <link>https://saubury.github.io/202009_piperipheral/202009_piperipheral/</link>
-      <pubDate>Mon, 21 Sep 2020 12:00:00 +1100</pubDate>
-      
-      <guid>https://saubury.github.io/202009_piperipheral/202009_piperipheral/</guid>
-      <description>Pi Peripheral Landing gear down and strobe lights active. How to add physical buttons, switches and dials to control computer actions with a $10 Raspberry Pi Zero.
-Why would you want to do this? Well you might want to add some additional buttons or switches to your favorite game. Or maybe you can streamline your video production but switching cameras with a foot pedal. For me, I wanted to add tactile controls to Microsoft Flight Simulator 2020.</description>
-    </item>
-    
-    <item>
-      <title>Home office ergonomics — with TensorFlow</title>
-      <link>https://saubury.github.io/202006_homeofficeergonomicswithtensorflow/202006_homeofficeergonomicswithtensorflow/</link>
-      <pubDate>Tue, 09 Jun 2020 12:00:00 +1100</pubDate>
-      
-      <guid>https://saubury.github.io/202006_homeofficeergonomicswithtensorflow/202006_homeofficeergonomicswithtensorflow/</guid>
-      <description>Home office ergonomics — with TensorFlow Monitor good posture — with machine learning. Ensure proper office ergonomics with TensorFlow, a webcam and OpenCV Python real-time computer vision libraries. Code available at https://github.com/saubury/posture-watch
-Real-time posture monitoring — as demonstrated with a teddy bear
-If you sit behind a desk for hours at a time, you’re possibly going to slump. This may result in neck and back pain. This can be avoided by teaching a machine to recognise “good” posture from “bad” posture.</description>
-    </item>
-    
-    <item>
-      <title>🍹 Cocktail Pi</title>
-      <link>https://saubury.github.io/202005_cocktailpi/202005_cocktailpi/</link>
-      <pubDate>Mon, 18 May 2020 12:00:00 +1100</pubDate>
-      
-      <guid>https://saubury.github.io/202005_cocktailpi/202005_cocktailpi/</guid>
-      <description>🍹 Cocktail Pi Cocktails based on your mood created by a Raspberry Pi bartender. Drinks are selected based on your emotion and multilingual voice prompts let you know when your drink is available.
-How to build a fully automated home build cocktail maker. Code available at **https://github.com/saubury/cocktail-pi**🍸
-Pumps I used 4 peristaltic pumps to provide a “food safe” way to pump the liquids from the drink bottles. These pumps provide a steady rate of flow of liquids when powered.</description>
-    </item>
-    
-    <item>
-      <title>Kafka with AVRO vs., Kafka with Protobuf vs., Kafka with JSON Schema</title>
-      <link>https://saubury.github.io/202004_kafkawithavrovskafkawithprotobuf/202004_kafkawithavrovskafkawithprotobuf/</link>
-      <pubDate>Sat, 02 May 2020 12:00:00 +1100</pubDate>
-      
-      <guid>https://saubury.github.io/202004_kafkawithavrovskafkawithprotobuf/202004_kafkawithavrovskafkawithprotobuf/</guid>
-      <description>Kafka with AVRO vs., Kafka with Protobuf vs., Kafka with JSON Schema Kafka serialisation schemes — playing with AVRO, Protobuf, JSON Schema in Confluent Streaming Platform. The code for these examples available at https://github.com/saubury/kafka-serialization
-Apache Avro was has been the default Kafka serialisation mechanism for a long time. Confluent just updated their Kafka streaming platform with additional support for serialising data with Protocol buffers (or protobuf) and JSON Schema serialisation.</description>
-    </item>
-    
-    <item>
-      <title>Kafka stream processing: sorting socks with ksqlDB - Part 2</title>
-      <link>https://saubury.github.io/202003_kafkastreamprocessingsortingsockswithksqldb/202003_kafkastreamprocessingsortingsockswithksqldb/</link>
-      <pubDate>Sun, 23 Feb 2020 12:00:00 +1100</pubDate>
-      
-      <guid>https://saubury.github.io/202003_kafkastreamprocessingsortingsockswithksqldb/202003_kafkastreamprocessingsortingsockswithksqldb/</guid>
-      <description>Kafka stream processing: sorting socks with ksqlDB Sorting socks with a streaming solution? Pair socks with ksqlDB, Kafka and Kafka Connect.
-Socks — sorted!
-ksqlDB is a pretty cool event streaming platform. A few commands allow you to build a detailed real-time stream processing application. Capture, transform and perform continuous transformations on Kafka with a simplified SQL dialect. In addition, ksqlDB allows you to capture events from an external system using Kafka connect.</description>
-    </item>
-    
-    <item>
-      <title>Sorting my socks with deep learning — Part 1</title>
-      <link>https://saubury.github.io/202002_sortingmysockswithdeeplearningpart1/202002_sortingmysockswithdeeplearningpart1/</link>
-      <pubDate>Mon, 10 Feb 2020 12:00:00 +1100</pubDate>
-      
-      <guid>https://saubury.github.io/202002_sortingmysockswithdeeplearningpart1/202002_sortingmysockswithdeeplearningpart1/</guid>
-      <description>Sorting my socks with deep learning — Part 1 Can I arrange my sock drawer using machine learning? An adventure in pairing my socks using transfer learning to build a custom sock image classification model. A small project to train and deploy an object recognition model on AWS DeepLens hardware for identifying my socks.
-Sock classification madness to neatly paired
-The Idea I have a crazy idea that I can pair my mismatched socks with machine learning.</description>
-    </item>
-    
-    <item>
-      <title>Kafka Connect Secrets Management with ksqlDB</title>
-      <link>https://saubury.github.io/202001_kafkaconnectsecretsmanagementwithksqldb/202001_kafkaconnectsecretsmanagementwithksqldb/</link>
-      <pubDate>Tue, 14 Jan 2020 12:00:00 +1100</pubDate>
-      
-      <guid>https://saubury.github.io/202001_kafkaconnectsecretsmanagementwithksqldb/202001_kafkaconnectsecretsmanagementwithksqldb/</guid>
-      <description>Kafka Connect Secrets Management with ksqlDB Get data into and out of Kafka with ease using ksqlDB &amp;hellip; without sharing your passwords
-Kafka Connect is a scalable, flexible framework for streaming data between Apache Kafka and other data systems. Got data in a database table and want to stream it into Kafka? No problem, a simple bit of configuration and a JDBC driver will get you going.
-What’s even better is this Kafka Connect configuration can be setup and managed with ksqlDB with Confluent Platform 5.</description>
-    </item>
-    
-    <item>
-      <title>Kafka Summit 2019 San Francisco: a review</title>
-      <link>https://saubury.github.io/201910_kafkasummit_2019sanfranciscoareview/201910_kafkasummit_2019sanfranciscoareview/</link>
-      <pubDate>Sat, 12 Oct 2019 12:00:00 +1100</pubDate>
-      
-      <guid>https://saubury.github.io/201910_kafkasummit_2019sanfranciscoareview/201910_kafkasummit_2019sanfranciscoareview/</guid>
-      <description>Kafka Summit 2019 San Francisco: a review 2 day summit review : welcome to the world of streaming data!
-Kafka Summit San Francisco (October 2019) was a two day conference aimed at data architects, engineers and developers who are keen to learn about streaming data and appreciate the real-world use cases of others. The event is organised by Confluent, the commercial company founded by the original creators of Apache Kafka.</description>
-    </item>
-    
-    <item>
-      <title>Confluent Kafka Kubernetes Operator — Setup and Playing!</title>
-      <link>https://saubury.github.io/201908_confluentkafkakubernetesoperatorsetupandplaying/201908_confluentkafkakubernetesoperatorsetupandplaying/</link>
-      <pubDate>Sat, 03 Aug 2019 12:00:00 +1100</pubDate>
-      
-      <guid>https://saubury.github.io/201908_confluentkafkakubernetesoperatorsetupandplaying/201908_confluentkafkakubernetesoperatorsetupandplaying/</guid>
-      <description>Confluent Kafka Kubernetes Operator — Setup and Playing! Confluent released their Kafka Kubernetes Operator this week (as part of their CP 5.3 release). The TL;DR summary is this gives you a straight forward way to deploy your own clustered &amp;amp; secured Apache Kafka on Kubernetes (ZooKeeper, Apache Kafka) along with the cool bits (Kafka Connect, KSQL, Schema Registry, REST Proxy, Control Center).
-This is pretty cool as it opens the way for Kafka deployments to on premises (eg.</description>
-    </item>
-    
-    <item>
-      <title>Did I beat Ben? Race tracking with Kafka KSQL, MQTT &amp; Kibana</title>
-      <link>https://saubury.github.io/201905_didibeatbenracetrackingwithkafka/201905_didibeatbenracetrackingwithkafka/</link>
-      <pubDate>Tue, 28 May 2019 12:00:00 +1100</pubDate>
-      
-      <guid>https://saubury.github.io/201905_didibeatbenracetrackingwithkafka/201905_didibeatbenracetrackingwithkafka/</guid>
-      <description>Did I beat Ben? Race tracking with Kafka KSQL, MQTT &amp;amp; Kibana Live race tracking with MQTT and Kafka streaming. Race statistics using KSQL and visualisations with Kibana. Can I run a half marathon faster than Ben?
-Kibana dashboard — showing live race analytics
-Design Overview Runners are tracked with GPS based apps installed on their phones. Location updates are sent (via MQTT) to a central server. Kafka acts as a streaming platform with KSQL performing the live race computations (speed, rank, distance to finish line).</description>
-    </item>
-    
-    <item>
-      <title>Machine learning &amp; Kafka KSQL stream processing — bug me when I’ve left the heater on</title>
-      <link>https://saubury.github.io/201810_machinelearningbugmewhenivelefttheheateron/201810_machinelearningbugmewhenivelefttheheateron/</link>
-      <pubDate>Sat, 08 Sep 2018 12:00:00 +1100</pubDate>
-      
-      <guid>https://saubury.github.io/201810_machinelearningbugmewhenivelefttheheateron/201810_machinelearningbugmewhenivelefttheheateron/</guid>
-      <description>Machine learning &amp;amp; Kafka KSQL stream processing — bug me when I’ve left the heater on Continuous household power monitoring with a trained model to alert on unexpected power usage for time of day. Let my Google Home and Phone notify me when I’ve used more electricity than expected.
-What on earth is this? Household power consumption fluctuates throughout the day. However, the *pattern *of electricity use follows a typical curve and becomes predictable after sufficient observations.</description>
-    </item>
-    
-    <item>
-      <title>Home Power Monitoring using a Raspberry Pi</title>
-      <link>https://saubury.github.io/201809_homepowermonitoringusingaraspberrypi/201809_homepowermonitoringusingaraspberrypi/</link>
-      <pubDate>Sat, 01 Sep 2018 12:00:00 +1100</pubDate>
-      
-      <guid>https://saubury.github.io/201809_homepowermonitoringusingaraspberrypi/201809_homepowermonitoringusingaraspberrypi/</guid>
-      <description>Home Power Monitoring using a Raspberry Pi. Home electricity usage monitoring using a Raspberry Pi. Plus some shaky maths to find out when we left the heater on.
-As we approached the colder months I wanted a way of monitoring our household power consumption. Our electric heaters are fairly ancient, and I had no accurate way of monitoring their cost (either financially or environmentally).
-I want to know this number!</description>
-    </item>
-    
-    <item>
-      <title>Using KSQL, Apache Kafka, a Raspberry Pi and a software defined radio to find the plane that wakes Snowy the cat</title>
-      <link>https://saubury.github.io/201805_usingksqlapachekafkafindtheplanethatwakessnowy/201805_usingksqlapachekafkafindtheplanethatwakessnowy/</link>
-      <pubDate>Sun, 20 May 2018 17:53:07 +1100</pubDate>
-      
-      <guid>https://saubury.github.io/201805_usingksqlapachekafkafindtheplanethatwakessnowy/201805_usingksqlapachekafkafindtheplanethatwakessnowy/</guid>
-      <description>Using KSQL, Apache Kafka, a Raspberry Pi and a software defined radio to find the plane that wakes Snowy the cat Using open-source streaming solutions to map the correlation between aircraft traffic and cat behaviour
-Aircraft determine their position using GPS; and periodically transmit that position along with identity string, altitude, speed etc as ADS-B signals.
-Cats behave erratically, but generally display their displeasure by jumping on your face. The post describes how we can use open source streaming solutions (Apache Kafka), KSQL (streaming SQL engine) and a Raspberry Pi to process aircraft movements in real-time to determine which plane is upsetting my cat.</description>
-    </item>
-    
-  </channel>
+	<channel>
+		<title>Simon Aubury Site </title>
+		<link>https://saubury.github.io/</link>
+		<generator>Hugo -- gohugo.io</generator>
+		<language>en-us</language>
+		<author></author>
+		<rights>Copyright (c) 2020</rights>
+		<updated>2020-09-21 12:00:00 &#43;1100 &#43;1100</updated>
+		
+		<item>
+			<title>202009_PiPeripherals</title>
+			<link>https://saubury.github.io/202009_piperipheral/</link>
+			<pubDate>Mon, 21 Sep 2020 12:00:00 &#43;1100</pubDate>
+			<author></author>
+			<guid>https://saubury.github.io/202009_piperipheral/</guid>
+			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://saubury.github.io/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
+			<description></description>
+		</item>
+		
+		<item>
+			<title>202006_HomeOfficeErgonomicsWithTensorFlows</title>
+			<link>https://saubury.github.io/202006_homeofficeergonomicswithtensorflow/</link>
+			<pubDate>Tue, 09 Jun 2020 12:00:00 &#43;1100</pubDate>
+			<author></author>
+			<guid>https://saubury.github.io/202006_homeofficeergonomicswithtensorflow/</guid>
+			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://saubury.github.io/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
+			<description></description>
+		</item>
+		
+		<item>
+			<title>202005_CocktailPis</title>
+			<link>https://saubury.github.io/202005_cocktailpi/</link>
+			<pubDate>Mon, 18 May 2020 12:00:00 &#43;1100</pubDate>
+			<author></author>
+			<guid>https://saubury.github.io/202005_cocktailpi/</guid>
+			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://saubury.github.io/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
+			<description></description>
+		</item>
+		
+		<item>
+			<title>202004_KafkaWithAvroVsKafkaWithProtobufs</title>
+			<link>https://saubury.github.io/202004_kafkawithavrovskafkawithprotobuf/</link>
+			<pubDate>Sat, 02 May 2020 12:00:00 &#43;1100</pubDate>
+			<author></author>
+			<guid>https://saubury.github.io/202004_kafkawithavrovskafkawithprotobuf/</guid>
+			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://saubury.github.io/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
+			<description></description>
+		</item>
+		
+		<item>
+			<title>202003_KafkaStreamProcessingSortingSocksWithKsqlDbs</title>
+			<link>https://saubury.github.io/202003_kafkastreamprocessingsortingsockswithksqldb/</link>
+			<pubDate>Sun, 23 Feb 2020 12:00:00 AEDT</pubDate>
+			<author></author>
+			<guid>https://saubury.github.io/202003_kafkastreamprocessingsortingsockswithksqldb/</guid>
+			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://saubury.github.io/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
+			<description></description>
+		</item>
+		
+		<item>
+			<title>202002_SortingMySocksWithDeepLearningPart1s</title>
+			<link>https://saubury.github.io/202002_sortingmysockswithdeeplearningpart1/</link>
+			<pubDate>Mon, 10 Feb 2020 12:00:00 AEDT</pubDate>
+			<author></author>
+			<guid>https://saubury.github.io/202002_sortingmysockswithdeeplearningpart1/</guid>
+			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://saubury.github.io/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
+			<description></description>
+		</item>
+		
+		<item>
+			<title>202001_KafkaConnectSecretsManagementWithKsqlDbs</title>
+			<link>https://saubury.github.io/202001_kafkaconnectsecretsmanagementwithksqldb/</link>
+			<pubDate>Tue, 14 Jan 2020 12:00:00 AEDT</pubDate>
+			<author></author>
+			<guid>https://saubury.github.io/202001_kafkaconnectsecretsmanagementwithksqldb/</guid>
+			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://saubury.github.io/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
+			<description></description>
+		</item>
+		
+		<item>
+			<title>201910_KafkaSummit_2019SanFranciscoAReviews</title>
+			<link>https://saubury.github.io/201910_kafkasummit_2019sanfranciscoareview/</link>
+			<pubDate>Sat, 12 Oct 2019 12:00:00 AEDT</pubDate>
+			<author></author>
+			<guid>https://saubury.github.io/201910_kafkasummit_2019sanfranciscoareview/</guid>
+			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://saubury.github.io/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
+			<description></description>
+		</item>
+		
+		<item>
+			<title>201908_ConfluentKafkaKubernetesOperatorSetupAndPlayings</title>
+			<link>https://saubury.github.io/201908_confluentkafkakubernetesoperatorsetupandplaying/</link>
+			<pubDate>Sat, 03 Aug 2019 12:00:00 &#43;1100</pubDate>
+			<author></author>
+			<guid>https://saubury.github.io/201908_confluentkafkakubernetesoperatorsetupandplaying/</guid>
+			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://saubury.github.io/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
+			<description></description>
+		</item>
+		
+		<item>
+			<title>201905_DidIBeatBenRaceTrackingWithKafkas</title>
+			<link>https://saubury.github.io/201905_didibeatbenracetrackingwithkafka/</link>
+			<pubDate>Tue, 28 May 2019 12:00:00 &#43;1100</pubDate>
+			<author></author>
+			<guid>https://saubury.github.io/201905_didibeatbenracetrackingwithkafka/</guid>
+			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://saubury.github.io/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
+			<description></description>
+		</item>
+		
+		<item>
+			<title>201810_MachineLearningBugMeWhenIVeLeftTheHeaterOns</title>
+			<link>https://saubury.github.io/201810_machinelearningbugmewhenivelefttheheateron/</link>
+			<pubDate>Sat, 08 Sep 2018 12:00:00 &#43;1100</pubDate>
+			<author></author>
+			<guid>https://saubury.github.io/201810_machinelearningbugmewhenivelefttheheateron/</guid>
+			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://saubury.github.io/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
+			<description></description>
+		</item>
+		
+		<item>
+			<title>201809_HomePowerMonitoringUsingARaspberryPis</title>
+			<link>https://saubury.github.io/201809_homepowermonitoringusingaraspberrypi/</link>
+			<pubDate>Sat, 01 Sep 2018 12:00:00 &#43;1100</pubDate>
+			<author></author>
+			<guid>https://saubury.github.io/201809_homepowermonitoringusingaraspberrypi/</guid>
+			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://saubury.github.io/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
+			<description></description>
+		</item>
+		
+		<item>
+			<title>201805_UsingKsqlApacheKafkaFindThePlaneThatWakesSnowies</title>
+			<link>https://saubury.github.io/201805_usingksqlapachekafkafindtheplanethatwakessnowy/</link>
+			<pubDate>Sun, 20 May 2018 17:53:07 &#43;1100</pubDate>
+			<author></author>
+			<guid>https://saubury.github.io/201805_usingksqlapachekafkafindtheplanethatwakessnowy/</guid>
+			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://saubury.github.io/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
+			<description></description>
+		</item>
+		
+	</channel>
 </rss>

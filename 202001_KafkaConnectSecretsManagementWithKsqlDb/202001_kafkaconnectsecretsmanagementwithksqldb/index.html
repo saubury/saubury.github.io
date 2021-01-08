@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Kafka Connect Secrets Management with ksqlDB</title>
+		<link rel="alternate" type="application/rss+xml" title="RSS" href="https://saubury.github.io/index.xml">
+		<link rel="canonical" href="https://saubury.github.io/202001_kafkaconnectsecretsmanagementwithksqldb/202001_kafkaconnectsecretsmanagementwithksqldb/">
+		
+		<link rel="shortcut icon" type="image/png" href="https://saubury.github.io/apple-touch-icon-precomposed.png">
+		
+		
+		<meta name="generator" content="Hugo 0.80.0" />
+
+		
+		<meta property="og:title" content="Kafka Connect Secrets Management with ksqlDB" />
+		<meta property="og:type" content="article" />
+		<meta property="og:image" content="https://saubury.github.io/202001_KafkaConnectSecretsManagementWithKsqlDb/00000000.png" />
+		<meta property="og:description" content="" />
+		<meta property="og:url" content="https://saubury.github.io/202001_kafkaconnectsecretsmanagementwithksqldb/202001_kafkaconnectsecretsmanagementwithksqldb/" />
+		<meta property="og:site_name" content="Kafka Connect Secrets Management with ksqlDB" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:site" content="@" />
+
+
+		
+		<link rel="stylesheet" href="https://saubury.github.io/css/tachyons.min.css" />
+		<link rel="stylesheet" href="https://saubury.github.io/css/story.css" />
+		<link rel="stylesheet" href="https://saubury.github.io/css/descartes.css" />
+		
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+		<link href="https://fonts.googleapis.com/css?family=Quattrocento+Sans:400,400i,700,700i|Quattrocento:400,700|Spectral:400,400i,700,700i&amp;subset=latin-ext" rel="stylesheet">
+		
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		
+		<script src="https://saubury.github.io/js/story.js"></script>
+
+	</head>
+	<body class="ma0 bg-white section-202001_KafkaConnectSecretsManagementWithKsqlDb page-kind-page is-page-true ">
+		
+		<header class="cover bg-top" style="background-image: url('https://saubury.github.io/202001_KafkaConnectSecretsManagementWithKsqlDb/00000000.png'); background-position: center;">
+			<div class="bg-black-30 bb bt">
+
+				<nav class="hide-print sans-serif  border-box pa3 ph5-l">
+					<a href="https://saubury.github.io/" title="Home">
+						<img src="https://saubury.github.io/img/logo.jpg" class="w2 h2 br-100" alt="Simon Aubury Site" />
+					</a>
+					<div class="fr h2 pv2 tr">
+						<a class="link f5 ml2 dim near-white" href="https://twitter.com/simonaubury/"><i class="fab fa-twitter-square"></i></a>
+						<a class="link f5 ml2 dim near-white" href="https://github.com/saubury/"><i class="fab fa-github-square"></i></a>
+						<a class="link f5 ml2 dim near-white" href="https://www.linkedin.com/in/simonaubury/"><i class="fab fa-linkedin"></i></a>
+						<a class="link f5 ml2 dim near-white fas fa-rss-square" href="https://saubury.github.io/index.xml" title="RSS Feed"></a>
+						<a class="link f5 ml2 dim near-white fas fa-search" href="https://saubury.github.io/search/" role="search" title="Search"></a>
+					</div>
+				</nav>
+
+				<div id="hdr" class="tc-l pv4-ns pv5-l pv2 ph3 ph4-ns">
+					<h1 class="near-white mt1-ns f2 fw3 mb0 mt0 lh-title">Kafka Connect Secrets Management with ksqlDB</h1>
+					<h2 class="near-white mt3-l mb4-l fw1 f6 f3-l measure-wide-l center lh-copy mt2 mb3">
+						
+						
+							
+								Published
+								<time datetime="2020-01-14T12:00:00&#43;11:00">Jan 14, 2020</time>
+								<span class="display-print">by </span>
+								
+								<span class="display-print">at https://saubury.github.io/202001_kafkaconnectsecretsmanagementwithksqldb/202001_kafkaconnectsecretsmanagementwithksqldb/</span>
+							
+						
+					</h2>
+				</div>
+
+				
+				
+				
+				
+
+			</div>
+		</header>
+		
+		<main role="main">
+		
+<article class="center bg-white br-3 pv1 ph4 lh-copy f5 nested-links mw7">
+	<h1 id="kafka-connect-secrets-management-with-ksqldb">Kafka Connect Secrets Management with ksqlDB</h1>
+<p>Get data into and out of Kafka with ease using ksqlDB &hellip; without sharing your passwords</p>
+<p>Kafka Connect is a scalable, flexible framework for streaming data between Apache Kafka and other data systems. Got data in a database table and want to stream it into Kafka? No problem, a simple bit of configuration and a JDBC driver will get you going.</p>
+<p><img src="/202001_KafkaConnectSecretsManagementWithKsqlDb/00000000.png" alt=""></p>
+<p>What’s even better is this Kafka Connect configuration can be setup and managed with <a href="http://ksqldb.io">ksqlDB </a>with Confluent Platform 5.4 onward. That is, you can use a SQL dialect to both manage your real-time data processing against Apache Kafka *and *run connectors to get data to and from your Kafka cluster.</p>
+<p>Apache Kafka 2.0 <a href="https://cwiki.apache.org/confluence/display/KAFKA/KIP-297%3A+Externalizing+Secrets+for+Connect+Configurations">added support</a> for external secrets using a flexible ConfigProvider class. You can externalise secrets using a variety of mechanisms (Vault, KMS, etc.,) However, it’s not immediately obvious how to get this capability running with ksqlDB. Let’s explore ways you can setup your distributed cluster, and keep your secrets, … secret.</p>
+<h2 id="example-context">Example Context</h2>
+<p>We’ll take a simple example. We wish to define a Kafka Connect JDBC source, and want to hide the username and password required to connect to the source database.</p>
+<p><img src="/202001_KafkaConnectSecretsManagementWithKsqlDb/00000001.png" alt="A typical Kafka Connect configuration with a password"><em>A typical Kafka Connect configuration with a password</em></p>
+<p>We want a fully distributed setup, with the ksqlDB server controlling our Kafka Connect cluster. We’ll load our Kafka Connect cluster with a JDBC Postgres JAR driver, so it can communicate with a Postgres database.</p>
+<p><img src="/202001_KafkaConnectSecretsManagementWithKsqlDb/00000002.png" alt=""></p>
+<p>Let’s setup out database</p>
+<pre><code>CREATE TABLE socks (
+    sockname VARCHAR
+  , ref SERIAL PRIMARY KEY
+  );
+
+INSERT INTO socks (sockname) VALUES ('Black wool socks');
+INSERT INTO socks (sockname) VALUES ('Yellow colourful socks');
+INSERT INTO socks (sockname) VALUES ('Old brown socks'); 
+</code></pre>
+<p>For simplicity, we’ll manage out secrets via the FileConfigProvide class (ie., an external credentials file). We can create a <em>secrets</em> file (cred.properties ) and must remember not to check it into to version control (use a .gitignore or equivalent)</p>
+<pre><code>PG_URI=jdbc:postgresql://postgres:5432/postgres
+PG_USER=postgres
+PG_PASS=Sup3rS3c3t
+</code></pre>
+<p>And then you can concentrate on defining your configuration like this. Note the username and password are simply references into the cred.properties file</p>
+<pre><code>CREATE SOURCE CONNECTOR `postgres-jdbc-source` WITH(
+  &quot;connector.class&quot;='io.confluent.connect.jdbc.JdbcSourceConnector',
+  &quot;connection.url&quot;='${file:/scripts/cred.properties:PG_URI}',
+  &quot;mode&quot;='incrementing',
+  &quot;incrementing.column.name&quot;='ref',
+  &quot;table.whitelist&quot;='socks',
+  &quot;connection.user&quot;='${file:/scripts/cred.properties:PG_USER}',
+  &quot;connection.password&quot;='${file:/scripts/cred.properties:PG_PASS}',
+  &quot;topic.prefix&quot;='db-',
+  &quot;key&quot;='sockname'); 
+</code></pre>
+<h2 id="lets-see-if-it-works">Let’s see if it works</h2>
+<p>From ksqlDB run this</p>
+<pre><code>print 'db-socks' from beginning;
+</code></pre>
+<p>And you should see this</p>
+<pre><code>{&quot;sockname&quot;: &quot;Black wool socks&quot;, &quot;ref&quot;: 1}
+{&quot;sockname&quot;: &quot;Yellow colourful socks&quot;, &quot;ref&quot;: 2}
+{&quot;sockname&quot;: &quot;Old brown socks&quot;, &quot;ref&quot;: 3}
+</code></pre>
+<p>In another window, insert a new database row</p>
+<pre><code>psql -U postgres -c &quot;INSERT INTO socks (sockname) VALUES ('Mismatched socks');&quot;
+</code></pre>
+<p>And your ksqlDB prompt should now show one additional row (notice the Kafka connect cluster found the new row)</p>
+<pre><code>{&quot;sockname&quot;: &quot;Mismatched socks&quot;, &quot;ref&quot;: 4}
+</code></pre>
+<h2 id="try-it-yourself">Try it yourself</h2>
+<p>A complete docker-compose to run this setup available at
+<a href="https://github.com/saubury/ksqldb-demo/tree/master/ksqldb-connect-demo"><strong>saubury/ksqldb-demo</strong>
+*How to setup Kafka Connect with ksqlDB ..*github.com</a></p>
+
+</article>
+
+		</main>
+		
+				<div class="hide-print sans-serif f6 f5-l mt5 ph3 pb6 center nested-copy-line-height lh-copy nested-links mw-100 measure-wide">
+		<div class="about-the-author">
+		
+			
+			
+				
+					
+				
+			
+		
+		</div>
+		
+	</div>
+
+		
+		
+		
+		<footer class="hide-print sans-serif f6 fw1 bg-black near-white bottom-0 w-100 pa3" role="contentinfo">
+			<p class="w-50 fr tr">
+			<a class="no-underline near-white" href="https://github.com/xaprb/story"><img class="dib" title="Made with Hugo and Story" alt="Story logo" src="https://saubury.github.io/img/story-logo-white.svg" style="width: 1.5rem; height: 1.5rem" /></a>
+			</p>
+			<p class="w-50 near-white">
+				&copy; 2021 
+			</p>
+		</footer>
+		
+	
+	
+	</body>
+</html>

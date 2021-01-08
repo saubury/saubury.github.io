@@ -6,11 +6,7 @@
     <description>Recent content in 202004_KafkaWithAvroVsKafkaWithProtobufs on Simon Aubury Site</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 02 May 2020 12:00:00 +1100</lastBuildDate>
-    
-	<atom:link href="https://saubury.github.io/202004_kafkawithavrovskafkawithprotobuf/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Sat, 02 May 2020 12:00:00 +1100</lastBuildDate><atom:link href="https://saubury.github.io/202004_kafkawithavrovskafkawithprotobuf/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Kafka with AVRO vs., Kafka with Protobuf vs., Kafka with JSON Schema</title>
       <link>https://saubury.github.io/202004_kafkawithavrovskafkawithprotobuf/202004_kafkawithavrovskafkawithprotobuf/</link>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Home office ergonomics — with TensorFlow</title>
+		<link rel="alternate" type="application/rss+xml" title="RSS" href="https://saubury.github.io/index.xml">
+		<link rel="canonical" href="https://saubury.github.io/202006_homeofficeergonomicswithtensorflow/202006_homeofficeergonomicswithtensorflow/">
+		
+		<link rel="shortcut icon" type="image/png" href="https://saubury.github.io/apple-touch-icon-precomposed.png">
+		
+		
+		<meta name="generator" content="Hugo 0.80.0" />
+
+		
+		<meta property="og:title" content="Home office ergonomics — with TensorFlow" />
+		<meta property="og:type" content="article" />
+		<meta property="og:image" content="https://saubury.github.io/202006_HomeOfficeErgonomicsWithTensorFlow/00000002.jpeg" />
+		<meta property="og:description" content="" />
+		<meta property="og:url" content="https://saubury.github.io/202006_homeofficeergonomicswithtensorflow/202006_homeofficeergonomicswithtensorflow/" />
+		<meta property="og:site_name" content="Home office ergonomics — with TensorFlow" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:site" content="@" />
+
+
+		
+		<link rel="stylesheet" href="https://saubury.github.io/css/tachyons.min.css" />
+		<link rel="stylesheet" href="https://saubury.github.io/css/story.css" />
+		<link rel="stylesheet" href="https://saubury.github.io/css/descartes.css" />
+		
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+		<link href="https://fonts.googleapis.com/css?family=Quattrocento+Sans:400,400i,700,700i|Quattrocento:400,700|Spectral:400,400i,700,700i&amp;subset=latin-ext" rel="stylesheet">
+		
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		
+		<script src="https://saubury.github.io/js/story.js"></script>
+
+	</head>
+	<body class="ma0 bg-white section-202006_HomeOfficeErgonomicsWithTensorFlow page-kind-page is-page-true ">
+		
+		<header class="cover bg-top" style="background-image: url('https://saubury.github.io/202006_HomeOfficeErgonomicsWithTensorFlow/00000002.jpeg'); background-position: center;">
+			<div class="bg-black-30 bb bt">
+
+				<nav class="hide-print sans-serif  border-box pa3 ph5-l">
+					<a href="https://saubury.github.io/" title="Home">
+						<img src="https://saubury.github.io/img/logo.jpg" class="w2 h2 br-100" alt="Simon Aubury Site" />
+					</a>
+					<div class="fr h2 pv2 tr">
+						<a class="link f5 ml2 dim near-white" href="https://twitter.com/simonaubury/"><i class="fab fa-twitter-square"></i></a>
+						<a class="link f5 ml2 dim near-white" href="https://github.com/saubury/"><i class="fab fa-github-square"></i></a>
+						<a class="link f5 ml2 dim near-white" href="https://www.linkedin.com/in/simonaubury/"><i class="fab fa-linkedin"></i></a>
+						<a class="link f5 ml2 dim near-white fas fa-rss-square" href="https://saubury.github.io/index.xml" title="RSS Feed"></a>
+						<a class="link f5 ml2 dim near-white fas fa-search" href="https://saubury.github.io/search/" role="search" title="Search"></a>
+					</div>
+				</nav>
+
+				<div id="hdr" class="tc-l pv4-ns pv5-l pv2 ph3 ph4-ns">
+					<h1 class="near-white mt1-ns f2 fw3 mb0 mt0 lh-title">Home office ergonomics — with TensorFlow</h1>
+					<h2 class="near-white mt3-l mb4-l fw1 f6 f3-l measure-wide-l center lh-copy mt2 mb3">
+						
+						
+							
+								Published
+								<time datetime="2020-06-09T12:00:00&#43;11:00">Jun 9, 2020</time>
+								<span class="display-print">by </span>
+								
+								<span class="display-print">at https://saubury.github.io/202006_homeofficeergonomicswithtensorflow/202006_homeofficeergonomicswithtensorflow/</span>
+							
+						
+					</h2>
+				</div>
+
+				
+				
+				
+				
+
+			</div>
+		</header>
+		
+		<main role="main">
+		
+<article class="center bg-white br-3 pv1 ph4 lh-copy f5 nested-links mw7">
+	<h1 id="home-office-ergonomicswith-tensorflow">Home office ergonomics — with TensorFlow</h1>
+<p>Monitor good posture — with machine learning. Ensure proper office ergonomics with TensorFlow, a webcam and OpenCV Python real-time computer vision libraries. Code available at <a href="https://github.com/saubury/posture-watch">https://github.com/saubury/posture-watch</a></p>
+<p><img src="/202006_HomeOfficeErgonomicsWithTensorFlow/00000000.gif" alt="Real-time posture monitoring — as demonstrated with a teddy bear"><em>Real-time posture monitoring — as demonstrated with a teddy bear</em></p>
+<p>If you sit behind a desk for hours at a time, you’re possibly going to slump. This may result in neck and back pain. This can be avoided by teaching a machine to recognise “good” posture from “bad” posture. To encourage better posture, instant feedback with a quick sound every-time poor office ergonomics are observed. Model training and monitoring is handled locally on device.</p>
+<h2 id="live-posture-classification--how-does-this-work">Live Posture Classification — How does this work?</h2>
+<p>Machine learning packages available for Python 3</p>
+<ul>
+<li>
+<p><a href="https://scikit-learn.org/">Scikit-learn</a> — open source Python machine learning library supporting supervised learning &amp; weightings</p>
+</li>
+<li>
+<p><a href="https://www.tensorflow.org/guide/keras/overview">Tensorflow Keras</a> — high-level API to build and train models</p>
+</li>
+<li>
+<p><a href="https://opencv.org/">OpenCV</a> — library of programming functions for real-time computer vision</p>
+</li>
+</ul>
+<p><img src="/202006_HomeOfficeErgonomicsWithTensorFlow/00000001.jpeg" alt="Classified Image"><em>Classified Image</em></p>
+<h2 id="training">Training</h2>
+<p><img src="/202006_HomeOfficeErgonomicsWithTensorFlow/00000002.jpeg" alt="A sample of images representing “good” and “bad” posture"><em>A sample of images representing “good” and “bad” posture</em></p>
+<p>Firstly we need to capture photos of “good posture” and “slumped posture”. These images are required as input to train supervised learning algorithm. In capture mode a sample image is captured every second and saved in a training folder. Run the capture mode whilst moving a bit in space to give a variety amongst the images. Press the “space” bar (with the preview frame in focus) to stop capture after about 30 images (30 seconds) have been captured.</p>
+<p>Note: the first run may take a few minutes to start</p>
+<pre><code># Capture samples of &quot;good&quot; posture
+python posture-watch.py --capture-good
+
+# Capture samples of &quot;bad&quot; posture
+python posture-watch.py --capture-slump
+</code></pre>
+<h2 id="train">Train</h2>
+<p>Now we have a variety of images representing both “good” and “bad” postures let us train a model. This should only take a few minutes. The more images captured will take longer to train, but should be more accurate.</p>
+<pre><code>python posture-watch.py --train
+</code></pre>
+<h2 id="live-video">Live Video</h2>
+<p>With the model trained we can test the classification by running a live video feed from the webcam into the model. The classification and predication confidence is overlaid onto the image. Press the “space” bar (with the preview frame in focus) to stop.</p>
+<pre><code>python posture-watch.py --live
+</code></pre>
+<h2 id="live-video-with-sound">Live Video with Sound</h2>
+<p>If you are satisfied with the accuracy of the predictions, you can constantly run the model and issue a sound alert every-time poor posture is detected.</p>
+<pre><code>python posture-watch.py --live --sound
+</code></pre>
+<h2 id="cleanup">Cleanup</h2>
+<pre><code>rm -fr train/
+</code></pre>
+<h2 id="setup">Setup</h2>
+<p>Ensure Python 3, virtualenv and pip are installed.</p>
+<pre><code>which python3
+
+virtualenv -p `which python3` venv
+source venv/bin/activate
+python --version
+pip --version
+pip install -r requirements.txt
+</code></pre>
+<h2 id="code">Code</h2>
+<p>Code available at <a href="https://github.com/saubury/posture-watch">https://github.com/saubury/posture-watch</a></p>
+
+</article>
+
+		</main>
+		
+				<div class="hide-print sans-serif f6 f5-l mt5 ph3 pb6 center nested-copy-line-height lh-copy nested-links mw-100 measure-wide">
+		<div class="about-the-author">
+		
+			
+			
+				
+					
+				
+			
+		
+		</div>
+		
+	</div>
+
+		
+		
+		
+		<footer class="hide-print sans-serif f6 fw1 bg-black near-white bottom-0 w-100 pa3" role="contentinfo">
+			<p class="w-50 fr tr">
+			<a class="no-underline near-white" href="https://github.com/xaprb/story"><img class="dib" title="Made with Hugo and Story" alt="Story logo" src="https://saubury.github.io/img/story-logo-white.svg" style="width: 1.5rem; height: 1.5rem" /></a>
+			</p>
+			<p class="w-50 near-white">
+				&copy; 2021 
+			</p>
+		</footer>
+		
+	
+	
+	</body>
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Kafka stream processing: sorting socks with ksqlDB - Part 2</title>
+		<link rel="alternate" type="application/rss+xml" title="RSS" href="https://saubury.github.io/index.xml">
+		<link rel="canonical" href="https://saubury.github.io/202003_kafkastreamprocessingsortingsockswithksqldb/202003_kafkastreamprocessingsortingsockswithksqldb/">
+		
+		<link rel="shortcut icon" type="image/png" href="https://saubury.github.io/apple-touch-icon-precomposed.png">
+		
+		
+		<meta name="generator" content="Hugo 0.80.0" />
+
+		
+		<meta property="og:title" content="Kafka stream processing: sorting socks with ksqlDB - Part 2" />
+		<meta property="og:type" content="article" />
+		<meta property="og:image" content="https://saubury.github.io/202003_KafkaStreamProcessingSortingSocksWithKsqlDb/00000000.png" />
+		<meta property="og:description" content="" />
+		<meta property="og:url" content="https://saubury.github.io/202003_kafkastreamprocessingsortingsockswithksqldb/202003_kafkastreamprocessingsortingsockswithksqldb/" />
+		<meta property="og:site_name" content="Kafka stream processing: sorting socks with ksqlDB - Part 2" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:site" content="@" />
+
+
+		
+		<link rel="stylesheet" href="https://saubury.github.io/css/tachyons.min.css" />
+		<link rel="stylesheet" href="https://saubury.github.io/css/story.css" />
+		<link rel="stylesheet" href="https://saubury.github.io/css/descartes.css" />
+		
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+		<link href="https://fonts.googleapis.com/css?family=Quattrocento+Sans:400,400i,700,700i|Quattrocento:400,700|Spectral:400,400i,700,700i&amp;subset=latin-ext" rel="stylesheet">
+		
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		
+		<script src="https://saubury.github.io/js/story.js"></script>
+
+	</head>
+	<body class="ma0 bg-white section-202003_KafkaStreamProcessingSortingSocksWithKsqlDb page-kind-page is-page-true ">
+		
+		<header class="cover bg-top" style="background-image: url('https://saubury.github.io/202003_KafkaStreamProcessingSortingSocksWithKsqlDb/00000000.png'); background-position: center;">
+			<div class="bg-black-30 bb bt">
+
+				<nav class="hide-print sans-serif  border-box pa3 ph5-l">
+					<a href="https://saubury.github.io/" title="Home">
+						<img src="https://saubury.github.io/img/logo.jpg" class="w2 h2 br-100" alt="Simon Aubury Site" />
+					</a>
+					<div class="fr h2 pv2 tr">
+						<a class="link f5 ml2 dim near-white" href="https://twitter.com/simonaubury/"><i class="fab fa-twitter-square"></i></a>
+						<a class="link f5 ml2 dim near-white" href="https://github.com/saubury/"><i class="fab fa-github-square"></i></a>
+						<a class="link f5 ml2 dim near-white" href="https://www.linkedin.com/in/simonaubury/"><i class="fab fa-linkedin"></i></a>
+						<a class="link f5 ml2 dim near-white fas fa-rss-square" href="https://saubury.github.io/index.xml" title="RSS Feed"></a>
+						<a class="link f5 ml2 dim near-white fas fa-search" href="https://saubury.github.io/search/" role="search" title="Search"></a>
+					</div>
+				</nav>
+
+				<div id="hdr" class="tc-l pv4-ns pv5-l pv2 ph3 ph4-ns">
+					<h1 class="near-white mt1-ns f2 fw3 mb0 mt0 lh-title">Kafka stream processing: sorting socks with ksqlDB - Part 2</h1>
+					<h2 class="near-white mt3-l mb4-l fw1 f6 f3-l measure-wide-l center lh-copy mt2 mb3">
+						
+						
+							
+								Published
+								<time datetime="2020-02-23T12:00:00&#43;11:00">Feb 23, 2020</time>
+								<span class="display-print">by </span>
+								
+								<span class="display-print">at https://saubury.github.io/202003_kafkastreamprocessingsortingsockswithksqldb/202003_kafkastreamprocessingsortingsockswithksqldb/</span>
+							
+						
+					</h2>
+				</div>
+
+				
+				
+				
+				
+
+			</div>
+		</header>
+		
+		<main role="main">
+		
+<article class="center bg-white br-3 pv1 ph4 lh-copy f5 nested-links mw7">
+	<h1 id="kafka-stream-processing-sorting-socks-with-ksqldb">Kafka stream processing: sorting socks with ksqlDB</h1>
+<p>Sorting socks with a streaming solution? Pair socks with ksqlDB, Kafka and Kafka Connect.</p>
+<p><img src="/202003_KafkaStreamProcessingSortingSocksWithKsqlDb/00000000.png" alt="Socks — sorted!"><em>Socks — sorted!</em></p>
+<p><a href="https://ksqldb.io/">ksqlDB</a> is a pretty cool event streaming platform. A few commands allow you to build a detailed real-time stream processing application. Capture, transform and perform continuous transformations on Kafka with a simplified SQL dialect. In addition, ksqlDB allows you to capture events from an external system using Kafka connect.</p>
+<p>In my previous blog <a href="https://medium.com/@simon.aubury/sorting-my-socks-with-deep-learning-part-1-1b5651d35f3e?source=your_stories_page---------------------------">classifying socks with deep learning</a> I described deploying an object recognition model on AWS DeepLens hardware for identifying socks. Let’s now look at how Kafka plus ksqlDB can retrieve sock classification messages from the camera and perform time-window stream transformations to find pairs of matching socks.</p>
+<p><img src="/202003_KafkaStreamProcessingSortingSocksWithKsqlDb/00000001.png" alt="Kafka and ksqlDB for a streaming platform to pair socks"><em>Kafka and ksqlDB for a streaming platform to pair socks</em></p>
+<h2 id="camera-predictions-to-kafka-mqtt-with-ksqldb">Camera predictions to Kafka: MQTT with ksqlDB</h2>
+<p>The first task is to pull sock predictions from the DeepLens camera. The images classified by the camera are placed onto an MQTT topic.</p>
+<p>MQTT is lightweight TCP/IP messaging protocol perfect for small mobile devices and low powered sensors. It allows for short efficient messages. It’s closer to a notice board than a queue, and allows for lightweight messages like “Sock seen is Google, with a 98% confidence”.</p>
+<p>We can peek at MQTT messages with mosquitto_sub(or the terrific GUI tool <a href="https://mqttfx.jensd.de/">MQTT.fx</a>). Here’s a typical sequence listing the MQTT topic sockfound</p>
+<pre><code>mosquitto_sub -h ${MQTT_HOST} -p ${MQTT_PORT} -u ${MQTT_USER} -P ${MQTT_PASS} -t sockfound
+
+{&quot;image&quot;: &quot;Blank&quot;, &quot;probability&quot;: 37.59765625}
+{&quot;image&quot;: &quot;Blank&quot;, &quot;probability&quot;: 41.162109375}
+{&quot;image&quot;: &quot;Google&quot;, &quot;probability&quot;: 97.314453125}
+{&quot;image&quot;: &quot;Google&quot;, &quot;probability&quot;: 94.970703125}
+{&quot;image&quot;: &quot;Google&quot;, &quot;probability&quot;: 64.6484375}
+{&quot;image&quot;: &quot;Blank&quot;, &quot;probability&quot;: 67.3828125}
+{&quot;image&quot;: &quot;Blank&quot;, &quot;probability&quot;: 50.634765625}
+</code></pre>
+<h3 id="mqtt-to-kafka-with-kafka-connect">MQTT to Kafka with Kafka Connect</h3>
+<p>We want to add recognised socks into the Kafka stream processor. MQTT acts like a key/value store, whereas Kafka is a complete streaming platform. Getting MQTT messages into Kafka is easily achieved with the Kafka Connect framework. With an <a href="https://www.confluent.io/hub/confluentinc/kafka-connect-mqtt">MQTT driver</a> added to Kafka Connect, we can configure a source connector to constantly place new prediction events from MQTT into a Kafka topic.</p>
+<p>The traditional way of configuring Kafka connect (which I used in <a href="https://medium.com/@simon.aubury/did-i-beat-ben-race-tracking-with-kafka-ksql-mqtt-kibana-25e62e8ecaef">Race tracking with Kafka KSQL, MQTT &amp; Kibana</a>) was to use curl to interact directly against the Kafka Connect service. Although this works, there is now a much easier way …</p>
+<h3 id="kafka-connect-with-ksqldb">Kafka Connect with ksqlDB</h3>
+<p>ksqlDB now has commands so you can directly setup and control Kafka Connect. Let’s see how we can configure an MQTT source using only ksqlDB</p>
+<p><img src="/202003_KafkaStreamProcessingSortingSocksWithKsqlDb/00000002.png" alt="ksqlDB used to establish a Kafka Connect source from MQTT to Kafka"><em>ksqlDB used to establish a Kafka Connect source from MQTT to Kafka</em></p>
+<p>We can create the Kafka Connect source to MQTT with a ksqlDB command like this. Note I’m describing the location and credentials for the MQTT broker plus the name of my destination Kafka topic, and .. that’s about it</p>
+<pre><code>CREATE SOURCE CONNECTOR `mqtt-source` WITH(       &quot;connector.class&quot;='io.confluent.connect.mqtt.MqttSourceConnector',
+&quot;mqtt.server.uri&quot;='tcp://something.example.com:14437', 
+&quot;mqtt.username&quot;='some-user',
+&quot;mqtt.password&quot;='my-password',
+&quot;mqtt.topics&quot;='sockfound',
+&quot;kafka.topic&quot;='data_mqtt', 
+);
+</code></pre>
+<p>By the way — if you’re worried about putting secrets (like passwords) into your KSQL script have a look at <a href="https://medium.com/@simon.aubury/kafka-connect-secrets-management-with-ksqldb-2f218a21a2d2">Kafka Connect Secrets Management with ksqlDB</a>.</p>
+<h3 id="test-mqtt-to-kafka">Test MQTT to Kafka</h3>
+<p>We can check incoming MQTT messages are landing in Kafka by querying the Kafka topic with KSQL</p>
+<pre><code>ksql&gt; print 'data_mqtt';
+</code></pre>
+<p>All going well you’ll see payloads like this</p>
+<pre><code>{&quot;image&quot;: &quot;Running Science&quot;, &quot;probability&quot;: 43.994140625}
+{&quot;image&quot;: &quot;Mongo&quot;, &quot;probability&quot;: 50.29296875}
+{&quot;image&quot;: &quot;Mongo&quot;, &quot;probability&quot;: 86.279296875}
+{&quot;image&quot;: &quot;Mongo&quot;, &quot;probability&quot;: 53.076171875}
+</code></pre>
+<h2 id="problem-1-ghost-socks">Problem #1: “Ghost” Socks</h2>
+<p>The DeepLens image classifier works pretty quickly— and I can get 3 or 4 images recognised each second. But not all image classifications are correct. Have a look at this stream (note the time is HH:MM:SS). Within the 4 second span of 18:10:51 to 18:10:55 I saw messages indicating “blank”, a single “Mongo” message, 9 sequential “Google” messages, another single “Mongo” message a finally a sequence of “blank”</p>
+<p><img src="/202003_KafkaStreamProcessingSortingSocksWithKsqlDb/00000003.png" alt="The occasional “ghost” Mongo sock showing up in a stream of Google socks"><em>The occasional “ghost” Mongo sock showing up in a stream of Google socks</em></p>
+<p>What I really want to do is identify a series of similar messages within a windows of time</p>
+<p><img src="/202003_KafkaStreamProcessingSortingSocksWithKsqlDb/00000004.png" alt="Time series — what should be expected for sock image identification"><em>Time series — what should be expected for sock image identification</em></p>
+<h3 id="window-hopping-with-ksqldb">Window Hopping with ksqlDB</h3>
+<p>The first step is to use ksqlDB to create a stream representing the messages updates of the MQTT topic</p>
+<pre><code>create stream sock_stream(image varchar, probability double) 
+with (kafka_topic='data_mqtt',  value_format='json');
+</code></pre>
+<p>We can now utilise a <a href="https://docs.ksqldb.io/en/latest/concepts/time-and-windows-in-ksqldb-queries/#windows-in-sql-queries">windowed aggregation</a> in KSQL to bucket sock images into windows of 5 seconds. That is, we’ll group arriving images into windows with intervals of 5 seconds to determine the most prevalent image seen. I determine a image classification is legitimate if it is the it appears more than 3 times in that 5 second window</p>
+<pre><code>create table sock_stream_smoothed as
+select image
+, timestamptostring(windowstart(), 'hh:mm:ss') as last_seen
+, windowstart() as window_start
+from sock_stream
+**window tumbling (size 5 seconds)**
+group by image **having count(*) &gt; 3**
+emit changes;
+</code></pre>
+<p>Stream sock_stream_smoothed now represents a stream of likely image — removing occasional ghost socks.</p>
+<h2 id="problem-2-thats-a-wall-not-a-sock">Problem #2: That’s a wall, not a sock</h2>
+<p>My second problem was a little silly. I need a way of finding not only the differences between socks — but finding when I had no sock! As I wanted to count socks I needed to exclude the “blank” images.</p>
+<p>The first step is to use ksqlDB to create a stream representing the messages updates of the MQTT topic</p>
+<pre><code>create stream sock_stream(image varchar, probability double) 
+with (kafka_topic='data_mqtt',  value_format='json');
+</code></pre>
+<p>I can eliminate pictures of the wall (the payloads of ‘blank’) by simply excluding them in a stream</p>
+<pre><code>create stream sock_stream_without_blanks as
+select image
+from sock_stream
+**where image != 'blank';**
+</code></pre>
+<h2 id="finding-pairs-of-sock">Finding Pairs of Sock</h2>
+<p>Now we’ve got a steady steam of identified socks — we now need to find pairs of identical images. To find pairs of socks I’ll look for socks appearing in even numbers. Here’s a sample segment of KSQL</p>
+<pre><code>select image
+, case when (count(*)/2)*2 = count(*) then 'Pair' else 'Un-matched' end  as pair_seen
+, count(*) as number_socks_seen
+from sock_stream_smoothed 
+group by image 
+emit changes;
+</code></pre>
+<p>Should see something like this</p>
+<pre><code>+--------------+-------------+--------------------+
+|IMAGE         |PAIR_SEEN    |NUMBER_SOCKS_SEEN   |
++--------------+-------------+--------------------+
+|Mongo         |Pair         |2                   |
+|Streamset     |Un-matched   |1                   |
+|Google        |Pair         |2                   |
+|Confluent     |Pair         |2                   |
+</code></pre>
+<h2 id="did-it-work">Did it work?</h2>
+<p>Well — yes. I was super thrilled with the result. There was a bit of latency between the image recognition and the pair identification which I hope to still optimise. But overall, very happy with this project.</p>
+<p><img src="/202003_KafkaStreamProcessingSortingSocksWithKsqlDb/00000005.gif" alt="Demo of matches"><em>Demo of matches</em></p>
+<h2 id="project-code">Project Code</h2>
+<p>Do you have socks to pair? Have a look at the complete project code at : <a href="https://github.com/saubury/socksort">https://github.com/saubury/socksort</a></p>
+
+</article>
+
+		</main>
+		
+				<div class="hide-print sans-serif f6 f5-l mt5 ph3 pb6 center nested-copy-line-height lh-copy nested-links mw-100 measure-wide">
+		<div class="about-the-author">
+		
+			
+			
+				
+					
+				
+			
+		
+		</div>
+		
+	</div>
+
+		
+		
+		
+		<footer class="hide-print sans-serif f6 fw1 bg-black near-white bottom-0 w-100 pa3" role="contentinfo">
+			<p class="w-50 fr tr">
+			<a class="no-underline near-white" href="https://github.com/xaprb/story"><img class="dib" title="Made with Hugo and Story" alt="Story logo" src="https://saubury.github.io/img/story-logo-white.svg" style="width: 1.5rem; height: 1.5rem" /></a>
+			</p>
+			<p class="w-50 near-white">
+				&copy; 2021 
+			</p>
+		</footer>
+		
+	
+	
+	</body>
+</html>

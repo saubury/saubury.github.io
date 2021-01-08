@@ -5,10 +5,6 @@
     <link>https://saubury.github.io/tag/</link>
     <description>Recent content in Tag on Simon Aubury Site</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    
-	<atom:link href="https://saubury.github.io/tag/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <language>en-us</language><atom:link href="https://saubury.github.io/tag/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>
