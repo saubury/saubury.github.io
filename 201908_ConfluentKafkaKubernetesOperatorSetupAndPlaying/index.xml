@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>201908_ConfluentKafkaKubernetesOperatorSetupAndPlayings on Simon Aubury Site</title>
+    <link>https://saubury.github.io/201908_confluentkafkakubernetesoperatorsetupandplaying/</link>
+    <description>Recent content in 201908_ConfluentKafkaKubernetesOperatorSetupAndPlayings on Simon Aubury Site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 03 Aug 2019 12:00:00 +1100</lastBuildDate>
+    
+	<atom:link href="https://saubury.github.io/201908_confluentkafkakubernetesoperatorsetupandplaying/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Confluent Kafka Kubernetes Operator — Setup and Playing!</title>
+      <link>https://saubury.github.io/201908_confluentkafkakubernetesoperatorsetupandplaying/201908_confluentkafkakubernetesoperatorsetupandplaying/</link>
+      <pubDate>Sat, 03 Aug 2019 12:00:00 +1100</pubDate>
+      
+      <guid>https://saubury.github.io/201908_confluentkafkakubernetesoperatorsetupandplaying/201908_confluentkafkakubernetesoperatorsetupandplaying/</guid>
+      <description>Confluent Kafka Kubernetes Operator — Setup and Playing! Confluent released their Kafka Kubernetes Operator this week (as part of their CP 5.3 release). The TL;DR summary is this gives you a straight forward way to deploy your own clustered &amp;amp; secured Apache Kafka on Kubernetes (ZooKeeper, Apache Kafka) along with the cool bits (Kafka Connect, KSQL, Schema Registry, REST Proxy, Control Center).
+This is pretty cool as it opens the way for Kafka deployments to on premises (eg.</description>
+    </item>
+    
+  </channel>
+</rss>
