@@ -6,7 +6,11 @@
     <description>Recent content in 202006_HomeOfficeErgonomicsWithTensorFlows on Simon Aubury Site</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 09 Jun 2020 12:00:00 +1100</lastBuildDate><atom:link href="https://saubury.github.io/202006_homeofficeergonomicswithtensorflow/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 09 Jun 2020 12:00:00 +1100</lastBuildDate>
+    
+	<atom:link href="https://saubury.github.io/202006_homeofficeergonomicswithtensorflow/index.xml" rel="self" type="application/rss+xml" />
+    
+    
     <item>
       <title>Home office ergonomics — with TensorFlow</title>
       <link>https://saubury.github.io/202006_homeofficeergonomicswithtensorflow/202006_homeofficeergonomicswithtensorflow/</link>

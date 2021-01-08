@@ -6,7 +6,11 @@
     <description>Recent content in 201805_UsingKsqlApacheKafkaFindThePlaneThatWakesSnowies on Simon Aubury Site</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 20 May 2018 17:53:07 +1100</lastBuildDate><atom:link href="https://saubury.github.io/201805_usingksqlapachekafkafindtheplanethatwakessnowy/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 20 May 2018 17:53:07 +1100</lastBuildDate>
+    
+	<atom:link href="https://saubury.github.io/201805_usingksqlapachekafkafindtheplanethatwakessnowy/index.xml" rel="self" type="application/rss+xml" />
+    
+    
     <item>
       <title>Using KSQL, Apache Kafka, a Raspberry Pi and a software defined radio to find the plane that wakes Snowy the cat</title>
       <link>https://saubury.github.io/201805_usingksqlapachekafkafindtheplanethatwakessnowy/201805_usingksqlapachekafkafindtheplanethatwakessnowy/</link>

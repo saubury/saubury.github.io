@@ -6,7 +6,11 @@
     <description>Recent content in 201905_DidIBeatBenRaceTrackingWithKafkas on Simon Aubury Site</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 28 May 2019 12:00:00 +1100</lastBuildDate><atom:link href="https://saubury.github.io/201905_didibeatbenracetrackingwithkafka/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 28 May 2019 12:00:00 +1100</lastBuildDate>
+    
+	<atom:link href="https://saubury.github.io/201905_didibeatbenracetrackingwithkafka/index.xml" rel="self" type="application/rss+xml" />
+    
+    
     <item>
       <title>Did I beat Ben? Race tracking with Kafka KSQL, MQTT &amp; Kibana</title>
       <link>https://saubury.github.io/201905_didibeatbenracetrackingwithkafka/201905_didibeatbenracetrackingwithkafka/</link>

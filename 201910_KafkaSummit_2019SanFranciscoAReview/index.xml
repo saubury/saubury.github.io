@@ -6,7 +6,11 @@
     <description>Recent content in 201910_KafkaSummit_2019SanFranciscoAReviews on Simon Aubury Site</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 12 Oct 2019 12:00:00 +1100</lastBuildDate><atom:link href="https://saubury.github.io/201910_kafkasummit_2019sanfranciscoareview/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 12 Oct 2019 12:00:00 +1100</lastBuildDate>
+    
+	<atom:link href="https://saubury.github.io/201910_kafkasummit_2019sanfranciscoareview/index.xml" rel="self" type="application/rss+xml" />
+    
+    
     <item>
       <title>Kafka Summit 2019 San Francisco: a review</title>
       <link>https://saubury.github.io/201910_kafkasummit_2019sanfranciscoareview/201910_kafkasummit_2019sanfranciscoareview/</link>
