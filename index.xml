@@ -1,0 +1,32 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Simon Aubury Site </title>
+		<link>https://saubury.github.io/</link>
+		<generator>Hugo -- gohugo.io</generator>
+		<language>en-us</language>
+		<author></author>
+		<rights>Copyright (c) 2018</rights>
+		<updated>2018-09-01 12:00:00 &#43;1100 &#43;1100</updated>
+		
+		<item>
+			<title>201809_homepowermonitoringusingaraspberrypis</title>
+			<link>https://saubury.github.io/201809_homepowermonitoringusingaraspberrypi/</link>
+			<pubDate>Sat, 01 Sep 2018 12:00:00 &#43;1100</pubDate>
+			<author></author>
+			<guid>https://saubury.github.io/201809_homepowermonitoringusingaraspberrypi/</guid>
+			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://saubury.github.io/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
+			<description></description>
+		</item>
+		
+		<item>
+			<title>201805_usingksqlapachekafkafindtheplanethatwakessnowies</title>
+			<link>https://saubury.github.io/201805_usingksqlapachekafkafindtheplanethatwakessnowy/</link>
+			<pubDate>Sun, 20 May 2018 17:53:07 &#43;1100</pubDate>
+			<author></author>
+			<guid>https://saubury.github.io/201805_usingksqlapachekafkafindtheplanethatwakessnowy/</guid>
+			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://saubury.github.io/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
+			<description></description>
+		</item>
+		
+	</channel>
+</rss>
