@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Did I beat Ben? Race tracking with Kafka KSQL, MQTT &amp; Kibana</title>
+		<link rel="alternate" type="application/rss+xml" title="RSS" href="https://saubury.github.io/index.xml">
+		<link rel="canonical" href="https://saubury.github.io/201905_didibeatbenracetrackingwithkafka/post/">
+		
+		<link rel="shortcut icon" type="image/png" href="https://saubury.github.io/apple-touch-icon-precomposed.png">
+		
+		
+		<meta name="generator" content="Hugo 0.68.3" />
+
+		
+		<meta property="og:title" content="Did I beat Ben? Race tracking with Kafka KSQL, MQTT &amp; Kibana" />
+		<meta property="og:type" content="article" />
+		<meta property="og:image" content="https://saubury.github.io/201905_didibeatbenracetrackingwithkafka/00000001.png" />
+		<meta property="og:description" content="" />
+		<meta property="og:url" content="https://saubury.github.io/201905_didibeatbenracetrackingwithkafka/post/" />
+		<meta property="og:site_name" content="Did I beat Ben? Race tracking with Kafka KSQL, MQTT &amp; Kibana" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:site" content="@" />
+
+
+		
+		<link rel="stylesheet" href="https://saubury.github.io/css/tachyons.min.css" />
+		<link rel="stylesheet" href="https://saubury.github.io/css/story.css" />
+		<link rel="stylesheet" href="https://saubury.github.io/css/descartes.css" />
+		
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+		<link href="https://fonts.googleapis.com/css?family=Quattrocento+Sans:400,400i,700,700i|Quattrocento:400,700|Spectral:400,400i,700,700i&amp;subset=latin-ext" rel="stylesheet">
+		
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		
+		<script src="https://saubury.github.io/js/story.js"></script>
+
+	</head>
+	<body class="ma0 bg-white section-201905_didibeatbenracetrackingwithkafka page-kind-page is-page-true ">
+		
+		<header class="cover bg-top" style="background-image: url('https://saubury.github.io/201905_didibeatbenracetrackingwithkafka/00000001.png'); background-position: center;">
+			<div class="bg-black-30 bb bt">
+
+				<nav class="hide-print sans-serif  border-box pa3 ph5-l">
+					<a href="https://saubury.github.io/" title="Home">
+						<img src="https://saubury.github.io/img/logo.jpg" class="w2 h2 br-100" alt="Simon Aubury Site" />
+					</a>
+					<div class="fr h2 pv2 tr">
+						<a class="link f5 ml2 dim near-white" href="https://twitter.com/simonaubury/"><i class="fab fa-twitter-square"></i></a>
+						<a class="link f5 ml2 dim near-white" href="https://github.com/saubury/"><i class="fab fa-github-square"></i></a>
+						<a class="link f5 ml2 dim near-white" href="https://www.linkedin.com/in/simonaubury/"><i class="fab fa-linkedin"></i></a>
+						<a class="link f5 ml2 dim near-white fas fa-rss-square" href="https://saubury.github.io/index.xml" title="RSS Feed"></a>
+						<a class="link f5 ml2 dim near-white fas fa-search" href="https://saubury.github.io/search/" role="search" title="Search"></a>
+					</div>
+				</nav>
+
+				<div id="hdr" class="tc-l pv4-ns pv5-l pv2 ph3 ph4-ns">
+					<h1 class="near-white mt1-ns f2 fw3 mb0 mt0 lh-title">Did I beat Ben? Race tracking with Kafka KSQL, MQTT &amp; Kibana</h1>
+					<h2 class="near-white mt3-l mb4-l fw1 f6 f3-l measure-wide-l center lh-copy mt2 mb3">
+						
+						
+							
+								Published
+								<time datetime="2019-05-28T12:00:00&#43;11:00">May 28, 2019</time>
+								<span class="display-print">by </span>
+								
+								<span class="display-print">at https://saubury.github.io/201905_didibeatbenracetrackingwithkafka/post/</span>
+							
+						
+					</h2>
+				</div>
+
+				
+				
+				
+				
+
+			</div>
+		</header>
+		
+		<main role="main">
+		
+<article class="center bg-white br-3 pv1 ph4 lh-copy f5 nested-links mw7">
+	<h1 id="did-i-beat-ben-race-tracking-with-kafka-ksql-mqtt--kibana">Did I beat Ben? Race tracking with Kafka KSQL, MQTT &amp; Kibana</h1>
+<p>Live race tracking with MQTT and Kafka streaming. Race statistics using KSQL and visualisations with Kibana. Can I run a half marathon faster than Ben?</p>
+<p><img src="/201905_didibeatbenracetrackingwithkafka/00000000.gif" alt="Kibana dashboard — showing live race analytics"><em>Kibana dashboard — showing live race analytics</em></p>
+<h2 id="design-overview">Design Overview</h2>
+<p><img src="/201905_didibeatbenracetrackingwithkafka/00000001.png" alt=""></p>
+<p>Runners are tracked with GPS based apps installed on their phones. Location updates are sent (via MQTT) to a central server. Kafka acts as a streaming platform with KSQL performing the live race computations (speed, rank, distance to finish line). The web-based mapping dashboard is generated using Kibana.</p>
+<h2 id="owntracks-open-source-phone-app">OwnTracks open-source phone app</h2>
+<p>Each runner has <a href="https://owntracks.org/">OwnTracks </a>on their phone. OwnTracks is an open-source app (<a href="https://itunes.apple.com/au/app/owntracks/id692424691?mt=8">iOS</a> and <a href="https://play.google.com/store/apps/details?id=org.owntracks.android&amp;hl=en">Android</a>) for communicating phone location to an MQTT server. Phone location is a great proxy for runner location!</p>
+<p>So why MQTT and not directly into Kafka? Well, MQTT is lightweight TCP/IP messaging protocol perfect for power constrained devices. It allows for short efficient messages to be constantly sent from the runners phone to a central server. It’s closer to a notice board than a queue, and allows for lightweight messages like “I’ve just moved to location x,y”.</p>
+<p><img src="/201905_didibeatbenracetrackingwithkafka/00000002.png" alt="CloudMQTT and OwnTracks app setup"><em>CloudMQTT and OwnTracks app setup</em></p>
+<p>I chose <a href="https://www.cloudmqtt.com/">CloudMQTT</a> to act as a hosted MQTT server, and the free-tier was super easy to configure. Each device has a unique login (eg., <em>simonuser</em>) and device ID (eg., <em>simonphone</em>). This allowed each runner to be individually tracked with a shared server.</p>
+<h2 id="mqtt-to-kafka-with-kafka-connect">MQTT to Kafka with Kafka Connect</h2>
+<p><a href="https://dzone.com/articles/apache-kafka-mqtt-end-to-end-iot-integration-githu">Kafka and MQTT are two complementary technologies</a>. MQTT acts more like a key/value store, whereas Kafka is a complete streaming platform. I used the <a href="https://docs.confluent.io/current/connect/kafka-connect-mqtt/index.html">Kafka Connect MQTT Connector</a> to poll MQTT updates and bring the location updates down to a Kafka cluster.</p>
+<!-- raw HTML omitted -->
+<p>To check this is actually collection location data into the “<em>data_mqtt</em>” topic I can query like this</p>
+<!-- raw HTML omitted -->
+<p>Looks like a valid stream of location updates. Now let’s process it to see who is winning.</p>
+<h2 id="kafka-streaming-transformation-with-ksql">Kafka Streaming Transformation with KSQL</h2>
+<p>I wanted to know where each runner was — along with their average speed and distance to the finish line. <a href="https://www.confluent.io/product/ksql/">KSQL</a> allowed me to determine each runners speed (over a 5 minute window) and distance to finish line.</p>
+<p>By concatenating the latitude and longitude fields together I could also form a “<em>geo_point</em>” data type suitable for mapping in Kibana.</p>
+<!-- raw HTML omitted -->
+<h2 id="kafka-to-elastic--kibana">Kafka To Elastic &amp; Kibana</h2>
+<p>Now I have 2 derived topics</p>
+<ul>
+<li>
+<p><em>runner-location</em> — a stream of runner’s and their location</p>
+</li>
+<li>
+<p><em>runner-status</em> — a table of runner’s speed and remaining distance</p>
+</li>
+</ul>
+<p>I can write these topics into Kibana using the Elastic <a href="https://docs.confluent.io/current/connect/kafka-connect-elasticsearch/index.html">Kafka Connect Sink</a> Connector.</p>
+<!-- raw HTML omitted -->
+<h2 id="kibana-visualisations">Kibana Visualisations</h2>
+<p><img src="/201905_didibeatbenracetrackingwithkafka/00000003.png" alt="A picture tells 10³ words"><em>A picture tells 10³ words</em></p>
+<p>A Kibana dashboard is a great way to display a real-time display of</p>
+<ul>
+<li>
+<p>Runner location platted on a map</p>
+</li>
+<li>
+<p>Speed graph per runner</p>
+</li>
+<li>
+<p>Altitude plot per runner</p>
+</li>
+<li>
+<p>A league table — who is closest to the finish line!</p>
+</li>
+</ul>
+<p>A nice trick for Kibana mapping when you want to zoom further to street-level data is to use Open Street Map as a <a href="https://www.objectrocket.com/blog/how-to/elasticsearch-tile-service/">third party map and tile services</a>. Allows for much richer maps when zoomed in.</p>
+<h2 id="did-i-beat-ben">Did I beat Ben?</h2>
+<p>No. <a href="https://www.linkedin.com/in/benjamin-widdup-a8a2175/">Ben </a>beat me by a sizeable margin. Perhaps I should spend more time training than coding?</p>
+<p><img src="/201905_didibeatbenracetrackingwithkafka/00000004.jpeg" alt="Me (left) who lost to Ben (right)"><em>Me (left) who lost to Ben (right)</em></p>
+<h2 id="want-to-try-it">Want To Try It?</h2>
+<p>Want to build your own race mapper for displaying participant progress and location? You can build an entire Kafka, KSQL, Kibana dashboard with demonstration run data by cloning</p>
+<ul>
+<li>
+<p><a href="https://github.com/saubury/race-mapper/">https://github.com/saubury/race-mapper/</a></p>
+</li>
+<li>
+<p><a href="https://www.udemy.com/kafka-ksql/?couponCode=MEDIUM">***KSQL — my course on Udemy</a>. ***(unashamed plug!)</p>
+</li>
+</ul>
+<h2 id="credits--references">Credits &amp; References</h2>
+<ul>
+<li>
+<p><a href="https://owntracks.org/">https://owntracks.org/</a></p>
+</li>
+<li>
+<p><a href="https://www.cloudmqtt.com/">https://www.cloudmqtt.com/</a></p>
+</li>
+<li>
+<p><a href="https://dzone.com/articles/apache-kafka-mqtt-end-to-end-iot-integration-githu">https://dzone.com/articles/apache-kafka-mqtt-end-to-end-iot-integration-githu</a> — by <a href="https://dzone.com/users/758579/megachucky.html">Kai Wähner</a></p>
+</li>
+<li>
+<p>And of course — thanks <a href="https://www.linkedin.com/in/benjamin-widdup-a8a2175/">Ben</a>!</p>
+</li>
+</ul>
+
+</article>
+
+		</main>
+		
+				<div class="hide-print sans-serif f6 f5-l mt5 ph3 pb6 center nested-copy-line-height lh-copy nested-links mw-100 measure-wide">
+		<div class="about-the-author">
+		
+			
+			
+				
+					
+				
+			
+		
+		</div>
+		
+	</div>
+
+		
+		
+		
+		<footer class="hide-print sans-serif f6 fw1 bg-black near-white bottom-0 w-100 pa3" role="contentinfo">
+			<p class="w-50 fr tr">
+			<a class="no-underline near-white" href="https://github.com/xaprb/story"><img class="dib" title="Made with Hugo and Story" alt="Story logo" src="https://saubury.github.io/img/story-logo-white.svg" style="width: 1.5rem; height: 1.5rem" /></a>
+			</p>
+			<p class="w-50 near-white">
+				&copy; 2021 
+			</p>
+		</footer>
+		
+	
+	
+	</body>
+</html>

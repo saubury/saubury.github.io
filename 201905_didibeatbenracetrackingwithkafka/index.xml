@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>201905_didibeatbenracetrackingwithkafkas on Simon Aubury Site</title>
+    <link>https://saubury.github.io/201905_didibeatbenracetrackingwithkafka/</link>
+    <description>Recent content in 201905_didibeatbenracetrackingwithkafkas on Simon Aubury Site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 28 May 2019 12:00:00 +1100</lastBuildDate>
+    
+	<atom:link href="https://saubury.github.io/201905_didibeatbenracetrackingwithkafka/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Did I beat Ben? Race tracking with Kafka KSQL, MQTT &amp; Kibana</title>
+      <link>https://saubury.github.io/201905_didibeatbenracetrackingwithkafka/post/</link>
+      <pubDate>Tue, 28 May 2019 12:00:00 +1100</pubDate>
+      
+      <guid>https://saubury.github.io/201905_didibeatbenracetrackingwithkafka/post/</guid>
+      <description>Did I beat Ben? Race tracking with Kafka KSQL, MQTT &amp;amp; Kibana Live race tracking with MQTT and Kafka streaming. Race statistics using KSQL and visualisations with Kibana. Can I run a half marathon faster than Ben?
+Kibana dashboard — showing live race analytics
+Design Overview Runners are tracked with GPS based apps installed on their phones. Location updates are sent (via MQTT) to a central server. Kafka acts as a streaming platform with KSQL performing the live race computations (speed, rank, distance to finish line).</description>
+    </item>
+    
+  </channel>
+</rss>

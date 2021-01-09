@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Confluent Kafka Kubernetes Operator — Setup and Playing!</title>
+		<link rel="alternate" type="application/rss+xml" title="RSS" href="https://saubury.github.io/index.xml">
+		<link rel="canonical" href="https://saubury.github.io/201908_confluentkafkakubernetesoperatorsetupandplaying/post/">
+		
+		<link rel="shortcut icon" type="image/png" href="https://saubury.github.io/apple-touch-icon-precomposed.png">
+		
+		
+		<meta name="generator" content="Hugo 0.68.3" />
+
+		
+		<meta property="og:title" content="Confluent Kafka Kubernetes Operator — Setup and Playing!" />
+		<meta property="og:type" content="article" />
+		<meta property="og:image" content="https://saubury.github.io/201908_confluentkafkakubernetesoperatorsetupandplaying/00000001.png" />
+		<meta property="og:description" content="" />
+		<meta property="og:url" content="https://saubury.github.io/201908_confluentkafkakubernetesoperatorsetupandplaying/post/" />
+		<meta property="og:site_name" content="Confluent Kafka Kubernetes Operator — Setup and Playing!" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:site" content="@" />
+
+
+		
+		<link rel="stylesheet" href="https://saubury.github.io/css/tachyons.min.css" />
+		<link rel="stylesheet" href="https://saubury.github.io/css/story.css" />
+		<link rel="stylesheet" href="https://saubury.github.io/css/descartes.css" />
+		
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+		<link href="https://fonts.googleapis.com/css?family=Quattrocento+Sans:400,400i,700,700i|Quattrocento:400,700|Spectral:400,400i,700,700i&amp;subset=latin-ext" rel="stylesheet">
+		
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		
+		<script src="https://saubury.github.io/js/story.js"></script>
+
+	</head>
+	<body class="ma0 bg-white section-201908_confluentkafkakubernetesoperatorsetupandplaying page-kind-page is-page-true ">
+		
+		<header class="cover bg-top" style="background-image: url('https://saubury.github.io/201908_confluentkafkakubernetesoperatorsetupandplaying/00000001.png'); background-position: center;">
+			<div class="bg-black-30 bb bt">
+
+				<nav class="hide-print sans-serif  border-box pa3 ph5-l">
+					<a href="https://saubury.github.io/" title="Home">
+						<img src="https://saubury.github.io/img/logo.jpg" class="w2 h2 br-100" alt="Simon Aubury Site" />
+					</a>
+					<div class="fr h2 pv2 tr">
+						<a class="link f5 ml2 dim near-white" href="https://twitter.com/simonaubury/"><i class="fab fa-twitter-square"></i></a>
+						<a class="link f5 ml2 dim near-white" href="https://github.com/saubury/"><i class="fab fa-github-square"></i></a>
+						<a class="link f5 ml2 dim near-white" href="https://www.linkedin.com/in/simonaubury/"><i class="fab fa-linkedin"></i></a>
+						<a class="link f5 ml2 dim near-white fas fa-rss-square" href="https://saubury.github.io/index.xml" title="RSS Feed"></a>
+						<a class="link f5 ml2 dim near-white fas fa-search" href="https://saubury.github.io/search/" role="search" title="Search"></a>
+					</div>
+				</nav>
+
+				<div id="hdr" class="tc-l pv4-ns pv5-l pv2 ph3 ph4-ns">
+					<h1 class="near-white mt1-ns f2 fw3 mb0 mt0 lh-title">Confluent Kafka Kubernetes Operator — Setup and Playing!</h1>
+					<h2 class="near-white mt3-l mb4-l fw1 f6 f3-l measure-wide-l center lh-copy mt2 mb3">
+						
+						
+							
+								Published
+								<time datetime="2019-08-03T12:00:00&#43;11:00">Aug 3, 2019</time>
+								<span class="display-print">by </span>
+								
+								<span class="display-print">at https://saubury.github.io/201908_confluentkafkakubernetesoperatorsetupandplaying/post/</span>
+							
+						
+					</h2>
+				</div>
+
+				
+				
+				
+				
+
+			</div>
+		</header>
+		
+		<main role="main">
+		
+<article class="center bg-white br-3 pv1 ph4 lh-copy f5 nested-links mw7">
+	<h1 id="confluent-kafka-kubernetes-operatorsetup-and-playing">Confluent Kafka Kubernetes Operator — Setup and Playing!</h1>
+<p>Confluent released their Kafka Kubernetes Operator this week (as part of their CP 5.3 release). The TL;DR summary is this gives you a straight forward way to deploy your own clustered &amp; secured Apache Kafka on Kubernetes (ZooKeeper, Apache Kafka) along with the cool bits (Kafka Connect, KSQL, Schema Registry, REST Proxy, Control Center).</p>
+<p>This is pretty cool as it opens the way for Kafka deployments to on premises (eg., OpenShift or Rancher) and eases the way for clouds deploys (EKS, AKS, GKE). It also automates security configuration setup (setting up kerberos authentication in Kafka is a job for the <em>patient</em>!).</p>
+<p>So, let’s see how to see this up.</p>
+<h2 id="machine-setup">Machine Setup</h2>
+<p>I recently got a new Mac — so this was a good opportunity to document the steps necessary to start from a clean machine. This demonstration uses the Google (GCP) Kubernetes Engine</p>
+<h2 id="kubernetes-helm-cli">Kubernetes Helm CLI</h2>
+<p>First — let’s install the kubernetes command line tools (assuming <a href="https://brew.sh/">*brew</a>* is already installed)</p>
+<pre><code>brew install kubernetes-helmbrew 
+
+install kubernetes-cli
+</code></pre>
+<h2 id="google-cloud-sdk">Google Cloud SDK</h2>
+<p>I’ll be using the Google (GCP) Kubernetes Engine. You’ll need to install the <em>google-cloud-sdk</em> . Google has great <a href="https://cloud.google.com/sdk/docs/quickstarts">quick-start</a> instructions . In short, download, extract and add to your PATH</p>
+<h2 id="confluent-kubernetes-operator-helm-bundle">Confluent Kubernetes Operator Helm bundle</h2>
+<p>Next, we actually need to download the Confluent Helm bundle. This Confluent bundle comprises Helm charts, templates, and scripts used to deploy Confluent Operator and Confluent Platform components for your Kubernetes cluster. Remember this is an Enterprise feature (ie., paid for if used in production).</p>
+<p>Download and extract the bundle from Confluent Platform Operations from <a href="https://docs.confluent.io/current/installation/operator/co-deployment.html">https://docs.confluent.io/current/installation/operator/co-deployment.html</a></p>
+<pre><code>tar xvfz confluent-operator-20190726-v0.65.0.tar.gz
+
+cd confluent-operator-20190726-v0.65.0/helm
+</code></pre>
+<h2 id="gcp-kubernetes-engine-provision">GCP Kubernetes Engine Provision</h2>
+<h3 id="adding-a-kubernetes-clusters">Adding a Kubernetes clusters</h3>
+<p>Navigating to GCP Kubernetes Engine ; click “create cluster”</p>
+<p><img src="/201908_confluentkafkakubernetesoperatorsetupandplaying/00000000.png" alt="Adding a Kubernetes clusters"><em>Adding a Kubernetes clusters</em></p>
+<h3 id="add-a-node-pool">Add a node pool</h3>
+<p>For the new cluster; add a lot of capacity. I found 16 nodes of 2 vCPU’s was enough to get going</p>
+<p><img src="/201908_confluentkafkakubernetesoperatorsetupandplaying/00000001.png" alt="Add a node pool"><em>Add a node pool</em></p>
+<h2 id="adding-resource-quota">Adding resource quota</h2>
+<p>Initially I hit a problem where I could not provision enough resource due to a quota on CPUs.</p>
+<p><img src="/201908_confluentkafkakubernetesoperatorsetupandplaying/00000002.png" alt="Be sure to increase the CPU quota"><em>Be sure to increase the CPU quota</em></p>
+<p>If this happens to you navigate to IAM Admin Quotas (<a href="https://console.cloud.google.com/iam-admin/quotas">https://console.cloud.google.com/iam-admin/quotas</a>) and increase to something like 32 for the Compute Engine API CPUs maximum</p>
+<p><img src="/201908_confluentkafkakubernetesoperatorsetupandplaying/00000003.png" alt="Update quota"><em>Update quota</em></p>
+<h2 id="setup-gcp-client">Setup GCP Client</h2>
+<p>Now you’ll need to initialises and authenticate your setup</p>
+<pre><code>gcloud init
+
+gcloud auth list
+
+gcloud config set compute/region us-central1
+
+gcloud config set compute/zone us-central1-a
+
+gcloud container clusters get-credentials my-kafka-cluster
+</code></pre>
+<p>Next, setup a Service Account</p>
+<pre><code>kubectl create serviceaccount tiller -n kube-system
+
+kubectl create clusterrolebinding tiller --clusterrole=cluster-admin --serviceaccount kube-system:tiller
+
+helm init --service-account tiller
+</code></pre>
+<h2 id="install-confluent-operator">Install Confluent Operator</h2>
+<p>Good — now my laptop can communicate with a remote GCP Kubernetes Engine. Now to install the Confluent Operator. These steps are pretty much verbatim from <a href="https://docs.confluent.io/current/installation/operator/co-deployment.html">https://docs.confluent.io/current/installation/operator/co-deployment.html</a></p>
+<pre><code>helm install -f ./providers/gcp.yaml --name operator --namespace operator --set operator.enabled=true ./confluent-operator
+
+kubectl -n operator patch serviceaccount default -p '{&quot;imagePullSecrets&quot;: [{&quot;name&quot;: &quot;confluent-docker-registry&quot; }]}'
+
+kubectl get pods -n operator | grep &quot;manager&quot;
+</code></pre>
+<h2 id="install-zookeeper">Install ZooKeeper</h2>
+<p>First — let’s install 3 zookeeper nodes</p>
+<pre><code>helm install -f ./providers/gcp.yaml --name zookeeper --namespace operator --set zookeeper.enabled=true ./confluent-operator
+
+kubectl get zookeeper zookeeper -ojsonpath='{.status.phase}' -n operator
+</code></pre>
+<h2 id="setup-dns-optional">Setup DNS (Optional)</h2>
+<p>Not strictly necessary — but if you want to have direct (external) access to your Kafka cluster, you’ll need to provide an accessible DNS that can be pushed into your LISTENER config. The settings are in <em>helm/providers/gcp.yaml</em></p>
+<p>![Changes to helm/providers/gcp.yaml](/201908_confluentkafkakubernetesoperatorsetupandplaying/00000004.yaml*</p>
+<h2 id="install-kafka-brokers">Install Kafka brokers</h2>
+<p>A very similar approach to setting up 3 kafka brokers</p>
+<pre><code>helm install -f ./providers/gcp.yaml --name kafka --namespace operator --set kafka.enabled=true ./confluent-operator
+
+kubectl get pods -n operator | grep kafka
+</code></pre>
+<h2 id="install-schema-registry">Install Schema Registry</h2>
+<p>Now to install a 2 node schema registry</p>
+<pre><code>helm install -f ./providers/gcp.yaml --name schemaregistry --namespace operator --set schemaregistry.enabled=true ./confluent-operator
+
+kubectl get pods -n operator | grep schemaregistry
+</code></pre>
+<h2 id="install-kafka-connect">Install Kafka Connect</h2>
+<p>Now for Kafka connect</p>
+<pre><code>helm install -f ./providers/gcp.yaml --name connect --namespace operator --set connect.enabled=true ./confluent-operator
+
+kubectl get pods -n operator | grep connectors
+</code></pre>
+<h2 id="install-confluent-control-center">Install Confluent Control Center</h2>
+<pre><code>helm install -f ./providers/gcp.yaml --name controlcenter --namespace operator --set controlcenter.enabled=true ./confluent-operator
+
+kubectl get pods -n operator | grep controlcenter
+</code></pre>
+<h2 id="install-confluent-ksql">Install Confluent KSQL</h2>
+<pre><code>helm install -f ./providers/gcp.yaml --name ksql --namespace operator --set ksql.enabled=true ./confluent-operator
+
+kubectl get pods -n operator | grep ksql
+</code></pre>
+<h2 id="running-workload">Running Workload</h2>
+<p>After the deployments have completed, the running workloads should look like this</p>
+<p><img src="/201908_confluentkafkakubernetesoperatorsetupandplaying/00000005.png" alt="Kubernetes Workloads on GCP"><em>Kubernetes Workloads on GCP</em></p>
+<h2 id="does-it-work--lets-test-it-">Does it work — let’s test it …</h2>
+<h3 id="test-kafka-from-within-the-cluster">Test Kafka from within the cluster</h3>
+<p>Launch a bash session on a kafka broker</p>
+<p>kubectl -n operator exec -it kafka-0 bash</p>
+<p>Create a local <em>kafka.properties</em> file</p>
+<pre><code>cat &lt;&lt; EOF &gt; kafka.properties
+bootstrap.servers=kafka:9071
+sasl.jaas.config=org.apache.kafka.common.security.plain.PlainLoginModule required username=&quot;test&quot; password=&quot;test123&quot;;
+sasl.mechanism=PLAIN
+security.protocol=SASL_PLAINTEXT
+EOF
+</code></pre>
+<p>And then run a test</p>
+<pre><code>kafka-topics --command-config kafka.properties --bootstrap-server kafka:9092 --list
+
+exit
+</code></pre>
+<h2 id="test-local-ksql-client-against-remote-ksql-server">Test local KSQL client against remote KSQL server</h2>
+<p>Establish a port mapping tunnel</p>
+<pre><code>kubectl port-forward svc/ksql 8088:8088 -n operator
+</code></pre>
+<p>And start a ksql session (locally) connecting to a remote server</p>
+<pre><code>ksql
+list topics;
+exit
+</code></pre>
+<h2 id="test-confluent-control-center">Test Confluent Control Center</h2>
+<p>Now let’s test access to Confluent Control Center. Establish a port mapping tunnel for port 9021</p>
+<pre><code>kubectl port-forward svc/controlcenter 9021:9021 -n operator
+</code></pre>
+<p>And navigate to <a href="http://localhost:9021/">http://localhost:9021</a></p>
+<p>The initial login is <em>admin</em> and the default password is <em>Developer1</em>.</p>
+<p><img src="/201908_confluentkafkakubernetesoperatorsetupandplaying/00000006.png" alt="Behold — Confluent Control Center"><em>Behold — Confluent Control Center</em></p>
+<h2 id="teardown-and-cleanup">Teardown and Cleanup</h2>
+<p>Be sure to remove the deployment once you’ve finished testing. For GCP Kubernetes Engine it’s pretty much down to deleting the cluster</p>
+<p><img src="/201908_confluentkafkakubernetesoperatorsetupandplaying/00000007.png" alt="Things not to do to production"><em>Things not to do to production</em></p>
+<h2 id="final-thoughts">Final Thoughts</h2>
+<p>A managed service <em>anything</em> is preferable to rolling things yourself. However, the Kafka Kubernetes Operator made a complex deployment pretty seem-less. This is pretty battle tested too as Confluent run their own public cloud offering (Confluent Cloud) on Kubernetes.</p>
+<p>I had a fully clustered, secured and highly available streaming platform of my own with a few <em>yaml</em> files and some cli magic.</p>
+<p>This is an amazing outcome — built in minutes (not days or weeks). This was <em>so much easier</em> than the last time I did this!</p>
+
+</article>
+
+		</main>
+		
+				<div class="hide-print sans-serif f6 f5-l mt5 ph3 pb6 center nested-copy-line-height lh-copy nested-links mw-100 measure-wide">
+		<div class="about-the-author">
+		
+			
+			
+				
+					
+				
+			
+		
+		</div>
+		
+	</div>
+
+		
+		
+		
+		<footer class="hide-print sans-serif f6 fw1 bg-black near-white bottom-0 w-100 pa3" role="contentinfo">
+			<p class="w-50 fr tr">
+			<a class="no-underline near-white" href="https://github.com/xaprb/story"><img class="dib" title="Made with Hugo and Story" alt="Story logo" src="https://saubury.github.io/img/story-logo-white.svg" style="width: 1.5rem; height: 1.5rem" /></a>
+			</p>
+			<p class="w-50 near-white">
+				&copy; 2021 
+			</p>
+		</footer>
+		
+	
+	
+	</body>
+</html>

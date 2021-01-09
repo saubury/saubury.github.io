@@ -5,8 +5,58 @@
 		<generator>Hugo -- gohugo.io</generator>
 		<language>en-us</language>
 		<author></author>
-		<rights>Copyright (c) 2018</rights>
-		<updated>2018-09-01 12:00:00 &#43;1100 &#43;1100</updated>
+		<rights>Copyright (c) 2020</rights>
+		<updated>2020-01-14 12:00:00 &#43;1100 AEDT</updated>
+		
+		<item>
+			<title>202001_kafkaconnectsecretsmanagementwithksqldbs</title>
+			<link>https://saubury.github.io/202001_kafkaconnectsecretsmanagementwithksqldb/</link>
+			<pubDate>Tue, 14 Jan 2020 12:00:00 AEDT</pubDate>
+			<author></author>
+			<guid>https://saubury.github.io/202001_kafkaconnectsecretsmanagementwithksqldb/</guid>
+			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://saubury.github.io/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
+			<description></description>
+		</item>
+		
+		<item>
+			<title>201910_kafkasummit_2019sanfranciscoareviews</title>
+			<link>https://saubury.github.io/201910_kafkasummit_2019sanfranciscoareview/</link>
+			<pubDate>Sat, 12 Oct 2019 12:00:00 AEDT</pubDate>
+			<author></author>
+			<guid>https://saubury.github.io/201910_kafkasummit_2019sanfranciscoareview/</guid>
+			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://saubury.github.io/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
+			<description></description>
+		</item>
+		
+		<item>
+			<title>201908_confluentkafkakubernetesoperatorsetupandplayings</title>
+			<link>https://saubury.github.io/201908_confluentkafkakubernetesoperatorsetupandplaying/</link>
+			<pubDate>Sat, 03 Aug 2019 12:00:00 &#43;1100</pubDate>
+			<author></author>
+			<guid>https://saubury.github.io/201908_confluentkafkakubernetesoperatorsetupandplaying/</guid>
+			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://saubury.github.io/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
+			<description></description>
+		</item>
+		
+		<item>
+			<title>201905_didibeatbenracetrackingwithkafkas</title>
+			<link>https://saubury.github.io/201905_didibeatbenracetrackingwithkafka/</link>
+			<pubDate>Tue, 28 May 2019 12:00:00 &#43;1100</pubDate>
+			<author></author>
+			<guid>https://saubury.github.io/201905_didibeatbenracetrackingwithkafka/</guid>
+			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://saubury.github.io/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
+			<description></description>
+		</item>
+		
+		<item>
+			<title>201810_machinelearningbugmewhenivelefttheheaterons</title>
+			<link>https://saubury.github.io/201810_machinelearningbugmewhenivelefttheheateron/</link>
+			<pubDate>Sat, 08 Sep 2018 12:00:00 &#43;1100</pubDate>
+			<author></author>
+			<guid>https://saubury.github.io/201810_machinelearningbugmewhenivelefttheheateron/</guid>
+			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://saubury.github.io/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
+			<description></description>
+		</item>
 		
 		<item>
 			<title>201809_homepowermonitoringusingaraspberrypis</title>

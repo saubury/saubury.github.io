@@ -3,17 +3,67 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://saubury.github.io/202001_kafkaconnectsecretsmanagementwithksqldb/</loc>
+    <lastmod>2020-01-14T12:00:00+11:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://saubury.github.io/202001_kafkaconnectsecretsmanagementwithksqldb/post/</loc>
+    <lastmod>2020-01-14T12:00:00+11:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://saubury.github.io/</loc>
+    <lastmod>2020-01-14T12:00:00+11:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://saubury.github.io/201910_kafkasummit_2019sanfranciscoareview/</loc>
+    <lastmod>2019-10-12T12:00:00+11:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://saubury.github.io/201910_kafkasummit_2019sanfranciscoareview/post/</loc>
+    <lastmod>2019-10-12T12:00:00+11:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://saubury.github.io/201908_confluentkafkakubernetesoperatorsetupandplaying/</loc>
+    <lastmod>2019-08-03T12:00:00+11:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://saubury.github.io/201908_confluentkafkakubernetesoperatorsetupandplaying/post/</loc>
+    <lastmod>2019-08-03T12:00:00+11:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://saubury.github.io/201905_didibeatbenracetrackingwithkafka/</loc>
+    <lastmod>2019-05-28T12:00:00+11:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://saubury.github.io/201905_didibeatbenracetrackingwithkafka/post/</loc>
+    <lastmod>2019-05-28T12:00:00+11:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://saubury.github.io/201810_machinelearningbugmewhenivelefttheheateron/</loc>
+    <lastmod>2018-09-08T12:00:00+11:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://saubury.github.io/201810_machinelearningbugmewhenivelefttheheateron/post/</loc>
+    <lastmod>2018-09-08T12:00:00+11:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://saubury.github.io/201809_homepowermonitoringusingaraspberrypi/</loc>
     <lastmod>2018-09-01T12:00:00+11:00</lastmod>
   </url>
   
   <url>
     <loc>https://saubury.github.io/201809_homepowermonitoringusingaraspberrypi/post/</loc>
-    <lastmod>2018-09-01T12:00:00+11:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://saubury.github.io/</loc>
     <lastmod>2018-09-01T12:00:00+11:00</lastmod>
   </url>
   
