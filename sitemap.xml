@@ -3,17 +3,77 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://saubury.github.io/202009_piperipheral/</loc>
+    <lastmod>2020-09-21T12:00:00+11:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://saubury.github.io/202009_piperipheral/post/</loc>
+    <lastmod>2020-09-21T12:00:00+11:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://saubury.github.io/</loc>
+    <lastmod>2020-09-21T12:00:00+11:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://saubury.github.io/202006_homeofficeergonomicswithtensorflow/</loc>
+    <lastmod>2020-06-09T12:00:00+11:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://saubury.github.io/202006_homeofficeergonomicswithtensorflow/post/</loc>
+    <lastmod>2020-06-09T12:00:00+11:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://saubury.github.io/202005_cocktailpi/</loc>
+    <lastmod>2020-05-18T12:00:00+11:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://saubury.github.io/202005_cocktailpi/post/</loc>
+    <lastmod>2020-05-18T12:00:00+11:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://saubury.github.io/202004_kafkawithavrovskafkawithprotobuf/</loc>
+    <lastmod>2020-05-02T12:00:00+11:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://saubury.github.io/202004_kafkawithavrovskafkawithprotobuf/post/</loc>
+    <lastmod>2020-05-02T12:00:00+11:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://saubury.github.io/202003_kafkastreamprocessingsortingsockswithksqldb/</loc>
+    <lastmod>2020-02-23T12:00:00+11:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://saubury.github.io/202003_kafkastreamprocessingsortingsockswithksqldb/post/</loc>
+    <lastmod>2020-02-23T12:00:00+11:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://saubury.github.io/202002_sortingmysockswithdeeplearningpart1/</loc>
+    <lastmod>2020-02-10T12:00:00+11:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://saubury.github.io/202002_sortingmysockswithdeeplearningpart1/post/</loc>
+    <lastmod>2020-02-10T12:00:00+11:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://saubury.github.io/202001_kafkaconnectsecretsmanagementwithksqldb/</loc>
     <lastmod>2020-01-14T12:00:00+11:00</lastmod>
   </url>
   
   <url>
     <loc>https://saubury.github.io/202001_kafkaconnectsecretsmanagementwithksqldb/post/</loc>
-    <lastmod>2020-01-14T12:00:00+11:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://saubury.github.io/</loc>
     <lastmod>2020-01-14T12:00:00+11:00</lastmod>
   </url>
   

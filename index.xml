@@ -6,7 +6,67 @@
 		<language>en-us</language>
 		<author></author>
 		<rights>Copyright (c) 2020</rights>
-		<updated>2020-01-14 12:00:00 &#43;1100 AEDT</updated>
+		<updated>2020-09-21 12:00:00 &#43;1100 &#43;1100</updated>
+		
+		<item>
+			<title>202009_piperipherals</title>
+			<link>https://saubury.github.io/202009_piperipheral/</link>
+			<pubDate>Mon, 21 Sep 2020 12:00:00 &#43;1100</pubDate>
+			<author></author>
+			<guid>https://saubury.github.io/202009_piperipheral/</guid>
+			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://saubury.github.io/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
+			<description></description>
+		</item>
+		
+		<item>
+			<title>202006_homeofficeergonomicswithtensorflows</title>
+			<link>https://saubury.github.io/202006_homeofficeergonomicswithtensorflow/</link>
+			<pubDate>Tue, 09 Jun 2020 12:00:00 &#43;1100</pubDate>
+			<author></author>
+			<guid>https://saubury.github.io/202006_homeofficeergonomicswithtensorflow/</guid>
+			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://saubury.github.io/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
+			<description></description>
+		</item>
+		
+		<item>
+			<title>202005_cocktailpis</title>
+			<link>https://saubury.github.io/202005_cocktailpi/</link>
+			<pubDate>Mon, 18 May 2020 12:00:00 &#43;1100</pubDate>
+			<author></author>
+			<guid>https://saubury.github.io/202005_cocktailpi/</guid>
+			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://saubury.github.io/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
+			<description></description>
+		</item>
+		
+		<item>
+			<title>202004_kafkawithavrovskafkawithprotobufs</title>
+			<link>https://saubury.github.io/202004_kafkawithavrovskafkawithprotobuf/</link>
+			<pubDate>Sat, 02 May 2020 12:00:00 &#43;1100</pubDate>
+			<author></author>
+			<guid>https://saubury.github.io/202004_kafkawithavrovskafkawithprotobuf/</guid>
+			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://saubury.github.io/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
+			<description></description>
+		</item>
+		
+		<item>
+			<title>202003_kafkastreamprocessingsortingsockswithksqldbs</title>
+			<link>https://saubury.github.io/202003_kafkastreamprocessingsortingsockswithksqldb/</link>
+			<pubDate>Sun, 23 Feb 2020 12:00:00 AEDT</pubDate>
+			<author></author>
+			<guid>https://saubury.github.io/202003_kafkastreamprocessingsortingsockswithksqldb/</guid>
+			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://saubury.github.io/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
+			<description></description>
+		</item>
+		
+		<item>
+			<title>202002_sortingmysockswithdeeplearningpart1s</title>
+			<link>https://saubury.github.io/202002_sortingmysockswithdeeplearningpart1/</link>
+			<pubDate>Mon, 10 Feb 2020 12:00:00 AEDT</pubDate>
+			<author></author>
+			<guid>https://saubury.github.io/202002_sortingmysockswithdeeplearningpart1/</guid>
+			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://saubury.github.io/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
+			<description></description>
+		</item>
 		
 		<item>
 			<title>202001_kafkaconnectsecretsmanagementwithksqldbs</title>

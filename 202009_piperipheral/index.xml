@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>202009_piperipherals on Simon Aubury Site</title>
+    <link>https://saubury.github.io/202009_piperipheral/</link>
+    <description>Recent content in 202009_piperipherals on Simon Aubury Site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 21 Sep 2020 12:00:00 +1100</lastBuildDate>
+    
+	<atom:link href="https://saubury.github.io/202009_piperipheral/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Pi Peripheral - Computer actions with a $10 Raspberry Pi Zero</title>
+      <link>https://saubury.github.io/202009_piperipheral/post/</link>
+      <pubDate>Mon, 21 Sep 2020 12:00:00 +1100</pubDate>
+      
+      <guid>https://saubury.github.io/202009_piperipheral/post/</guid>
+      <description>Pi Peripheral Landing gear down and strobe lights active. How to add physical buttons, switches and dials to control computer actions with a $10 Raspberry Pi Zero.
+Why would you want to do this? Well you might want to add some additional buttons or switches to your favorite game. Or maybe you can streamline your video production but switching cameras with a foot pedal. For me, I wanted to add tactile controls to Microsoft Flight Simulator 2020.</description>
+    </item>
+    
+  </channel>
+</rss>
