@@ -1,140 +1,150 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 	<channel>
 		<title>Simon Aubury Site </title>
-		<link>https://saubury.github.io/</link>
+		<link>https://simonaubury.com/</link>
 		<generator>Hugo -- gohugo.io</generator>
 		<language>en-us</language>
 		<author></author>
-		<rights>Copyright (c) 2020</rights>
-		<updated>2020-09-21 12:00:00 &#43;1100 &#43;1100</updated>
+		<rights>Copyright (c) 2021</rights>
+		<updated>2021-01-10 12:00:00 &#43;1100 AEDT</updated>
+		
+		<item>
+			<title>202101_1cat3cloudspart1s</title>
+			<link>https://simonaubury.com/202101_1cat3cloudspart1/</link>
+			<pubDate>Sun, 10 Jan 2021 12:00:00 AEDT</pubDate>
+			<author></author>
+			<guid>https://simonaubury.com/202101_1cat3cloudspart1/</guid>
+			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://simonaubury.com/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
+			<description></description>
+		</item>
 		
 		<item>
 			<title>202009_piperipherals</title>
-			<link>https://saubury.github.io/202009_piperipheral/</link>
+			<link>https://simonaubury.com/202009_piperipheral/</link>
 			<pubDate>Mon, 21 Sep 2020 12:00:00 &#43;1100</pubDate>
 			<author></author>
-			<guid>https://saubury.github.io/202009_piperipheral/</guid>
-			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://saubury.github.io/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
+			<guid>https://simonaubury.com/202009_piperipheral/</guid>
+			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://simonaubury.com/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
 			<description></description>
 		</item>
 		
 		<item>
 			<title>202006_homeofficeergonomicswithtensorflows</title>
-			<link>https://saubury.github.io/202006_homeofficeergonomicswithtensorflow/</link>
+			<link>https://simonaubury.com/202006_homeofficeergonomicswithtensorflow/</link>
 			<pubDate>Tue, 09 Jun 2020 12:00:00 &#43;1100</pubDate>
 			<author></author>
-			<guid>https://saubury.github.io/202006_homeofficeergonomicswithtensorflow/</guid>
-			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://saubury.github.io/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
+			<guid>https://simonaubury.com/202006_homeofficeergonomicswithtensorflow/</guid>
+			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://simonaubury.com/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
 			<description></description>
 		</item>
 		
 		<item>
 			<title>202005_cocktailpis</title>
-			<link>https://saubury.github.io/202005_cocktailpi/</link>
+			<link>https://simonaubury.com/202005_cocktailpi/</link>
 			<pubDate>Mon, 18 May 2020 12:00:00 &#43;1100</pubDate>
 			<author></author>
-			<guid>https://saubury.github.io/202005_cocktailpi/</guid>
-			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://saubury.github.io/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
+			<guid>https://simonaubury.com/202005_cocktailpi/</guid>
+			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://simonaubury.com/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
 			<description></description>
 		</item>
 		
 		<item>
 			<title>202004_kafkawithavrovskafkawithprotobufs</title>
-			<link>https://saubury.github.io/202004_kafkawithavrovskafkawithprotobuf/</link>
+			<link>https://simonaubury.com/202004_kafkawithavrovskafkawithprotobuf/</link>
 			<pubDate>Sat, 02 May 2020 12:00:00 &#43;1100</pubDate>
 			<author></author>
-			<guid>https://saubury.github.io/202004_kafkawithavrovskafkawithprotobuf/</guid>
-			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://saubury.github.io/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
+			<guid>https://simonaubury.com/202004_kafkawithavrovskafkawithprotobuf/</guid>
+			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://simonaubury.com/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
 			<description></description>
 		</item>
 		
 		<item>
 			<title>202003_kafkastreamprocessingsortingsockswithksqldbs</title>
-			<link>https://saubury.github.io/202003_kafkastreamprocessingsortingsockswithksqldb/</link>
+			<link>https://simonaubury.com/202003_kafkastreamprocessingsortingsockswithksqldb/</link>
 			<pubDate>Sun, 23 Feb 2020 12:00:00 AEDT</pubDate>
 			<author></author>
-			<guid>https://saubury.github.io/202003_kafkastreamprocessingsortingsockswithksqldb/</guid>
-			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://saubury.github.io/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
+			<guid>https://simonaubury.com/202003_kafkastreamprocessingsortingsockswithksqldb/</guid>
+			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://simonaubury.com/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
 			<description></description>
 		</item>
 		
 		<item>
 			<title>202002_sortingmysockswithdeeplearningpart1s</title>
-			<link>https://saubury.github.io/202002_sortingmysockswithdeeplearningpart1/</link>
+			<link>https://simonaubury.com/202002_sortingmysockswithdeeplearningpart1/</link>
 			<pubDate>Mon, 10 Feb 2020 12:00:00 AEDT</pubDate>
 			<author></author>
-			<guid>https://saubury.github.io/202002_sortingmysockswithdeeplearningpart1/</guid>
-			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://saubury.github.io/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
+			<guid>https://simonaubury.com/202002_sortingmysockswithdeeplearningpart1/</guid>
+			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://simonaubury.com/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
 			<description></description>
 		</item>
 		
 		<item>
 			<title>202001_kafkaconnectsecretsmanagementwithksqldbs</title>
-			<link>https://saubury.github.io/202001_kafkaconnectsecretsmanagementwithksqldb/</link>
+			<link>https://simonaubury.com/202001_kafkaconnectsecretsmanagementwithksqldb/</link>
 			<pubDate>Tue, 14 Jan 2020 12:00:00 AEDT</pubDate>
 			<author></author>
-			<guid>https://saubury.github.io/202001_kafkaconnectsecretsmanagementwithksqldb/</guid>
-			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://saubury.github.io/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
+			<guid>https://simonaubury.com/202001_kafkaconnectsecretsmanagementwithksqldb/</guid>
+			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://simonaubury.com/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
 			<description></description>
 		</item>
 		
 		<item>
 			<title>201910_kafkasummit_2019sanfranciscoareviews</title>
-			<link>https://saubury.github.io/201910_kafkasummit_2019sanfranciscoareview/</link>
+			<link>https://simonaubury.com/201910_kafkasummit_2019sanfranciscoareview/</link>
 			<pubDate>Sat, 12 Oct 2019 12:00:00 AEDT</pubDate>
 			<author></author>
-			<guid>https://saubury.github.io/201910_kafkasummit_2019sanfranciscoareview/</guid>
-			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://saubury.github.io/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
+			<guid>https://simonaubury.com/201910_kafkasummit_2019sanfranciscoareview/</guid>
+			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://simonaubury.com/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
 			<description></description>
 		</item>
 		
 		<item>
 			<title>201908_confluentkafkakubernetesoperatorsetupandplayings</title>
-			<link>https://saubury.github.io/201908_confluentkafkakubernetesoperatorsetupandplaying/</link>
+			<link>https://simonaubury.com/201908_confluentkafkakubernetesoperatorsetupandplaying/</link>
 			<pubDate>Sat, 03 Aug 2019 12:00:00 &#43;1100</pubDate>
 			<author></author>
-			<guid>https://saubury.github.io/201908_confluentkafkakubernetesoperatorsetupandplaying/</guid>
-			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://saubury.github.io/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
+			<guid>https://simonaubury.com/201908_confluentkafkakubernetesoperatorsetupandplaying/</guid>
+			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://simonaubury.com/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
 			<description></description>
 		</item>
 		
 		<item>
 			<title>201905_didibeatbenracetrackingwithkafkas</title>
-			<link>https://saubury.github.io/201905_didibeatbenracetrackingwithkafka/</link>
+			<link>https://simonaubury.com/201905_didibeatbenracetrackingwithkafka/</link>
 			<pubDate>Tue, 28 May 2019 12:00:00 &#43;1100</pubDate>
 			<author></author>
-			<guid>https://saubury.github.io/201905_didibeatbenracetrackingwithkafka/</guid>
-			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://saubury.github.io/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
+			<guid>https://simonaubury.com/201905_didibeatbenracetrackingwithkafka/</guid>
+			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://simonaubury.com/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
 			<description></description>
 		</item>
 		
 		<item>
 			<title>201810_machinelearningbugmewhenivelefttheheaterons</title>
-			<link>https://saubury.github.io/201810_machinelearningbugmewhenivelefttheheateron/</link>
+			<link>https://simonaubury.com/201810_machinelearningbugmewhenivelefttheheateron/</link>
 			<pubDate>Sat, 08 Sep 2018 12:00:00 &#43;1100</pubDate>
 			<author></author>
-			<guid>https://saubury.github.io/201810_machinelearningbugmewhenivelefttheheateron/</guid>
-			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://saubury.github.io/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
+			<guid>https://simonaubury.com/201810_machinelearningbugmewhenivelefttheheateron/</guid>
+			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://simonaubury.com/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
 			<description></description>
 		</item>
 		
 		<item>
 			<title>201809_homepowermonitoringusingaraspberrypis</title>
-			<link>https://saubury.github.io/201809_homepowermonitoringusingaraspberrypi/</link>
+			<link>https://simonaubury.com/201809_homepowermonitoringusingaraspberrypi/</link>
 			<pubDate>Sat, 01 Sep 2018 12:00:00 &#43;1100</pubDate>
 			<author></author>
-			<guid>https://saubury.github.io/201809_homepowermonitoringusingaraspberrypi/</guid>
-			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://saubury.github.io/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
+			<guid>https://simonaubury.com/201809_homepowermonitoringusingaraspberrypi/</guid>
+			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://simonaubury.com/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
 			<description></description>
 		</item>
 		
 		<item>
 			<title>201805_usingksqlapachekafkafindtheplanethatwakessnowies</title>
-			<link>https://saubury.github.io/201805_usingksqlapachekafkafindtheplanethatwakessnowy/</link>
+			<link>https://simonaubury.com/201805_usingksqlapachekafkafindtheplanethatwakessnowy/</link>
 			<pubDate>Sun, 20 May 2018 17:53:07 &#43;1100</pubDate>
 			<author></author>
-			<guid>https://saubury.github.io/201805_usingksqlapachekafkafindtheplanethatwakessnowy/</guid>
-			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://saubury.github.io/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
+			<guid>https://simonaubury.com/201805_usingksqlapachekafkafindtheplanethatwakessnowy/</guid>
+			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://simonaubury.com/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
 			<description></description>
 		</item>
 		

@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>201810_machinelearningbugmewhenivelefttheheaterons on Simon Aubury Site</title>
-    <link>https://saubury.github.io/201810_machinelearningbugmewhenivelefttheheateron/</link>
+    <link>https://simonaubury.com/201810_machinelearningbugmewhenivelefttheheateron/</link>
     <description>Recent content in 201810_machinelearningbugmewhenivelefttheheaterons on Simon Aubury Site</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 08 Sep 2018 12:00:00 +1100</lastBuildDate>
     
-	<atom:link href="https://saubury.github.io/201810_machinelearningbugmewhenivelefttheheateron/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://simonaubury.com/201810_machinelearningbugmewhenivelefttheheateron/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Machine learning &amp; Kafka KSQL stream processing — bug me when I’ve left the heater on</title>
-      <link>https://saubury.github.io/201810_machinelearningbugmewhenivelefttheheateron/post/</link>
+      <link>https://simonaubury.com/201810_machinelearningbugmewhenivelefttheheateron/post/</link>
       <pubDate>Sat, 08 Sep 2018 12:00:00 +1100</pubDate>
       
-      <guid>https://saubury.github.io/201810_machinelearningbugmewhenivelefttheheateron/post/</guid>
+      <guid>https://simonaubury.com/201810_machinelearningbugmewhenivelefttheheateron/post/</guid>
       <description>Machine learning &amp;amp; Kafka KSQL stream processing — bug me when I’ve left the heater on Continuous household power monitoring with a trained model to alert on unexpected power usage for time of day. Let my Google Home and Phone notify me when I’ve used more electricity than expected.
 What on earth is this? Household power consumption fluctuates throughout the day. However, the *pattern *of electricity use follows a typical curve and becomes predictable after sufficient observations.</description>
     </item>

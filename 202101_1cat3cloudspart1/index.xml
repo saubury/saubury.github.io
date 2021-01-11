@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>202101_1cat3cloudspart1s on Simon Aubury Site</title>
+    <link>https://simonaubury.com/202101_1cat3cloudspart1/</link>
+    <description>Recent content in 202101_1cat3cloudspart1s on Simon Aubury Site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 10 Jan 2021 12:00:00 +1100</lastBuildDate>
+    
+	<atom:link href="https://simonaubury.com/202101_1cat3cloudspart1/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>1 Cat, 3 Clouds — Part 1 - Where is Snowy sleeping?</title>
+      <link>https://simonaubury.com/202101_1cat3cloudspart1/post/</link>
+      <pubDate>Sun, 10 Jan 2021 12:00:00 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/202101_1cat3cloudspart1/post/</guid>
+      <description>1 Cat, 3 Clouds — Where is Snowy sleeping? Our cat Snowy is an outdoor cat — but we are beginning to wonder where she travels once she’s left the house. Let me share how I built a low cost pet tracking device to show Snowy’s location in real-time.
+ Plus, what’s it like to build the same IoT data project in AWS, Azure &amp;amp; Google Cloud in 2021? This is article 1 in a 4 part series.</description>
+    </item>
+    
+  </channel>
+</rss>
