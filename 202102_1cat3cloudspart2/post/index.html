@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Cat tracking with Amazon Web Services— AWS IoT, DynamoDB and SageMaker</title>
+		<link rel="alternate" type="application/rss+xml" title="RSS" href="https://simonaubury.com/index.xml">
+		<link rel="canonical" href="https://simonaubury.com/202102_1cat3cloudspart2/post/">
+		
+		<link rel="shortcut icon" type="image/png" href="https://simonaubury.com/apple-touch-icon-precomposed.png">
+		
+		
+		<meta name="generator" content="Hugo 0.68.3" />
+
+		
+		<meta property="og:title" content="Cat tracking with Amazon Web Services— AWS IoT, DynamoDB and SageMaker" />
+		<meta property="og:type" content="article" />
+		<meta property="og:image" content="https://simonaubury.com/202102_1cat3cloudspart2/00000000.png" />
+		<meta property="og:description" content="" />
+		<meta property="og:url" content="https://simonaubury.com/202102_1cat3cloudspart2/post/" />
+		<meta property="og:site_name" content="Cat tracking with Amazon Web Services— AWS IoT, DynamoDB and SageMaker" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:site" content="@" />
+
+
+		
+		<link rel="stylesheet" href="https://simonaubury.com/css/tachyons.min.css" />
+		<link rel="stylesheet" href="https://simonaubury.com/css/story.css" />
+		<link rel="stylesheet" href="https://simonaubury.com/css/descartes.css" />
+		
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+		<link href="https://fonts.googleapis.com/css?family=Quattrocento+Sans:400,400i,700,700i|Quattrocento:400,700|Spectral:400,400i,700,700i&amp;subset=latin-ext" rel="stylesheet">
+		
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		
+		<script src="https://simonaubury.com/js/story.js"></script>
+
+	</head>
+	<body class="ma0 bg-white section-202102_1cat3cloudspart2 page-kind-page is-page-true ">
+		
+		<header class="cover bg-top" style="background-image: url('https://simonaubury.com/202102_1cat3cloudspart2/00000000.png'); background-position: center;">
+			<div class="bg-black-30 bb bt">
+
+				<nav class="hide-print sans-serif  border-box pa3 ph5-l">
+					<a href="https://simonaubury.com/" title="Home">
+						<img src="https://simonaubury.com/img/logo.jpg" class="w2 h2 br-100" alt="👋 - Simon Aubury&#39;s home 🏠 on the Internet" />
+					</a>
+					<div class="fr h2 pv2 tr">
+						<a class="link f5 ml2 dim near-white" href="https://twitter.com/simonaubury/"><i class="fab fa-twitter-square"></i></a>
+						<a class="link f5 ml2 dim near-white" href="https://github.com/saubury/"><i class="fab fa-github-square"></i></a>
+						<a class="link f5 ml2 dim near-white" href="https://www.linkedin.com/in/simonaubury/"><i class="fab fa-linkedin"></i></a>
+						<a class="link f5 ml2 dim near-white fas fa-rss-square" href="https://simonaubury.com/index.xml" title="RSS Feed"></a>
+						<a class="link f5 ml2 dim near-white fas fa-search" href="https://simonaubury.com/search/" role="search" title="Search"></a>
+					</div>
+				</nav>
+
+				<div id="hdr" class="tc-l pv4-ns pv5-l pv2 ph3 ph4-ns">
+					<h1 class="near-white mt1-ns f2 fw3 mb0 mt0 lh-title">Cat tracking with Amazon Web Services— AWS IoT, DynamoDB and SageMaker</h1>
+					<h2 class="near-white mt3-l mb4-l fw1 f6 f3-l measure-wide-l center lh-copy mt2 mb3">
+						
+						
+							
+								Published
+								<time datetime="2021-02-04T12:00:00&#43;11:00">Feb 4, 2021</time>
+								<span class="display-print">by </span>
+								
+								<span class="display-print">at https://simonaubury.com/202102_1cat3cloudspart2/post/</span>
+							
+						
+					</h2>
+				</div>
+
+				
+				
+				
+				
+
+			</div>
+		</header>
+		
+		<main role="main">
+		
+<article class="center bg-white br-3 pv1 ph4 lh-copy f5 nested-links mw7">
+	<h1 id="cat-tracking-with-amazon-web-services-aws-iot-dynamodb-and-sagemaker">Cat tracking with Amazon Web Services— AWS IoT, DynamoDB and SageMaker</h1>
+<p>If you read  <a href="https://simonaubury.com/202101_1cat3cloudspart1/post/">1 Cat, 3 Clouds — Where is Snowy sleeping (Part 1)</a>
+you’ll know I’m trying to build a real-time location tracker for my cat.</p>
+<blockquote>
+<p>Following on from that initial blog (which described the hardware and networking), this “Part 2” article describes data processing with Amazon Web Services. I’ll be using native AWS services for data ingest, data processing and mapping visualisation to build a low cost pet tracking device to show Snowy’s location in real-time. Later articles will cover similar approaches in both Microsoft Azure &amp; Google Cloud.</p>
+</blockquote>
+<p><img src="/202102_1cat3cloudspart2/00000000.png" alt="AWS IoT, DynamoDB and SageMaker"><em>AWS IoT, DynamoDB and SageMaker</em></p>
+<p>Today I’m describing my data build in AWS, however my goal for each cloud solution is identical</p>
+<ul>
+<li>
+<p>Use cloud native services where possible — following “best practices” documentation (if available) to ensure the tools are demonstrated in their best light. Where there are conflicting approaches published, pick the most recent</p>
+</li>
+<li>
+<p>Write as little code as possible; and utilise cloud native build, deployment, logging and secrets management</p>
+</li>
+<li>
+<p>Build a data ingestion pipeline that will subscribe to location updates from my cat/device registered on <a href="https://www.thethingsnetwork.org/">The Things Network</a> and write all location updates into a data store. Extra points for being able to manage the cat/device as an IoT “thing” rather than worrying about end-points (especially important if I want to track hundreds of cats!)</p>
+</li>
+<li>
+<p>Perform basic data analysis, such as selecting locations by time or cluster locations by frequency of visit</p>
+</li>
+<li>
+<p>Display maps where Snowy has spent her day</p>
+</li>
+</ul>
+<h2 id="what-do-we-need-to-do">What do we need to do?</h2>
+<p>Our pet tracker is working, with reliable location updates transmitted every 5 minutes. The data is captured by <a href="https://www.thethingsnetwork.org/">The Things Network</a> (TTN), but I will need additional services from AWS to capture these messages, store them securely, process &amp; refine the messages and finally plot the paths on a map.</p>
+<h3 id="iot-integration-to-aws">IoT Integration to AWS</h3>
+<p>My first task is IoT Integration to AWS. That is, bring my <a href="https://www.thethingsnetwork.org/docs/lorawan/architecture.html">LoRaWAN</a> TTN messages into AWS. Fortunately there is a well documented AWS IoT <a href="https://www.thethingsnetwork.org/docs/applications/aws/">Integration </a>which integrates TTN to the AWS IoT service. This integration runs in my AWS account and bridges The Things Network community network into my private AWS account. This integration provided by TTN is quite elegant, and presents each of LoRaWAN physical device (such as Snowy’s locator) as an AWS IoT. Syncing the IoT “thing shadows” enables reporting from uplink messages.</p>
+<p>The AWS TTN IoT integration is established with a provided AWS <a href="https://ap-southeast-1.console.aws.amazon.com/cloudformation/home?region=ap-southeast-1#/stacks/create/review?filter=active&amp;templateURL=https%3A%2F%2Fs3.amazonaws.com%2Fthethingsnetwork%2Fbuilds%2Fintegration-aws%2Fdist%2Fcloudformation.template&amp;stackName=ttn-integration&amp;param_AccountServer=https:%2F%2Faccount.thethingsnetwork.org&amp;param_DiscoveryServer=discovery.thethings.network:1900&amp;param_InstanceType=t2.micro&amp;param_ThingShadowDeltaFPort=1&amp;param_ThingSyncEnabled=true&amp;param_ThingSyncInterval=10m&amp;param_ThingTypeName=lorawan">CloudFormation template</a> which describes the final resources and their dependencies. The TL;DR is — click a link, cross fingers — and initial configuration for integrations to The Things Network is done.</p>
+<p><img src="/202102_1cat3cloudspart2/00000001.png" alt="AWS IoT integration using CloudFormation from the Quick Start guide"><em>AWS IoT integration using CloudFormation from the Quick Start guide</em></p>
+<p>The template uses AWS Elastic Beanstalk (an orchestration service) to create a <em>t3.micro</em> EC2 instance to provide a sync service to the TTN devices. After a few minutes, my services are spun up.</p>
+<p><img src="/202102_1cat3cloudspart2/00000002.png" alt=""></p>
+<p>The AWS IoT service provides a registry that helps manage “things”. In my case, my “thing” is a representation of the physical GPS tracker device attached to my cat. Following the Thing Registry <a href="https://www.thethingsnetwork.org/docs/applications/aws/thing-registry.html">setup steps</a>, I could register Snowy’s GPS tracker as a “thing” in the AWS IoT console. The thing acts a device shadow; whatever you do to the thing (such as read a value, or update a setting) is reflected in the physical device. If Snowy moves in the real work, the thing is updated to reflect her new location.</p>
+<p><img src="/202102_1cat3cloudspart2/00000003.png" alt=""></p>
+<p>Information about a thing is stored in the IoT registry as JSON data. Here is an example a payload from Snowy’s tracker “thing” by subscribing to the “<em>+/devices/+/up</em>” topic. Within the JSON are location updates (latitude, longitude) along with acceleration data and battery voltage.</p>
+<p><img src="/202102_1cat3cloudspart2/00000004.png" alt=""></p>
+<p>So, it looks like I’ve got my GPS tracker registering updates to the AWS IoT thing shadow, with some nicely formatted JSON data. Now let’s do some data processing.</p>
+<p>An AWS IoT action rule can be triggered by the arrival of new IoT data. An action rule consists of an SQL select statement, a topic filter, and a rule action. My rule query is shown below, indicating the fields I wanted to extract</p>
+<p><img src="/202102_1cat3cloudspart2/00000005.png" alt="AWS IoT rule query"><em>AWS IoT rule query</em></p>
+<h3 id="storing-location-updates-in-a-dynamodb-table">Storing location updates in a DynamoDB table</h3>
+<p>IoT messages are “posted” to a payload topic, but they don’t hang around. As each time a new payload arrives, it replaces the former payload. I wanted to persist all my JSON payloads so database, so I would have a history of past locations. I decided to use DynamoDB as my document database to store my IoT JSON payloads</p>
+<p>A <em>rule action</em> is used to take the information extracted via the <em>rule</em> and send it to another AWS service, such as DynamoDB. For simplicity, I chose the “dynamoDBv2” action, to split message into multiple columns of my DynamoDB table.</p>
+<p><img src="/202102_1cat3cloudspart2/00000006.png" alt="Rule action choices"><em>Rule action choices</em></p>
+<p>Finally I can check the data is arriving by jumping over to the DynamoDB services console, and checking an item is created for each new message</p>
+<p><img src="/202102_1cat3cloudspart2/00000007.png" alt="DynamoDB console"><em>DynamoDB console</em></p>
+<h2 id="map-merriment-with-aws-sagemaker">Map merriment with AWS SageMaker</h2>
+<p>So I’ve now got a regular feed of location updates being persisted to DynamoDB. This is a good start — I have both historic and current accurate location for Snowy, but I now want to start plotting her movements on a map.</p>
+<p>Now my original plan was to use Amazon QuickSight for visualization of my data. However, the <a href="https://docs.aws.amazon.com/quicksight/latest/user/geospatial-data-prep.html">geospatial capabilities</a> of QuickSight did not me to build a path map over Snowy’s movements throughout the day. I decided I would need to break out a bit of <a href="https://plotly.com/python/lines-on-maps/">Plotly expres</a>s Python graphing libraries to get the desired result. So how to fire up a Python notebook in AWS?</p>
+<p>AWS SageMaker provides managed Jupyter Notebook instances. SageMaker is typically used as managed machine-learning platform; but it is great for my needs for some querying and visualization within an Jupyter Notebook. This provides a simple way to write Python code, interact with data — and visualize the results.</p>
+<h3 id="interacting-with-dynamodb-with-boto3-in-python">Interacting with DynamoDB with boto3 in Python</h3>
+<p>Within my notebook I would need to collect my location updates from DynamoDB into Python. Boto3 is the go-to AWS SDK for Python — a nice way for Python developers to interact with AWS services such as DynomoDB. For me, this is a quick way to query (select data, limit to particular timeframes) from DynamoDB and return the result into a data frame. Here’s the section of the notebook that collects Latitude and Longitude between a given date range (or <em>FilterExpression</em> in boto speak)</p>
+<pre><code>dynamodb = boto3.resource('dynamodb')
+table = dynamodb.Table('saubury-001')
+
+fe = Key('time').between(time_from, time_to);
+response = table.scan(FilterExpression=fe)
+items = response['Items']
+
+for item in items:
+    lat_array.append(item['Latitude'])
+    lon_array.append(item['Longitude'])
+</code></pre>
+<h3 id="lines-on-maps--plotly-express">Lines on Maps — Plotly Express</h3>
+<p>For mapping, I wanted to plot locations on a map; along with a line showing the path taken between recorded locations. Plotly Express is a fantastic Python library, and provides API’s for creating different types of figures — including line paths over a map. There are heaps of mapping services available (Google Map, OpenStreetMaps etc.) but my use case required quite detailed maps tiles as I wanted detailed maps provided by the Mapbox tile service when zoomed into a very small area. Plotly provides support Mapbox which is convenient to use and provides detailed tiles for my local area. Mapbox maps in Python for my base layers required getting a free <a href="https://docs.mapbox.com/help/how-mapbox-works/access-tokens/">Mapbox Access token</a>.</p>
+<p>You can see the entire notebook <a href="https://github.com/saubury/3clouds1cat/blob/master/cloud_aws/MapWithLines.ipynb">here</a>.</p>
+<p><img src="/202102_1cat3cloudspart2/00000008.png" alt="Notebook — Mapping with plotly express"><em>Notebook — Mapping with plotly express</em></p>
+<p>And more importantly, here is a sample of the multi day tracks of Snowy. The generated Plotly Expres map can be zoomed to show details are a very local level. I also like that I can plot each morning/afternoon Snowy outing as an individual path in a new colour.</p>
+<p><img src="/202102_1cat3cloudspart2/00000009.png" alt="Generated maps"><em>Generated maps</em></p>
+<h2 id="tldr--aws-conclusion">TL;DR — AWS Conclusion</h2>
+<p>What’s it like building this data solution in AWS?</p>
+<h3 id="the-good-bits-of-aws">The Good bits of AWS</h3>
+<p>There are some great attributes whilst building this data solution in AWS</p>
+<p>• TheThingsNetwork integration — a simple out of the box integration by running the TTN provided AWS CloudFormation template made it really fast to get going. Extra points for making it so easy to represent cats in the IoT thing devices
+• Secure by default — nothing works until you have an IAM policy change. This is initially frustrating; but does force you to think which service needs to connect where
+• Secrets management — I loved the sample code generated within the AWS Secrets manager console. With my newly created secret I could view a Python code sample that illustrates how to retrieve my secret for pasting into my notebook. However, I did waste a bit of time with an annoying bug in this template code (see below)</p>
+<h3 id="the-not-so-good-bits-of-aws">The not-so-good bits of AWS</h3>
+<p>Not everything is unicorns &amp; muffins. There were some not so good bits when building this solution in AWS. Nothing major, but worth sharing some nitpicks</p>
+<p>• Bewildering number of solutions — as a mature cloud providing a crazy large number of services, there is choice overload when trying to build a solution in AWS. It would be nice if there was an “opinionated approach” to delivering a build. Equally there are lots of blogs; documents etc., with no prioritisation or sunsetting. Getting rid of outdated blogs would be great to minimise confusion
+• Default secrets code for python mask IAM problems — the really cool code sample (generated within the AWS Secrets manager console) has an exception handler that hid my basic permission problem. I had failed to establish an IAM policy for my secret to be used in my notebook, but the generated Python code initially masked the issue
+• Running a beanstalk EC2 machine is overkill — I would have preferred a “serverless” or event-driven approach to respond to location updates. Running a server all the time to respond to occasional events is wasteful (and costly)
+• Confusing git integration with Sagemaker — the documentation describes how to setup git integration for Sagemaker notebooks. However, add, commit, push are really inelegant steps within the notebook</p>
+<h2 id="closing-thoughts">Closing Thoughts</h2>
+<p>Building a cat tracking with Amazon Web Services was heaps of fun. Lots of existing guides and established services such as AWS IoT, DynamoDB and SageMaker made it easy to work out where Snowy was sleeping.</p>
+<p>There are good aspects of each cloud platform — so please look out for the next two articles in this blog series explores building a similar solution in</p>
+<ul>
+<li>
+<p>Microsoft Azure — Azure Functions, Cosmos DB and Cosmic notebooks (<strong>currently unpublished</strong>)</p>
+</li>
+<li>
+<p>Google Cloud — Cloud Build, Cloud Functions, BigQuery and Geo Viz (<strong>currently unpublished</strong>)</p>
+</li>
+</ul>
+<h2 id="code-for-this-project">Code for this project</h2>
+<p>Thanks for reading this far. All code for this project available at</p>
+<ul>
+<li><a href="https://github.com/saubury/3clouds1cat/">https://github.com/saubury/3clouds1cat/</a></li>
+</ul>
+
+</article>
+
+		</main>
+		
+				<div class="hide-print sans-serif f6 f5-l mt5 ph3 pb6 center nested-copy-line-height lh-copy nested-links mw-100 measure-wide">
+		<div class="about-the-author">
+		
+			
+			
+				
+					
+				
+			
+		
+		</div>
+		
+	</div>
+
+		
+		
+		
+		<footer class="hide-print sans-serif f6 fw1 bg-black near-white bottom-0 w-100 pa3" role="contentinfo">
+			<p class="w-50 fr tr">
+			<a class="no-underline near-white" href="https://github.com/xaprb/story"><img class="dib" title="Made with Hugo and Story" alt="Story logo" src="https://simonaubury.com/img/story-logo-white.svg" style="width: 1.5rem; height: 1.5rem" /></a>
+			</p>
+			<p class="w-50 near-white">
+				&copy; 2021 
+			</p>
+		</footer>
+		
+	
+	
+	</body>
+</html>
