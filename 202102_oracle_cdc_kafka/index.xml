@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>202102_oracle_cdc_kafkas on 👋 - Simon Aubury&#39;s home 🏠 on the Internet</title>
+    <link>https://simonaubury.com/202102_oracle_cdc_kafka/</link>
+    <description>Recent content in 202102_oracle_cdc_kafkas on 👋 - Simon Aubury&#39;s home 🏠 on the Internet</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 18 Feb 2021 12:00:00 +1100</lastBuildDate>
+    
+	<atom:link href="https://simonaubury.com/202102_oracle_cdc_kafka/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Oracle to Kafka — Playing with Confluent’s new Oracle CDC Source Connector in Docker</title>
+      <link>https://simonaubury.com/202102_oracle_cdc_kafka/post/</link>
+      <pubDate>Thu, 18 Feb 2021 12:00:00 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/202102_oracle_cdc_kafka/post/</guid>
+      <description>Oracle to Kafka — Playing with Confluent’s new Oracle CDC Source Connector in Docker It’s really exciting to have a new option for streaming Oracle data into Kafka. With Confluent releasing their “Oracle CDC Source Premium Connector” there’s a new way to capture data that has been added to, updated, or deleted from Oracle RDBMS with Change Data Capture (CDC). Think of this as a low touch way to stream both the Oracle data and schema changes into Kafka and Schema Registry.</description>
+    </item>
+    
+  </channel>
+</rss>

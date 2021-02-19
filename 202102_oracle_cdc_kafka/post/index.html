@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Oracle to Kafka — Playing with Confluent’s new Oracle CDC Source Connector in Docker</title>
+		<link rel="alternate" type="application/rss+xml" title="RSS" href="https://simonaubury.com/index.xml">
+		<link rel="canonical" href="https://simonaubury.com/202102_oracle_cdc_kafka/post/">
+		
+		<link rel="shortcut icon" type="image/png" href="https://simonaubury.com/apple-touch-icon-precomposed.png">
+		
+		
+		<meta name="generator" content="Hugo 0.68.3" />
+
+		
+		<meta property="og:title" content="Oracle to Kafka — Playing with Confluent’s new Oracle CDC Source Connector in Docker" />
+		<meta property="og:type" content="article" />
+		<meta property="og:image" content="https://simonaubury.com/202102_oracle_cdc_kafka/00000000.png" />
+		<meta property="og:description" content="" />
+		<meta property="og:url" content="https://simonaubury.com/202102_oracle_cdc_kafka/post/" />
+		<meta property="og:site_name" content="Oracle to Kafka — Playing with Confluent’s new Oracle CDC Source Connector in Docker" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:site" content="@" />
+
+
+		
+		<link rel="stylesheet" href="https://simonaubury.com/css/tachyons.min.css" />
+		<link rel="stylesheet" href="https://simonaubury.com/css/story.css" />
+		<link rel="stylesheet" href="https://simonaubury.com/css/descartes.css" />
+		
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+		<link href="https://fonts.googleapis.com/css?family=Quattrocento+Sans:400,400i,700,700i|Quattrocento:400,700|Spectral:400,400i,700,700i&amp;subset=latin-ext" rel="stylesheet">
+		
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		
+		<script src="https://simonaubury.com/js/story.js"></script>
+
+	</head>
+	<body class="ma0 bg-white section-202102_oracle_cdc_kafka page-kind-page is-page-true ">
+		
+		<header class="cover bg-top" style="background-image: url('https://simonaubury.com/202102_oracle_cdc_kafka/00000000.png'); background-position: center;">
+			<div class="bg-black-30 bb bt">
+
+				<nav class="hide-print sans-serif  border-box pa3 ph5-l">
+					<a href="https://simonaubury.com/" title="Home">
+						<img src="https://simonaubury.com/img/logo.jpg" class="w2 h2 br-100" alt="👋 - Simon Aubury&#39;s home 🏠 on the Internet" />
+					</a>
+					<div class="fr h2 pv2 tr">
+						<a class="link f5 ml2 dim near-white" href="https://twitter.com/simonaubury/"><i class="fab fa-twitter-square"></i></a>
+						<a class="link f5 ml2 dim near-white" href="https://github.com/saubury/"><i class="fab fa-github-square"></i></a>
+						<a class="link f5 ml2 dim near-white" href="https://www.linkedin.com/in/simonaubury/"><i class="fab fa-linkedin"></i></a>
+						<a class="link f5 ml2 dim near-white fas fa-rss-square" href="https://simonaubury.com/index.xml" title="RSS Feed"></a>
+						<a class="link f5 ml2 dim near-white fas fa-search" href="https://simonaubury.com/search/" role="search" title="Search"></a>
+					</div>
+				</nav>
+
+				<div id="hdr" class="tc-l pv4-ns pv5-l pv2 ph3 ph4-ns">
+					<h1 class="near-white mt1-ns f2 fw3 mb0 mt0 lh-title">Oracle to Kafka — Playing with Confluent’s new Oracle CDC Source Connector in Docker</h1>
+					<h2 class="near-white mt3-l mb4-l fw1 f6 f3-l measure-wide-l center lh-copy mt2 mb3">
+						
+						
+							
+								Published
+								<time datetime="2021-02-18T12:00:00&#43;11:00">Feb 18, 2021</time>
+								<span class="display-print">by </span>
+								
+								<span class="display-print">at https://simonaubury.com/202102_oracle_cdc_kafka/post/</span>
+							
+						
+					</h2>
+				</div>
+
+				
+				
+				
+				
+
+			</div>
+		</header>
+		
+		<main role="main">
+		
+<article class="center bg-white br-3 pv1 ph4 lh-copy f5 nested-links mw7">
+	<h1 id="oracle-to-kafkaplaying-with-confluents-new-oracle-cdc-source-connector-in-docker">Oracle to Kafka — Playing with Confluent’s new Oracle CDC Source Connector in Docker</h1>
+<p>It’s really exciting to have a new option for streaming Oracle data into Kafka. With Confluent releasing their “Oracle CDC Source Premium Connector” there’s a new way to capture data that has been added to, updated, or deleted from Oracle RDBMS with Change Data Capture (CDC). Think of this as a low touch way to stream both the Oracle data and schema changes into Kafka and Schema Registry.</p>
+<blockquote>
+<p>I put together some <a href="https://github.com/saubury/kafka-connect-oracle-cdc">examples</a> so you can play with this entire pipeline in Docker. Docker is an easy-way to run a an end to end pipeline on your machine. I hope this demo gives you a glimpse of how Oracle CDC to Kafka works.</p>
+</blockquote>
+<p><img src="/202102_oracle_cdc_kafka/00000000.png" alt=""></p>
+<p>⚠️ Some of these components are paid offerings 💰 for production use. Both the <a href="https://www.oracle.com/downloads/licenses/standard-license.html">Oracle</a> and <a href="https://www.confluent.io/software-evaluation-license/">Confluent</a> license grant you free licence to play with this stuff as a developer for 30 days (disclaimer: I’m not a lawyer; nor do I play one on TV)</p>
+<p>🛠 Code available at <a href="https://github.com/saubury/kafka-connect-oracle-cdc">https://github.com/saubury/kafka-connect-oracle-cdc</a></p>
+<h2 id="kafka-connect-cdc-what-be-this">Kafka Connect, CDC— What be this?</h2>
+<p><a href="https://docs.confluent.io/platform/current/connect/index.html">Kafka Connect</a> is an open source framework for streaming data between Apache Kafka and other data systems (such as databases). Confluent’s Oracle CDC Source Connector is a plug-in for Kafka Connect, which (surprise) connects Oracle as a source into Kafka as a destination.</p>
+<p>This connector uses the <a href="https://docs.oracle.com/en/database/oracle/oracle-database/19/sutil/oracle-logminer-utility.html#GUID-3417B738-374C-4EE3-B15C-3A66E01AE2B5">Oracle LogMiner</a> interface to query online and archived redo log files. That’s an Oracle specific way to stream both the DML and DDL directly from the redo of the database. This is similar to how the <a href="https://debezium.io/">Debezium</a> project reads the Postgres write-ahead log or the MySQL binlog.</p>
+<h3 id="why-not-just-use-the-oracle-jdbc-source-connector">Why not just use the Oracle JDBC Source Connector?</h3>
+<p>Robin Moffatt has written a great article on <a href="https://www.confluent.io/blog/no-more-silos-how-to-integrate-your-databases-with-apache-kafka-and-cdc/">How to Integrate Your Databases with Apache Kafka</a> which provides a great discussion on the differences between a JDBC connector reading data from a database (such as Oracle) vs a log-based Change Data Capture (CDC) tool to extract changes.</p>
+<p>The Oracle JDBC Connector is fine for getting a snapshot of a table. However, to identify changed or deleted rows with a JDBC connector is painful. Let’s just say you’ll quickly fall into a murky world of putting triggers on tables to determine what has changed … and no-one wants to do that.</p>
+<p>The Oracle CDC Source Connector on the other hand is essentially listening to the recovery redo segment of the database. This allows for <em>most</em> DML (insert, update, delete) and <em>some</em> DDL (alter table) database events to be captured an Oracle database and produced into into Kafka and the Schema Registry.</p>
+<h3 id="oracle-versions">Oracle Versions</h3>
+<p>Worth highlighting that when this blog was written, the connector works with Oracle 11g, 12c and 18c but <em>not</em> Oracle 19c. For this demonstration I’m using Oracle 12c with pluggable databases.</p>
+<h2 id="lets-play">Let’s Play</h2>
+<h3 id="clone-this-repo">Clone this repo</h3>
+<pre><code>git clone [https://github.com/saubury/kafka-connect-oracle-cdc](https://github.com/saubury/kafka-connect-oracle-cdc)
+
+cd kafka-connect-oracle-cdc
+</code></pre>
+<h2 id="get-oracle-cdc-source-connector">Get Oracle CDC Source Connector</h2>
+<p>Be sure to review the license and <a href="https://www.confluent.io/hub/confluentinc/kafka-connect-oracle-cdc">download</a> the zip file for the Confluent Oracle CDC Source Connector</p>
+<p>Unzip to confluentinc-kafka-connect-oracle-cdc (and remove any trailing version numbers)</p>
+<pre><code>unzip ~/Downloads/confluentinc-kafka-connect-oracle-cdc-1.0.3.zip
+
+mv confluentinc-kafka-connect-oracle-cdc-1.0.3 confluentinc-kafka-connect-oracle-cdc
+</code></pre>
+<h2 id="get-oracle-docker">Get Oracle Docker</h2>
+<p>Credit to <a href="https://stackoverflow.com/questions/47887403/pull-access-denied-for-container-registry-oracle-com-database-enterprise">Stackoverflow</a> for explaining how to get Oracle working in Docker (well, at least in February 2021)</p>
+<ul>
+<li>
+<p>log into <a href="https://hub.docker.com/">https://hub.docker.com/</a></p>
+</li>
+<li>
+<p>search “oracle database”</p>
+</li>
+<li>
+<p>click on “Oracle Database Enterprise Edition”</p>
+</li>
+<li>
+<p>click on “Proceed to Checkout”</p>
+</li>
+<li>
+<p>fill in your contact info on the left, check two boxes under “Developer Tier” on the right, click on “Get Content”</p>
+</li>
+</ul>
+<p>You should now be able to download an Oracle Docker image</p>
+<pre><code>docker login --username YourDockerUserName --password-stdin
+&lt;&lt;Enter your password&gt;&gt;
+
+docker pull store/oracle/database-enterprise:12.2.0.1
+</code></pre>
+<h2 id="docker-startup">Docker Startup</h2>
+<p>You’re all set to startup the platform (which will start Oracle, Kafka, Kafka Connect, Schema registry etc.,)</p>
+<pre><code>docker-compose up -d
+</code></pre>
+<h2 id="setup-oracle-docker">Setup Oracle Docker</h2>
+<p>Once the Oracle database is running, we need run a script to perform some setup. This SQL will turn on ARCHIVELOG mode, create some users, and establish permissions</p>
+<p>First, ensure the database looks like it’s finished starting up (docker-compose logs -f oracle) and then run the following (for the curious, the SQL script is <a href="https://github.com/saubury/kafka-connect-oracle-cdc/blob/master/scripts/oracle_setup_docker.sql">here</a> )</p>
+<pre><code>docker-compose exec oracle /scripts/go_sqlplus.sh /scripts/oracle_setup_docker
+</code></pre>
+<h2 id="sample-data">Sample Data</h2>
+<p>This SQL script also creates an EMP table, and adds four employees.</p>
+<p><img src="/202102_oracle_cdc_kafka/00000001.png" alt="The EMP table"><em>The EMP table</em></p>
+<h3 id="connector-configuration">Connector Configuration</h3>
+<p>Check the OracleCdcSourceConnector source plug-in is available</p>
+<pre><code>curl -s -X GET -H 'Content-Type: application/json' http://localhost:8083/connector-plugins | jq '.'
+</code></pre>
+<p>And look for an occurrence of &ldquo;class&rdquo;: &ldquo;io.confluent.connect.oracle.cdc.OracleCdcSourceConnector&rdquo;</p>
+<p>All good — now it’s time to establish the SimpleOracleCDC connector. This configuration will initially snapshot the EMP table, and then listen to all redo activity (DML and DDL) against this table.</p>
+<pre><code>curl -s -X POST -H 'Content-Type: application/json' --data @SimpleOracleCDC.json http://localhost:8083/connectors | jq
+</code></pre>
+<p>Check the status of the connector. You may need to wait a minute or so for the status to show up</p>
+<pre><code>curl -s -X GET -H 'Content-Type: application/json' http://localhost:8083/connectors/SimpleOracleCDC/status | jq
+</code></pre>
+<h2 id="check-topic">Check topic</h2>
+<p>If you have Kafka tools installed locally, you can look at the de-serialised AVRO like this</p>
+<pre><code>kafka-avro-console-consumer --bootstrap-server localhost:9092 --topic ORCLCDB.C__MYUSER.EMP --from-beginning
+</code></pre>
+<p>Or if you don’t have the Kafka tools installed, you can launch kafka-avro-console-consumer via a container like (yes; this is all one line)</p>
+<pre><code>docker-compose exec kafka-connect kafka-avro-console-consumer --bootstrap-server kafka:29092 --property schema.registry.url=&quot;http://schema-registry:8081&quot; --topic ORCLCDB.C__MYUSER.EMP --from-beginning
+</code></pre>
+<p>The (simplified) output of kafka-avro-console-consumer should look something like. Four rows initially from the table are four records in Kafka</p>
+<pre><code>{&quot;I&quot;:&quot;\u0001&quot;,&quot;NAME&quot;:{&quot;string&quot;:&quot;Bob&quot;}}
+{&quot;I&quot;:&quot;\u0002&quot;,&quot;NAME&quot;:{&quot;string&quot;:&quot;Jane&quot;}}
+{&quot;I&quot;:&quot;\u0003&quot;,&quot;NAME&quot;:{&quot;string&quot;:&quot;Mary&quot;}}
+{&quot;I&quot;:&quot;\u0004&quot;,&quot;NAME&quot;:{&quot;string&quot;:&quot;Alice&quot;}}
+</code></pre>
+<h2 id="schema">Schema</h2>
+<p>Let’s see what schemas we have registered for the EMP table</p>
+<pre><code>curl -s -X GET http://localhost:8081/subjects/ORCLCDB.C__MYUSER.EMP-value/versions/1 | jq -r .schema | jq .
+</code></pre>
+<p>Amongst other things, you’ll see version 1 of the schema has been registered like this</p>
+<pre><code>&quot;fields&quot;: [
+    {
+      &quot;name&quot;: &quot;I&quot;,
+      &quot;type&quot;: {
+        &quot;type&quot;: &quot;bytes&quot;
+    },
+    {
+      &quot;name&quot;: &quot;NAME&quot;,
+      &quot;type&quot;: [
+        &quot;string&quot;
+      ]
+    }
+</code></pre>
+<h2 id="insert-update-and-delete-some-data">Insert, update and delete some data</h2>
+<p>Let’s now insert more data, and try some updates and a delete.</p>
+<p>Run docker-compose exec oracle /scripts/go_sqlplus.sh followed by this SQL</p>
+<pre><code>insert into C##MYUSER.emp (name) values ('Dale');
+insert into C##MYUSER.emp (name) values ('Emma');
+update C##MYUSER.emp set name = 'Robert' where name = 'Bob';
+delete C##MYUSER.emp where name = 'Jane';
+commit;
+exit
+</code></pre>
+<h2 id="updated-sample-data">Updated Sample Data</h2>
+<p>This adds 2 rows to EMP table, updates 1 row, and deletes 1 row.</p>
+<p><img src="/202102_oracle_cdc_kafka/00000002.png" alt="Updated EMP table"><em>Updated EMP table</em></p>
+<p>The (simplified) output of <em>kafka-avro-console-consumer</em> should look something like</p>
+<pre><code>{&quot;I&quot;:&quot;\u0005&quot;,&quot;NAME&quot;:{&quot;string&quot;:&quot;Dale&quot;},&quot;op_type&quot;:{&quot;string&quot;:&quot;I&quot;}}
+{&quot;I&quot;:&quot;\u0006&quot;,&quot;NAME&quot;:{&quot;string&quot;:&quot;Emma&quot;},&quot;op_type&quot;:{&quot;string&quot;:&quot;I&quot;}}
+{&quot;I&quot;:&quot;\u0001&quot;,&quot;NAME&quot;:{&quot;string&quot;:&quot;Robert&quot;},&quot;op_type&quot;:{&quot;string&quot;:&quot;U&quot;}}
+{&quot;I&quot;:&quot;\u0002&quot;,&quot;NAME&quot;:{&quot;string&quot;:&quot;Jane&quot;},&quot;op_type&quot;:{&quot;string&quot;:&quot;D&quot;}
+</code></pre>
+<h2 id="ddl">DDL</h2>
+<p>So far we’ve seen DML applied to a table. Now let’s try some DDL to modify a table.</p>
+<p>Run docker-compose exec oracle /scripts/go_sqlplus.sh followed by this SQL</p>
+<pre><code>ALTER TABLE C##MYUSER.EMP ADD (SURNAME VARCHAR2(100));
+
+insert into C##MYUSER.emp (name, surname) values ('Mickey', 'Mouse');
+commit;
+</code></pre>
+<h2 id="updated-sample-data-1">Updated Sample Data</h2>
+<p>Our new row looks like this (note the new surname column)</p>
+<p><img src="/202102_oracle_cdc_kafka/00000003.png" alt="DDL applied to EMP table"><em>DDL applied to EMP table</em></p>
+<h3 id="schema-mutation">Schema mutation</h3>
+<p>Let’s see what schemas we have registered now.</p>
+<pre><code>curl -s -X GET http://localhost:8081/subjects/ORCLCDB.C__MYUSER.EMP-value/versions
+</code></pre>
+<p>Will show [1,2] — indicating two versions of the schema are available. We have data registered against version 1 and version 2 of the schema</p>
+<pre><code>curl -s -X GET http://localhost:8081/subjects/ORCLCDB.C__MYUSER.EMP-value/versions/2 | jq -r .schema | jq .
+</code></pre>
+<p>Note, schema version 2 has this addition</p>
+<pre><code>{
+      &quot;name&quot;: &quot;SURNAME&quot;,
+      &quot;type&quot;: [
+        &quot;null&quot;,
+        &quot;string&quot;
+      ],
+      &quot;default&quot;: null
+    }
+</code></pre>
+<h3 id="tear-down">Tear Down</h3>
+<p>To tear down the containers</p>
+<pre><code>docker-compose down
+</code></pre>
+<h2 id="conclusion">Conclusion</h2>
+<p>Capturing data from an Oracle database into Kafka is a really common request. Having a Confluent supported CDC Source Connector is a great option to consider when you require a low touch way to stream both the Oracle data and schema changes into Kafka and Schema Registry.</p>
+<p>Oh, and Docker is awesome !</p>
+<h2 id="references">References</h2>
+<ul>
+<li>
+<p><a href="https://www.confluent.io/hub/confluentinc/kafka-connect-oracle-cdc">Oracle CDC Source Connector</a></p>
+</li>
+<li>
+<p><a href="https://docs.confluent.io/kafka-connect-oracle-cdc/current/configuration-properties.html">Oracle CDC Source Connector Configuration Properties</a></p>
+</li>
+<li>
+<p><a href="https://www.confluent.io/blog/no-more-silos-how-to-integrate-your-databases-with-apache-kafka-and-cdc/">How to Integrate Your Databases with Apache Kafka</a></p>
+</li>
+<li>
+<p><a href="https://github.com/saubury/kafka-connect-oracle-cdc">https://github.com/saubury/kafka-connect-oracle-cdc</a></p>
+</li>
+</ul>
+
+</article>
+
+		</main>
+		
+				<div class="hide-print sans-serif f6 f5-l mt5 ph3 pb6 center nested-copy-line-height lh-copy nested-links mw-100 measure-wide">
+		<div class="about-the-author">
+		
+			
+			
+				
+					
+				
+			
+		
+		</div>
+		
+	</div>
+
+		
+		
+		
+		<footer class="hide-print sans-serif f6 fw1 bg-black near-white bottom-0 w-100 pa3" role="contentinfo">
+			<p class="w-50 fr tr">
+			<a class="no-underline near-white" href="https://github.com/xaprb/story"><img class="dib" title="Made with Hugo and Story" alt="Story logo" src="https://simonaubury.com/img/story-logo-white.svg" style="width: 1.5rem; height: 1.5rem" /></a>
+			</p>
+			<p class="w-50 near-white">
+				&copy; 2021 
+			</p>
+		</footer>
+		
+	
+	
+	</body>
+</html>

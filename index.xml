@@ -6,7 +6,17 @@
 		<language>en-us</language>
 		<author></author>
 		<rights>Copyright (c) 2021</rights>
-		<updated>2021-02-04 12:00:00 &#43;1100 AEDT</updated>
+		<updated>2021-02-18 12:00:00 &#43;1100 AEDT</updated>
+		
+		<item>
+			<title>202102_oracle_cdc_kafkas</title>
+			<link>https://simonaubury.com/202102_oracle_cdc_kafka/</link>
+			<pubDate>Thu, 18 Feb 2021 12:00:00 AEDT</pubDate>
+			<author></author>
+			<guid>https://simonaubury.com/202102_oracle_cdc_kafka/</guid>
+			<media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://simonaubury.com/img/default-header-img.tn-500x500.jpg" medium="image" type="image/jpg" width="100" height="100" />
+			<description></description>
+		</item>
 		
 		<item>
 			<title>202102_1cat3cloudspart2s</title>
