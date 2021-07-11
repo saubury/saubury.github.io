@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>202107_cat_fit_part_1s on 👋 - Simon Aubury&#39;s home 🏠 on the Internet</title>
+    <link>https://simonaubury.com/202107_cat_fit_part_1/</link>
+    <description>Recent content in 202107_cat_fit_part_1s on 👋 - Simon Aubury&#39;s home 🏠 on the Internet</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 10 Jul 2021 12:00:00 +1100</lastBuildDate>
+    
+	<atom:link href="https://simonaubury.com/202107_cat_fit_part_1/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Snowy’s eating — tweeting my cats weight &amp; dining habits with a Raspberry Pi</title>
+      <link>https://simonaubury.com/202107_cat_fit_part_1/post/</link>
+      <pubDate>Sat, 10 Jul 2021 12:00:00 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/202107_cat_fit_part_1/post/</guid>
+      <description>Snowy’s eating — tweeting my cats weight &amp;amp; dining habits with a Raspberry Pi Our cat Snowy 😸 has been enjoying her meals over winter. I wanted to start collecting data on her eating habits, and analyse her weight over time. This data is collected with food and cat weight measurements; alongside phots taken by two cameras. Data is collected and images processed locally using a Raspberry Pi. At the risk of body-shaming our cat, updates are posted regularly to Twitter #snowydata.</description>
+    </item>
+    
+  </channel>
+</rss>

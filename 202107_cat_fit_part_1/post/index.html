@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Snowy’s eating — tweeting my cats weight &amp; dining habits with a Raspberry Pi</title>
+		<link rel="alternate" type="application/rss+xml" title="RSS" href="https://simonaubury.com/index.xml">
+		<link rel="canonical" href="https://simonaubury.com/202107_cat_fit_part_1/post/">
+		
+		<link rel="shortcut icon" type="image/png" href="https://simonaubury.com/apple-touch-icon-precomposed.png">
+		
+		
+		<meta name="generator" content="Hugo 0.68.3" />
+
+		
+		<meta property="og:title" content="Snowy’s eating — tweeting my cats weight &amp; dining habits with a Raspberry Pi" />
+		<meta property="og:type" content="article" />
+		<meta property="og:image" content="https://simonaubury.com/202107_cat_fit_part_1/00000000.png" />
+		<meta property="og:description" content="" />
+		<meta property="og:url" content="https://simonaubury.com/202107_cat_fit_part_1/post/" />
+		<meta property="og:site_name" content="Snowy’s eating — tweeting my cats weight &amp; dining habits with a Raspberry Pi" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:site" content="@" />
+
+
+		
+		<link rel="stylesheet" href="https://simonaubury.com/css/tachyons.min.css" />
+		<link rel="stylesheet" href="https://simonaubury.com/css/story.css" />
+		<link rel="stylesheet" href="https://simonaubury.com/css/descartes.css" />
+		
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+		<link href="https://fonts.googleapis.com/css?family=Quattrocento+Sans:400,400i,700,700i|Quattrocento:400,700|Spectral:400,400i,700,700i&amp;subset=latin-ext" rel="stylesheet">
+		
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		
+		<script src="https://simonaubury.com/js/story.js"></script>
+
+	</head>
+	<body class="ma0 bg-white section-202107_cat_fit_part_1 page-kind-page is-page-true ">
+		
+		<header class="cover bg-top" style="background-image: url('https://simonaubury.com/202107_cat_fit_part_1/00000000.png'); background-position: center;">
+			<div class="bg-black-30 bb bt">
+
+				<nav class="hide-print sans-serif  border-box pa3 ph5-l">
+					<a href="https://simonaubury.com/" title="Home">
+						<img src="https://simonaubury.com/img/logo.jpg" class="w2 h2 br-100" alt="👋 - Simon Aubury&#39;s home 🏠 on the Internet" />
+					</a>
+					<div class="fr h2 pv2 tr">
+						<a class="link f5 ml2 dim near-white" href="https://twitter.com/simonaubury/"><i class="fab fa-twitter-square"></i></a>
+						<a class="link f5 ml2 dim near-white" href="https://github.com/saubury/"><i class="fab fa-github-square"></i></a>
+						<a class="link f5 ml2 dim near-white" href="https://www.linkedin.com/in/simonaubury/"><i class="fab fa-linkedin"></i></a>
+						<a class="link f5 ml2 dim near-white fas fa-rss-square" href="https://simonaubury.com/index.xml" title="RSS Feed"></a>
+						<a class="link f5 ml2 dim near-white fas fa-search" href="https://simonaubury.com/search/" role="search" title="Search"></a>
+					</div>
+				</nav>
+
+				<div id="hdr" class="tc-l pv4-ns pv5-l pv2 ph3 ph4-ns">
+					<h1 class="near-white mt1-ns f2 fw3 mb0 mt0 lh-title">Snowy’s eating — tweeting my cats weight &amp; dining habits with a Raspberry Pi</h1>
+					<h2 class="near-white mt3-l mb4-l fw1 f6 f3-l measure-wide-l center lh-copy mt2 mb3">
+						
+						
+							
+								Published
+								<time datetime="2021-07-10T12:00:00&#43;11:00">Jul 10, 2021</time>
+								<span class="display-print">by </span>
+								
+								<span class="display-print">at https://simonaubury.com/202107_cat_fit_part_1/post/</span>
+							
+						
+					</h2>
+				</div>
+
+				
+				
+				
+				
+
+			</div>
+		</header>
+		
+		<main role="main">
+		
+<article class="center bg-white br-3 pv1 ph4 lh-copy f5 nested-links mw7">
+	<h1 id="snowys-eatingtweeting-my-cats-weight--dining-habits-with-a-raspberry-pi">Snowy’s eating — tweeting my cats weight &amp; dining habits with a Raspberry Pi</h1>
+<p>Our cat Snowy 😸 has been enjoying her meals over winter. I wanted to start collecting data on her eating habits, and analyse her weight over time. This data is collected with food and cat weight measurements; alongside phots taken by two cameras. Data is collected and images processed locally using a Raspberry Pi. At the risk of body-shaming our cat, updates are posted regularly to <a href="https://twitter.com/SnowyBlackCat">Twitter</a> #snowydata.</p>
+<p><img src="/202107_cat_fit_part_1/00000000.png" alt="Snowy enjoying her food while being measured"><em>Snowy enjoying her food while being measured</em></p>
+<h2 id="project-overview">Project Overview</h2>
+<p>There are two scales — one for weighing the cat; and an independent weight measure for her food. As Snowy enters the cat scale, an initial measurement is taken for her current weight along with an starting weight for her food. An overhead and lateral camera takes a photo every 5 seconds.</p>
+<p><img src="/202107_cat_fit_part_1/00000001.png" alt="Diagram indicting two scales and camera placement"><em>Diagram indicting two scales and camera placement</em></p>
+<p>When Snowy leaves the cat scale, a calculation is made between the initial and current cat and food weight measurements to determine how much food has been eaten and her current weight. Two camera images are selected, text is overlaid the photos — and a Tweet is sent to announce her latest meal.</p>
+<!-- raw HTML omitted -->
+<h2 id="hardware--how-much-food">Hardware — how much food?</h2>
+<p>I needed to build two scales — one for the food and one for the cat. So another excuse for online <a href="https://www.aliexpress.com/w/wholesale-10kg-load-cell.html">shopping</a> for a collection of load cells and load cell amplifiers.</p>
+<p>Load cells are pretty neat. They measure weight (or, more accurately, directional force). Each load cell is able to measure the electrical resistance that changes in response to (and is proportional to) the force applied.</p>
+<p><img src="/202107_cat_fit_part_1/00000002.png" alt="A “straight bar” load cell"><em>A “straight bar” load cell</em></p>
+<p>For weighting the food; I used a single “straight bar” load cell which can translate up to 1kg of pressure (force) into an electrical signal. To weigh the food I had the load cell mounted between two wooden boards. The weight of the food is measured by the strain resistance measured across the load cell.</p>
+<p><img src="/202107_cat_fit_part_1/00000003.png" alt="Load cell mounted between boards"><em>Load cell mounted between boards</em></p>
+<p>A load cell amplifier is used to get measurable data out from a load cell. I used an <a href="https://learn.sparkfun.com/tutorials/load-cell-amplifier-hx711-breakout-hookup-guide/all">HX711</a> — which is an analogue-to-digital converter (ADC) designed to act as interface between the analogue world of weigh sensors to a digital input for the Raspberry Pi.</p>
+<h2 id="hardware--cat-weight">Hardware — cat weight</h2>
+<p>To accurately weigh Snowy I needed a larger scale. I wanted a surface large enough for her body and tail so she could be weighted whist she was eating. The first step required measuring the length of a cat</p>
+<p><img src="/202107_cat_fit_part_1/00000004.png" alt="Snowy was not helpful when I tried to measure her length"><em>Snowy was not helpful when I tried to measure her length</em></p>
+<p>I used four load cell weighing sensors — one for each corner of the cat weighing station. The <a href="https://www.aliexpress.com/item/32968926628.html">50kg load cells and another HX711</a> amplifier module was around $5. The peculiar thing about these sensors is they don’t sit flush to a surface, and the centre of each sensor needs a gap for it to flex when a load is applied. You can 3D print <a href="https://www.thingiverse.com/thing:2274593">a bracket</a> — but I found I could build 4 brackets with some scrap wood cut with a Dremel.</p>
+<p><img src="/202107_cat_fit_part_1/00000005.png" alt="Offset bracket for load cell"><em>Offset bracket for load cell</em></p>
+<p>The wooden brackets provided sufficient clearance for the foot of the load cell to flex, while still holding the perimeter of the sensor.</p>
+<p><img src="/202107_cat_fit_part_1/00000006.png" alt="Closeup of wooden mounting bracket"><em>Closeup of wooden mounting bracket</em></p>
+<p>The four load cells are wired into a single circuit with the HX711 amplifier module in a <a href="https://en.wikipedia.org/wiki/Wheatstone_bridge">wheatstone bridge</a> configuration — have a look at <a href="https://circuitjournal.com/50kg-load-cells-with-HX711">this helpful blog</a> for the detailed steps.</p>
+<p><img src="/202107_cat_fit_part_1/00000007.png" alt="The four load cells are mounted to each corner and wired together"><em>The four load cells are mounted to each corner and wired together</em></p>
+<p>Finally I was ready to connect the five load cells to the two HX711 amplifier modules — and in turn to the <a href="https://www.raspberrypi.org/">Raspberry Pi</a>; a tiny and very cheap computer. I found <a href="https://tutorials-raspberrypi.com/digital-raspberry-pi-scale-weight-sensor-hx711/">this guide</a> very helpful for providing wiring details to build a digital Raspberry Pi scale.</p>
+<p><img src="/202107_cat_fit_part_1/00000008.png" alt="Two HX711 amplifier modules connected to the Raspberry Pi"><em>Two HX711 amplifier modules connected to the Raspberry Pi</em></p>
+<h2 id="real-world-testing">Real world testing</h2>
+<p>My first experiment was a dismal failure. After waiting an eternity for Snowy to approach the weigh station, she quickly discovered a flaw in my design.</p>
+<p><img src="/202107_cat_fit_part_1/00000009.png" alt="Snowy avoiding the scale in version 1"><em>Snowy avoiding the scale in version 1</em></p>
+<p>To encourage Snowy to step onto the scale when eating, I placed small triangular walls on the side of her feed station. This worked well, and Snowy appreciated the additional privacy while eating</p>
+<p><img src="/202107_cat_fit_part_1/00000010.png" alt="Small walls around her food encouraged Snowy to stand on the scale"><em>Small walls around her food encouraged Snowy to stand on the scale</em></p>
+<p>A camera was mounted above and next to the feed station — and the entire contraption was painted.</p>
+<p><img src="/202107_cat_fit_part_1/00000011.png" alt="Final cat weigh station — now painted"><em>Final cat weigh station — now painted</em></p>
+<h2 id="whats-next">What’s next</h2>
+<p>This blog covers the initial hardware steps for the ongoing <a href="https://github.com/saubury/catfit">catfit data project</a>. Further blogs will describe data processing, trend analytics and data visualisation.</p>
+<h2 id="links">Links</h2>
+<ul>
+<li>
+<p>Project files: <a href="https://github.com/saubury/catfit">https://github.com/saubury/catfit</a></p>
+</li>
+<li>
+<p>Follow <a href="https://twitter.com/SnowyBlackCat">Snowy The Cat (@SnowyBlackCat) / Twitter</a></p>
+</li>
+<li>
+<p><a href="https://tutorials-raspberrypi.com/digital-raspberry-pi-scale-weight-sensor-hx711/">Build a digital Raspberry Pi Scale</a></p>
+</li>
+</ul>
+
+</article>
+
+		</main>
+		
+				<div class="hide-print sans-serif f6 f5-l mt5 ph3 pb6 center nested-copy-line-height lh-copy nested-links mw-100 measure-wide">
+		<div class="about-the-author">
+		
+			
+			
+				
+					
+				
+			
+		
+		</div>
+		
+	</div>
+
+		
+		
+		
+		<footer class="hide-print sans-serif f6 fw1 bg-black near-white bottom-0 w-100 pa3" role="contentinfo">
+			<p class="w-50 fr tr">
+			<a class="no-underline near-white" href="https://github.com/xaprb/story"><img class="dib" title="Made with Hugo and Story" alt="Story logo" src="https://simonaubury.com/img/story-logo-white.svg" style="width: 1.5rem; height: 1.5rem" /></a>
+			</p>
+			<p class="w-50 near-white">
+				&copy; 2021 
+			</p>
+		</footer>
+		
+	
+	
+	</body>
+</html>
