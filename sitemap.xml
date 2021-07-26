@@ -3,17 +3,27 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://simonaubury.com/202107_cleaning_messy_sensor_data_kafka/</loc>
+    <lastmod>2021-07-25T12:00:00+11:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://simonaubury.com/202107_cleaning_messy_sensor_data_kafka/posts/</loc>
+    <lastmod>2021-07-25T12:00:00+11:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://simonaubury.com/</loc>
+    <lastmod>2021-07-25T12:00:00+11:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://simonaubury.com/202107_cat_fit_part_1/</loc>
     <lastmod>2021-07-10T12:00:00+11:00</lastmod>
   </url>
   
   <url>
     <loc>https://simonaubury.com/202107_cat_fit_part_1/post/</loc>
-    <lastmod>2021-07-10T12:00:00+11:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://simonaubury.com/</loc>
     <lastmod>2021-07-10T12:00:00+11:00</lastmod>
   </url>
   

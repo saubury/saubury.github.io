@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Cleaning messy sensor data in Kafka with ksqlDB</title>
+		<link rel="alternate" type="application/rss+xml" title="RSS" href="https://simonaubury.com/index.xml">
+		<link rel="canonical" href="https://simonaubury.com/202107_cleaning_messy_sensor_data_kafka/posts/">
+		
+		<link rel="shortcut icon" type="image/png" href="https://simonaubury.com/apple-touch-icon-precomposed.png">
+		
+		
+		<meta name="generator" content="Hugo 0.68.3" />
+
+		
+		<meta property="og:title" content="Cleaning messy sensor data in Kafka with ksqlDB" />
+		<meta property="og:type" content="article" />
+		<meta property="og:image" content="https://simonaubury.com/202107_cleaning_messy_sensor_data_kafka/00000000.png" />
+		<meta property="og:description" content="" />
+		<meta property="og:url" content="https://simonaubury.com/202107_cleaning_messy_sensor_data_kafka/posts/" />
+		<meta property="og:site_name" content="Cleaning messy sensor data in Kafka with ksqlDB" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:site" content="@" />
+
+
+		
+		<link rel="stylesheet" href="https://simonaubury.com/css/tachyons.min.css" />
+		<link rel="stylesheet" href="https://simonaubury.com/css/story.css" />
+		<link rel="stylesheet" href="https://simonaubury.com/css/descartes.css" />
+		
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+		<link href="https://fonts.googleapis.com/css?family=Quattrocento+Sans:400,400i,700,700i|Quattrocento:400,700|Spectral:400,400i,700,700i&amp;subset=latin-ext" rel="stylesheet">
+		
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		
+		<script src="https://simonaubury.com/js/story.js"></script>
+
+	</head>
+	<body class="ma0 bg-white section-202107_cleaning_messy_sensor_data_kafka page-kind-page is-page-true ">
+		
+		<header class="cover bg-top" style="background-image: url('https://simonaubury.com/202107_cleaning_messy_sensor_data_kafka/00000000.png'); background-position: center;">
+			<div class="bg-black-30 bb bt">
+
+				<nav class="hide-print sans-serif  border-box pa3 ph5-l">
+					<a href="https://simonaubury.com/" title="Home">
+						<img src="https://simonaubury.com/img/logo.jpg" class="w2 h2 br-100" alt="👋 - Simon Aubury&#39;s home 🏠 on the Internet" />
+					</a>
+					<div class="fr h2 pv2 tr">
+						<a class="link f5 ml2 dim near-white" href="https://twitter.com/simonaubury/"><i class="fab fa-twitter-square"></i></a>
+						<a class="link f5 ml2 dim near-white" href="https://github.com/saubury/"><i class="fab fa-github-square"></i></a>
+						<a class="link f5 ml2 dim near-white" href="https://www.linkedin.com/in/simonaubury/"><i class="fab fa-linkedin"></i></a>
+						<a class="link f5 ml2 dim near-white fas fa-rss-square" href="https://simonaubury.com/index.xml" title="RSS Feed"></a>
+						<a class="link f5 ml2 dim near-white fas fa-search" href="https://simonaubury.com/search/" role="search" title="Search"></a>
+					</div>
+				</nav>
+
+				<div id="hdr" class="tc-l pv4-ns pv5-l pv2 ph3 ph4-ns">
+					<h1 class="near-white mt1-ns f2 fw3 mb0 mt0 lh-title">Cleaning messy sensor data in Kafka with ksqlDB</h1>
+					<h2 class="near-white mt3-l mb4-l fw1 f6 f3-l measure-wide-l center lh-copy mt2 mb3">
+						
+						
+							
+								Published
+								<time datetime="2021-07-25T12:00:00&#43;11:00">Jul 25, 2021</time>
+								<span class="display-print">by </span>
+								
+								<span class="display-print">at https://simonaubury.com/202107_cleaning_messy_sensor_data_kafka/posts/</span>
+							
+						
+					</h2>
+				</div>
+
+				
+				
+				
+				
+
+			</div>
+		</header>
+		
+		<main role="main">
+		
+<article class="center bg-white br-3 pv1 ph4 lh-copy f5 nested-links mw7">
+	<h1 id="cleaning-messy-sensor-data-in-kafka-with-ksqldb">Cleaning messy sensor data in Kafka with ksqlDB</h1>
+<blockquote>
+<p>Collecting streaming data is easy — but understanding it is much harder! With months of 🐱 weight data captured I discovered sensor data can be very messy⚡. Let me share some of the real world data problems I encountered — and how I solved my stream processing &amp; cat dining challenges with ksqlDB</p>
+</blockquote>
+<p><img src="/202107_cleaning_messy_sensor_data_kafka/00000000.png" alt="Snowy the cat — an expert in streaming data"><em>Snowy the cat — an expert in streaming data</em></p>
+<p>You may have seen me <a href="https://simon-aubury.medium.com/snowys-eating-tweeting-my-cats-weight-dining-habits-with-a-raspberry-pi-3218e340c20c">tweeting my cats weight &amp; dining habits with a Raspberry Pi</a>. This small project captures the weight of both my cat and her food bowl and places these measurements into a Kafka topic about every second.</p>
+<p>These weight measurements are pretty messy — and Snowy 😺 doesn’t want to stand still on the scale! She has been causing havoc with the measurement data by interfering with both the food scale and cat scale when eating. The four problems I needed to overcome</p>
+<ul>
+<li>Data type casting — forming strings into timestamps</li>
+<li>Windowing — finding the start and end of dining sessions</li>
+<li>Resequencing — handling refilling of food tray during the day</li>
+<li>Discarding — weight mismatch when the cat stands on the food scale</li>
+</ul>
+<p>Fortunately the time series measurements are captured in an infinite event stream in Kafka. This gives me a chance to reprocess the stream to make sense of her weight and dining habits. Let me share some of the sensor data problems I encountered — and how I solved my stream processing cat dining challenges with ksqlDB</p>
+<h1 id="context--getting-weight-data-into-kafka">Context — getting weight data into Kafka</h1>
+<p>As described in earlier the Raspberry Pi is constantly measuring the weight of the food and cat using load cells weight sensor. The <a href="https://github.com/saubury/catfit">catfit</a> project is written in Python, so the code to write weight measurements looks something like the code below. TL;DR weight measurements are written to the feed_log Kafka topic roughly every second with cat and food values.</p>
+<pre><code>from confluent_kafka import Producer, KafkaError
+import json
+
+# Kafka Producer
+producer_conf = {
+'bootstrap.servers': config.bootstrap_servers, 
+'sasl.username': config.sasl_username, 
+'sasl.password': config.sasl_password,
+'security.protocol': 'SASL_SSL', 
+'sasl.mechanisms': 'PLAIN'
+}
+
+producer = Producer(producer_conf)
+# Regularly save the cat &amp; food weight measurement
+
+producer.produce('feed_log',  value=json.dumps({&quot;event_date&quot;: event_date.strftime(&quot;%d/%m/%Y %H:%M:%S&quot;), &quot;cat_weight&quot;: cat_weight, &quot;food_weight&quot;: food_weight}))
+</code></pre><p>I’m using <a href="https://www.confluent.io/confluent-cloud/">Confluent Cloud</a> as a fully managed Kafka service; but the code would look almost identical if you were connecting to another Kafka cluster.</p>
+<h1 id="kafka-event-stream-processing-with-ksqldb">Kafka Event stream processing with ksqlDB</h1>
+<p>Now I have a stream of time-based measurements streaming into Kafka, I want to understand Snowy’s eating habits. I could dump the feeding events into a database and then perform some analysis. A better approach would be <a href="https://en.wikipedia.org/wiki/Stream_processing">stream processing</a> — which means I can write an application to respond to new data events at the moment they occur. I’m a big fan of <a href="https://ksqldb.io/">ksqlDB</a> as a platform to create event streaming applications. I can perform stream processing data clean-up with a few lines of SQL (as opposed to writing a stream processor in Scala or Java).</p>
+<h1 id="create-stream">Create Stream</h1>
+<p>First job is to create a KSQL <a href="https://docs.ksqldb.io/en/latest/concepts/streams/">stream</a> describing the Kafka feed_log topic. A KSQL stream is a simple way to describe the contents of a Kafka topic. It’s pretty self describing and looks something like …</p>
+<pre><code>CREATE STREAM feed_stream_raw 
+(event_date varchar, cat_weight double, food_weight double) 
+WITH (kafka_topic='feed_log', value_format='json');
+</code></pre><p>When I created the project I had (foolishly) placed the timestamp of the events in a text field called event_date. In hindsight this was a bit silly, but I had already collected over a month of data — so I needed to convert it to a timestamp datatype. I got a little fancy and created a second stream called weight_stream with the converted datatype, and set the TIMESTAMP property to the expected value. I also set the serialization format to <a href="https://docs.ksqldb.io/en/latest/reference/serialization/#avro">AVRO</a>. Not only does this neatly register everything in a <a href="https://docs.confluent.io/platform/current/schema-registry/index.html">schema registry</a>, it also makes me feel like I’m <a href="https://en.wikipedia.org/wiki/Apache_Avro#Logo">building an airplane</a> in my garage.</p>
+<pre><code>create stream weight_stream
+with (timestamp='event_ts', value_format='avro') 
+as 
+select 'snowy' as cat_name
+, stringtotimestamp(event_date, 'dd/MM/yyyy HH:mm:ss') as event_ts
+, event_date
+, cat_weight
+, food_weight 
+from debug_stream_raw ;
+</code></pre><h1 id="challenge-1---find-the-start-and-end-of-dining-sessions">Challenge 1 - Find the start and end of dining sessions</h1>
+<p>I want to find periods of time when Snowy if eating. If I was ambitious I’d train her to press a button at the end of her meal. Instead I’ll settle for using some stream processing magic to work out her dining sessions.</p>
+<p>I’ll define an eating session as when Snowy is on the cat scale. That is, if the cat scale is indicating a 5.8kg fluffy mass is on the scale I can assume some eating is underway. When the weight (of the cat scale) drops to zero I can assume she has stopped eating. A zero weight means she has wondered off to have a nap somewhere.</p>
+<p><img src="/202107_cleaning_messy_sensor_data_kafka/00000001.png" alt="Eating windows — jumping from one session to another">
+<em>Eating windows — jumping from one session to another</em></p>
+<p>Events (such as periodic weight measurements) are simply a stream of numbers landing in a Kafka topic. I can use a windowing state store to aggregate all the records received so far within the defined window boundary. The window closes when a sufficient gap of inactivity (say 1 minute) has passed with near zero weight measurements.</p>
+<p><img src="/202107_cleaning_messy_sensor_data_kafka/00000002.gif" alt="ksqlDB Session Windows"><em>ksqlDB Session Windows</em></p>
+<p>A windowing state store is used to store the aggregation results per window — and allows me to determine how much food is consumed within each eating session. Here’s a quick idea of how to write a <a href="https://docs.ksqldb.io/en/latest/concepts/time-and-windows-in-ksqldb-queries/#session-window">time session window query</a> in KSQL. This code is finding a period of activity separated by (at least) a 60 second gap of inactivity.</p>
+<pre><code>select avg(cat_weight) as cat_weight_avg
+, max(food_weight) as food_weight_max
+from  weight_stream 
+window session (60 seconds) 
+group by 1
+emit changes;
+</code></pre><p><img src="/202107_cleaning_messy_sensor_data_kafka/00000003.png" alt="Two session windows"><em>Two session windows</em></p>
+<h1 id="challenge-2--ignore-refilling-of-the-food">Challenge 2 — Ignore refilling of the food</h1>
+<p>A practical problem with the monitoring station, I need to refill 🍴 the food tray. This means the food weight can increase throughout the day, at fairly random times.</p>
+<p><img src="/202107_cleaning_messy_sensor_data_kafka/00000004.png" alt="An eating session spanning almost 3 minutes"><em>An eating session spanning almost 3 minutes</em></p>
+<p>Fortunately I can ignore the actual weight of the food, as I really only care about the change of food weight during an eating window. As long as I know the beginning food weight and final food weight during an eating window we know how much Snowy has eaten during that meal. I can find the difference in food weight within a window like this …</p>
+<pre><code>select ...
+, max(food_weight) - min(food_weight) as food_eaten
+from  weight_stream
+window ...
+</code></pre><h1 id="challenge-3-stepping-on-the-wrong-scale">Challenge 3— Stepping on the wrong scale</h1>
+<p>There are two independent scales — but there are times when Snowy leaves her sensor plate and places her weight on the food scale. Suddenly her measured weight will drop (by around 1kg) and the weight of the food will seem to increase.</p>
+<p><img src="/202107_cleaning_messy_sensor_data_kafka/00000005.png" alt="Data mismatch — cat stepping on food plate"><em>Data mismatch — cat stepping on food plate</em></p>
+<p>I initially tried to account for this momentary difference by calculating the shifted mass. But after a bit of tinkering I decided it was easier to simply ignore these spurious events with some boundary checks. To only keep the “sensible” events I can use a predicate like this …</p>
+<pre><code>select ..
+from  weight_stream
+where food_weight &lt; 1100 and cat_weight &gt; 5800 and cat_weight &lt; 6200
+...
+</code></pre><h1 id="putting-it-all-together">Putting it all together</h1>
+<p>I now have a stream of events, grouped into eating session windows. I’ve excluded the rogue data and calculated the food consumed for each meal. I can materialize the result into a KSQL table which represents a snapshot (a point in time) of how much food was eaten within a window</p>
+<pre><code>create table cat_weight_table 
+as 
+select avg(cat_weight) as cat_weight_avg
+, max(food_weight) - min(food_weight) as food_eaten
+from  weight_stream 
+window session (600 seconds) 
+where food_weight &lt; 1100 and cat_weight &gt; 5800 and cat_weight &lt; 6200
+group by cat_name
+having count(*) &gt; 4;
+
+select  timestamptostring(windowstart, 'dd/MM/yyyy HH:mm:ss') 
+, timestamptostring(windowend, 'dd/MM/yyyy HH:mm:ss') 
+, (windowend-windowstart) / 1000 as eat_seconds
+, round(cat_weight_avg) as cat_weight_grams
+, round(food_weight_max - food_weight_min) as food_eaten_grams
+, cnt 
+from cat_weight_table 
+where cat_name = 'snowy';
+Which results in a projection with clear dining sessions, the duration and weight of feed eaten.
+</code></pre><p><img src="/202107_cleaning_messy_sensor_data_kafka/00000006.png" alt="Eating sessions — with elapsed time and food eaten"><em>Eating sessions — with elapsed time and food eaten</em></p>
+<h1 id="conclusion">Conclusion</h1>
+<p>An uncooperative cat plus unexpected load cell measuring inaccuracies meant I had a lot of messy data. A bit of stream processing with ksqlDB makes it much easier to work out when your cat needs to go on a diet.
+Feel free to download and try out this project yourself (with data) — <a href="https://github.com/saubury/catfit/blob/master/ksqldb/ksqldb.md">catfit (github.com)</a></p>
+
+</article>
+
+		</main>
+		
+				<div class="hide-print sans-serif f6 f5-l mt5 ph3 pb6 center nested-copy-line-height lh-copy nested-links mw-100 measure-wide">
+		<div class="about-the-author">
+		
+			
+			
+				
+					
+				
+			
+		
+		</div>
+		
+	</div>
+
+		
+		
+		
+		<footer class="hide-print sans-serif f6 fw1 bg-black near-white bottom-0 w-100 pa3" role="contentinfo">
+			<p class="w-50 fr tr">
+			<a class="no-underline near-white" href="https://github.com/xaprb/story"><img class="dib" title="Made with Hugo and Story" alt="Story logo" src="https://simonaubury.com/img/story-logo-white.svg" style="width: 1.5rem; height: 1.5rem" /></a>
+			</p>
+			<p class="w-50 near-white">
+				&copy; 2021 
+			</p>
+		</footer>
+		
+	
+	
+	</body>
+</html>

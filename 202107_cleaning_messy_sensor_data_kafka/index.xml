@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>202107_cleaning_messy_sensor_data_kafkas on 👋 - Simon Aubury&#39;s home 🏠 on the Internet</title>
+    <link>https://simonaubury.com/202107_cleaning_messy_sensor_data_kafka/</link>
+    <description>Recent content in 202107_cleaning_messy_sensor_data_kafkas on 👋 - Simon Aubury&#39;s home 🏠 on the Internet</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 25 Jul 2021 12:00:00 +1100</lastBuildDate>
+    
+	<atom:link href="https://simonaubury.com/202107_cleaning_messy_sensor_data_kafka/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Cleaning messy sensor data in Kafka with ksqlDB</title>
+      <link>https://simonaubury.com/202107_cleaning_messy_sensor_data_kafka/posts/</link>
+      <pubDate>Sun, 25 Jul 2021 12:00:00 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/202107_cleaning_messy_sensor_data_kafka/posts/</guid>
+      <description>Cleaning messy sensor data in Kafka with ksqlDB  Collecting streaming data is easy — but understanding it is much harder! With months of 🐱 weight data captured I discovered sensor data can be very messy⚡. Let me share some of the real world data problems I encountered — and how I solved my stream processing &amp;amp; cat dining challenges with ksqlDB
+ Snowy the cat — an expert in streaming data</description>
+    </item>
+    
+  </channel>
+</rss>
