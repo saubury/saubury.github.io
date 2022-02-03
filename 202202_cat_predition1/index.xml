@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>202202_cat_predition1s on 👋 - Simon Aubury&#39;s home 🏠 on the Internet</title>
+    <link>https://simonaubury.com/202202_cat_predition1/</link>
+    <description>Recent content in 202202_cat_predition1s on 👋 - Simon Aubury&#39;s home 🏠 on the Internet</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 01 Feb 2022 10:22:20 +1100</lastBuildDate>
+    
+	<atom:link href="https://simonaubury.com/202202_cat_predition1/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Can ML predict where my cat is now — part 1</title>
+      <link>https://simonaubury.com/202202_cat_predition1/posts/</link>
+      <pubDate>Tue, 01 Feb 2022 10:22:20 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/202202_cat_predition1/posts/</guid>
+      <description>Can ML predict where my cat is now — part 1 It’s 9am on a rainy Tuesday morning — can a simple ML model predict where my cat will be sleeping? How I used a bluetooth tracker, a dozen microcontrollers plus a bit of Python to predict where Snowy the cat would be napping in the next hour.
+Predicting where Snowy the cat is likely to be based on time and weather</description>
+    </item>
+    
+  </channel>
+</rss>
