@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Can ML predict where my cat is now — part 2</title>
+		<link rel="alternate" type="application/rss+xml" title="RSS" href="https://simonaubury.com/index.xml">
+		<link rel="canonical" href="https://simonaubury.com/202207_cat_predition2/posts/">
+		
+		<link rel="shortcut icon" type="image/png" href="https://simonaubury.com/apple-touch-icon-precomposed.png">
+		
+		
+		<meta name="generator" content="Hugo 0.68.3" />
+
+		
+		<meta property="og:title" content="Can ML predict where my cat is now — part 2" />
+		<meta property="og:type" content="article" />
+		<meta property="og:image" content="https://simonaubury.com/202207_cat_predition2/00000001.png" />
+		<meta property="og:description" content="" />
+		<meta property="og:url" content="https://simonaubury.com/202207_cat_predition2/posts/" />
+		<meta property="og:site_name" content="Can ML predict where my cat is now — part 2" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:site" content="@" />
+
+
+		
+		<link rel="stylesheet" href="https://simonaubury.com/css/tachyons.min.css" />
+		<link rel="stylesheet" href="https://simonaubury.com/css/story.css" />
+		<link rel="stylesheet" href="https://simonaubury.com/css/descartes.css" />
+		
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+		<link href="https://fonts.googleapis.com/css?family=Quattrocento+Sans:400,400i,700,700i|Quattrocento:400,700|Spectral:400,400i,700,700i&amp;subset=latin-ext" rel="stylesheet">
+		
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		
+		<script src="https://simonaubury.com/js/story.js"></script>
+
+	</head>
+	<body class="ma0 bg-white section-202207_cat_predition2 page-kind-page is-page-true ">
+		
+		<header class="cover bg-top" style="background-image: url('https://simonaubury.com/202207_cat_predition2/00000001.png'); background-position: center;">
+			<div class="bg-black-30 bb bt">
+
+				<nav class="hide-print sans-serif  border-box pa3 ph5-l">
+					<a href="https://simonaubury.com/" title="Home">
+						<img src="https://simonaubury.com/img/logo.jpg" class="w2 h2 br-100" alt="👋 - Simon Aubury&#39;s home 🏠 on the Internet" />
+					</a>
+					<div class="fr h2 pv2 tr">
+						<a class="link f5 ml2 dim near-white" href="https://twitter.com/simonaubury/"><i class="fab fa-twitter-square"></i></a>
+						<a class="link f5 ml2 dim near-white" href="https://github.com/saubury/"><i class="fab fa-github-square"></i></a>
+						<a class="link f5 ml2 dim near-white" href="https://www.linkedin.com/in/simonaubury/"><i class="fab fa-linkedin"></i></a>
+						<a class="link f5 ml2 dim near-white fas fa-rss-square" href="https://simonaubury.com/index.xml" title="RSS Feed"></a>
+						<a class="link f5 ml2 dim near-white fas fa-search" href="https://simonaubury.com/search/" role="search" title="Search"></a>
+					</div>
+				</nav>
+
+				<div id="hdr" class="tc-l pv4-ns pv5-l pv2 ph3 ph4-ns">
+					<h1 class="near-white mt1-ns f2 fw3 mb0 mt0 lh-title">Can ML predict where my cat is now — part 2</h1>
+					<h2 class="near-white mt3-l mb4-l fw1 f6 f3-l measure-wide-l center lh-copy mt2 mb3">
+						
+						
+							
+								Published
+								<time datetime="2022-07-01T10:22:20&#43;11:00">Jul 1, 2022</time>
+								<span class="display-print">by </span>
+								
+								<span class="display-print">at https://simonaubury.com/202207_cat_predition2/posts/</span>
+							
+						
+					</h2>
+				</div>
+
+				
+				
+				
+				
+
+			</div>
+		</header>
+		
+		<main role="main">
+		
+<article class="center bg-white br-3 pv1 ph4 lh-copy f5 nested-links mw7">
+	<h1 id="can-ml-predict-where-my-cat-is-nowpart-2">Can ML predict where my cat is now — part 2</h1>
+<blockquote>
+<p>Can ML predict where Snowy the cat would go throughout her day? With months of location &amp; temperature data captured, this second blogs covers how to train a machine learning (ML) model to predict where Snowy would go throughout her day. For the impatient, you can skip directly to the prediction web-app here.</p>
+</blockquote>
+<p><a href="/202202_cat_predition1/posts">Part 1 of this blog</a> covered the hardware required build a history of which room she used for her favourite sleeping spots.</p>
+<p><img src="/202207_cat_predition2/00000000.gif" alt="Cat location prediction using Streamlit web apps"></p>
+<p><em>Cat location prediction using Streamlit web apps</em></p>
+<h2 id="where-are-we-starting">Where are we starting?</h2>
+<p>This <a href="/202202_cat_predition1/posts">first blog</a> described the the method for locating Snowy and data collection platform. I had collected over three months of location observations, with over <strong>12 million</strong> location, temperature, humidity and rainfall observations (I <em>may</em> have gone over the top with data collection).</p>
+<p><img src="/202207_cat_predition2/00000001.png" alt=""></p>
+<p>The question I’ve been trying to answer, can I use these historic observations to build a prediction model of where she is likely to go? How confident can I be using a machine to predict where a cat is likely to be at predicting the hiding spot for Snowy?</p>
+<h2 id="ml-bootcamp">ML Bootcamp</h2>
+<p>Supervised learning is the ML task of creating a function that maps an input to an output based on example input-output pairs. In my case, I want to take historic observations about cat location, temperature, time of day etc., as inputs and find patterns … a function (inference) that predicts future cat location.</p>
+<p><img src="/202207_cat_predition2/00000002.png" alt="Temperature, time and day — can it map to location?"></p>
+<p><em>Temperature, time and day — can it map to location?</em></p>
+<p>My assumption is the problem can be generalised from this data; e.g. future data will follow some common pattern of past cat behaviour (for a cat — this assumption may be questionable) .</p>
+<p><img src="/202207_cat_predition2/00000003.png" alt="Cat location prediction"></p>
+<p><em>Cat location prediction</em></p>
+<p>The training uses past information to build a model that is a deployable artefact. Once a candidate model is trained, it can be tested for predication accuracy and finally deployed. In my case, I wish to create a web application to make predictions on where Snowy is likely to be napping.</p>
+<p>What’s also important is that the model doesn’t have to explicitly output an absolute location, but can give its answer in terms of a confidence. If it output P(location:study) near 1.0 it’s confident, but values near 0.5 represent “unsure” about the confidence of predicting Snowy’s location.</p>
+<h2 id="summarising-data-with-dbt">Summarising data with dbt</h2>
+<p>As covered in <a href="https://simon-aubury.medium.com/can-ml-predict-where-my-cat-is-now-part-1-cfb194b51aab">part 1</a> — my data platform Home assistant stores each sensor update in the <a href="https://www.home-assistant.io/docs/backend/database/">states</a> table. This is *really *fine-grained, with updates added every few seconds from all the sensors (in my case, around 18,000 sensor updates a day). My goal was to summarise the data into hourly updates — essentially a single (most prevalent) location, along with temperature and humidity readings.</p>
+<p><img src="/202207_cat_predition2/00000004.png" alt="Summarising lots of data into hourly summaries"></p>
+<p><em>Summarising lots of data into hourly summaries</em></p>
+<p>Initially I was manually running the data processing with a bunch of SQL statements (like <a href="https://github.com/saubury/cat-predictor/blob/master/sql/extract.sql">this</a>) to process the data. However, I found this fairly cumbersome as I wanted to retraining the model with newer location and environmental conditions. I settled on using the trusty data engineering tool <a href="https://www.getdbt.com/">dbt</a> to simplify the creation of the SQL transformation in my database to make retraining more effective.</p>
+<p><img src="/202207_cat_predition2/00000005.png" alt="The dbt lineage graph showing the transformation of data"></p>
+<p><em>The dbt lineage graph showing the transformation of data</em></p>
+<p>dbt handles turning these my select statements into tables and views, performing the transforming data already inside of my postgres data warehouse.</p>
+<h2 id="model-training--evaluation">Model training &amp; evaluation</h2>
+<p>I used a Scikit-learn random <a href="https://www.datacamp.com/tutorial/random-forests-classifier-python">forest decision tree</a> classification for my predictive model. Random forests creates decision trees on randomly selected data samples, gets prediction from each tree and selects the best solution by means of voting. It also provides a pretty good indicator of the feature importance.</p>
+<p>If you look at the <a href="https://github.com/saubury/cat-predict/tree/master/notebooks">python notebook</a> you can see the steps taken to assigns a class label to inputs, based on many examples it has been trained on from thousands of past observations of time of day, temperature and location.</p>
+<p><img src="/202207_cat_predition2/00000006.png" alt="Python code segment for visualizing feature importance"></p>
+<p><em>Python code segment for visualizing feature importance</em></p>
+<p>One really cool thing about the Scikit-learn decision tree models is how easy it is to visualise what’s going on. By visualizing the model features (above) I can see that “hour of the day” is the most significant feature in the model.</p>
+<p>Intuitively this makes sense — time of day is likely to have the most significant impact on where Snowy is likely to be. The second most significant feature in predicting Snowy’s location is outside air temperature. Again this makes sense — too hot or too cold is likely to change is she wants to be outside. What I found surprising was the <em>least significant</em> feature was the is-raining feature. One possible explanation is the feature only makes sense during daylight hours, the is-raining won’t have an effect on the model when Snowy is sleeping inside at night.</p>
+<p>It’s also possible to <a href="https://towardsdatascience.com/how-to-visualize-a-decision-tree-from-a-random-forest-in-python-using-scikit-learn-38ad2d75f21c">visualize a decision tree</a> from a random forest in Python using Scikit-Learn.</p>
+<p><img src="/202207_cat_predition2/00000007.png" alt="A visual decision tree showing the hour and day decision points"></p>
+<p><em>A visual decision tree showing the hour and day decision points</em></p>
+<p>Here in my display tree I can see the hour of the day is the initial decision point in the prediction — with 7:00am an interesting part of the algorithm. This is the time when alarm clocks go off in our household — and the cat is motivated to get up and look for food. Another interesting part of the tree is the “day of the week ≤ 5.5”. This equates to day of day of week being Monday through Friday — and again this part of the algorithm makes sense as we (and the cat) generally get up a bit later on week-ends</p>
+<h2 id="the-cat-predictor-web-app-in-streamlit">The cat predictor web-app in Streamlit</h2>
+<p>With the model created, I now wanted to build a web application to predict Snowy’s location based on a range of inputs. <a href="https://docs.streamlit.io/">Streamlit</a> is an open-source Python library that makes it easy to create web apps (without me having to learn a bunch of front-end frameworks). I added sliders and selection boxes to for feature values, such as day and temperature.</p>
+<p><img src="/202207_cat_predition2/00000008.png" alt="Web application — with inputs as slider controls"></p>
+<p><em>Web application — with inputs as slider controls</em></p>
+<p>And voila — with a bit more <a href="https://github.com/saubury/cat-predict-app/blob/master/cat_predictor_app.py">python code</a> I’ve created a Cat Prediction App; a web-app that predicts the likely location of Snowy the cat. I found some <a href="https://towardsdatascience.com/a-quick-tutorial-on-how-to-deploy-your-streamlit-app-to-heroku-874e1250dadd">excellent instruction</a>s to deploy my Streamlit app to Heroku. So I can now <a href="https://cat-predict-app.herokuapp.com/">share my Cap Predicator app</a> with the world!</p>
+<h2 id="links-to-code">Links to code</h2>
+<p>Hope you find this blog and code helpful for all your pet location prediction needs</p>
+<ul>
+<li>
+<p>Data platform and ML prediction: <a href="https://github.com/saubury/cat-predict">https://github.com/saubury/cat-predict</a></p>
+</li>
+<li>
+<p>Streamlit App: <a href="https://github.com/saubury/cat-predict-app">https://github.com/saubury/cat-predict-app</a></p>
+</li>
+</ul>
+
+</article>
+
+		</main>
+		
+				<div class="hide-print sans-serif f6 f5-l mt5 ph3 pb6 center nested-copy-line-height lh-copy nested-links mw-100 measure-wide">
+		<div class="about-the-author">
+		
+			
+			
+				
+					
+				
+			
+		
+		</div>
+		
+	</div>
+
+		
+		
+		
+		<footer class="hide-print sans-serif f6 fw1 bg-black near-white bottom-0 w-100 pa3" role="contentinfo">
+			<p class="w-50 fr tr">
+			<a class="no-underline near-white" href="https://github.com/xaprb/story"><img class="dib" title="Made with Hugo and Story" alt="Story logo" src="https://simonaubury.com/img/story-logo-white.svg" style="width: 1.5rem; height: 1.5rem" /></a>
+			</p>
+			<p class="w-50 near-white">
+				&copy; 2022 
+			</p>
+		</footer>
+		
+	
+	
+	</body>
+</html>

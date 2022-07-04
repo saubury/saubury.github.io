@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>202207_cat_predition2s on 👋 - Simon Aubury&#39;s home 🏠 on the Internet</title>
+    <link>https://simonaubury.com/202207_cat_predition2/</link>
+    <description>Recent content in 202207_cat_predition2s on 👋 - Simon Aubury&#39;s home 🏠 on the Internet</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 01 Jul 2022 10:22:20 +1100</lastBuildDate>
+    
+	<atom:link href="https://simonaubury.com/202207_cat_predition2/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Can ML predict where my cat is now — part 2</title>
+      <link>https://simonaubury.com/202207_cat_predition2/posts/</link>
+      <pubDate>Fri, 01 Jul 2022 10:22:20 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/202207_cat_predition2/posts/</guid>
+      <description>Can ML predict where my cat is now — part 2  Can ML predict where Snowy the cat would go throughout her day? With months of location &amp;amp; temperature data captured, this second blogs covers how to train a machine learning (ML) model to predict where Snowy would go throughout her day. For the impatient, you can skip directly to the prediction web-app here.
+ Part 1 of this blog covered the hardware required build a history of which room she used for her favourite sleeping spots.</description>
+    </item>
+    
+  </channel>
+</rss>
