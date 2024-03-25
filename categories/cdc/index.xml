@@ -1,0 +1,21 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>CDC - Simon Aubury</title>
+    <link>https://simonaubury.com/categories/cdc/</link>
+    <description>Recent content in CDC on Simon Aubury</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-au</language>
+    <lastBuildDate>Thu, 18 Feb 2021 12:00:00 +1100</lastBuildDate>
+    
+        <atom:link href="https://simonaubury.com/categories/cdc/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Oracle to Kafka — Playing with Confluent’s new Oracle CDC Source Connector in Docker</title>
+      <link>https://simonaubury.com/posts/202102_oracle_cdc_kafka/</link>
+      <pubDate>Thu, 18 Feb 2021 12:00:00 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202102_oracle_cdc_kafka/</guid>
+      <description>Streaming Oracle data into Kafka</description>
+    </item>
+  </channel>
+</rss>
