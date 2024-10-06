@@ -1,0 +1,42 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>duckdb - Simon Aubury</title>
+    <link>https://simonaubury.com/categories/duckdb/</link>
+    <description>Recent content in duckdb on Simon Aubury</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-au</language>
+    <lastBuildDate>Wed, 18 Oct 2023 10:22:20 +1100</lastBuildDate>
+    
+        <atom:link href="https://simonaubury.com/categories/duckdb/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>🍹GinAI - Cocktails mixed with generative AI</title>
+      <link>https://simonaubury.com/posts/202310_ginai/</link>
+      <pubDate>Wed, 18 Oct 2023 10:22:20 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202310_ginai/</guid>
+      <description>Cocktails mixed with generative AI</description>
+    </item><item>
+      <title>My data, your LLM</title>
+      <link>https://simonaubury.com/posts/202309_paranoid_genai/</link>
+      <pubDate>Sun, 10 Sep 2023 10:22:20 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202309_paranoid_genai/</guid>
+      <description>Paranoid analysis of iMessage chats with OpenAI, LlamaIndex &amp; DuckDB</description>
+    </item><item>
+      <title>Fitbit activity analysis with DuckDB</title>
+      <link>https://simonaubury.com/posts/202306_duckdb_fitbit/</link>
+      <pubDate>Thu, 01 Jun 2023 10:22:20 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202306_duckdb_fitbit/</guid>
+      <description>My (very) personal data warehouse — Fitbit activity analysis with DuckDB</description>
+    </item><item>
+      <title>Mastodon usage — counting toots with Kafka, DuckDB &amp; Seaborn </title>
+      <link>https://simonaubury.com/posts/202302_mastodon_duckdb/</link>
+      <pubDate>Wed, 22 Feb 2023 10:22:20 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202302_mastodon_duckdb/</guid>
+      <description>Counting toots in a decentralized social networking platform 🐘🦆📊</description>
+    </item>
+  </channel>
+</rss>
