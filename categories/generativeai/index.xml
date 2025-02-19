@@ -1,0 +1,49 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>GenerativeAI - Simon Aubury</title>
+    <link>https://simonaubury.com/categories/generativeai/</link>
+    <description>Recent content in GenerativeAI on Simon Aubury</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-au</language>
+    <lastBuildDate>Sat, 15 Feb 2025 10:22:20 +1100</lastBuildDate>
+    
+        <atom:link href="https://simonaubury.com/categories/generativeai/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Puppy data</title>
+      <link>https://simonaubury.com/posts/202502_puppydata/</link>
+      <pubDate>Sat, 15 Feb 2025 10:22:20 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202502_puppydata/</guid>
+      <description>🐾 Puppy Data 🐾 combines a love of data and dogs — a project to track Barney the puppy</description>
+    </item><item>
+      <title>FridgeBot — GPT-4o shopping list automation</title>
+      <link>https://simonaubury.com/posts/202405_fridgebot/</link>
+      <pubDate>Wed, 15 May 2024 10:22:20 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202405_fridgebot/</guid>
+      <description>GPT-4o shopping list automation - no excuse to forget the milk</description>
+    </item><item>
+      <title>🍹GinAI - Cocktails mixed with generative AI</title>
+      <link>https://simonaubury.com/posts/202310_ginai/</link>
+      <pubDate>Wed, 18 Oct 2023 10:22:20 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202310_ginai/</guid>
+      <description>Cocktails mixed with generative AI</description>
+    </item><item>
+      <title>My data, your LLM</title>
+      <link>https://simonaubury.com/posts/202309_paranoid_genai/</link>
+      <pubDate>Sun, 10 Sep 2023 10:22:20 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202309_paranoid_genai/</guid>
+      <description>Paranoid analysis of iMessage chats with OpenAI, LlamaIndex &amp; DuckDB</description>
+    </item><item>
+      <title>GenPiCam - Generative AI Camera</title>
+      <link>https://simonaubury.com/posts/202307_genai_camera/</link>
+      <pubDate>Tue, 27 Jun 2023 10:22:20 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202307_genai_camera/</guid>
+      <description>GenPiCam — a RaspberryPi based camera that reimagines the world with GenAI</description>
+    </item>
+  </channel>
+</rss>
