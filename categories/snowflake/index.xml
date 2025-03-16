@@ -1,0 +1,21 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>snowflake - Simon Aubury</title>
+    <link>https://simonaubury.com/categories/snowflake/</link>
+    <description>Recent content in snowflake on Simon Aubury</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-au</language>
+    <lastBuildDate>Sat, 15 Feb 2025 10:22:20 +1100</lastBuildDate>
+    
+        <atom:link href="https://simonaubury.com/categories/snowflake/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Puppy data</title>
+      <link>https://simonaubury.com/posts/202502_puppydata/</link>
+      <pubDate>Sat, 15 Feb 2025 10:22:20 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202502_puppydata/</guid>
+      <description>🐾 Puppy Data 🐾 combines a love of data and dogs — a project to track Barney the puppy</description>
+    </item>
+  </channel>
+</rss>
