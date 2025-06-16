@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en-au" dir="ltr">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Kafka with AVRO vs., Kafka with Protobuf vs., Kafka with JSON Schema &middot; Simon Aubury</title>
+  <meta name="description" content="Kafka serialisation schemes" />
+  <link rel="apple-touch-icon" sizes="180x180" href="https://simonaubury.com/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://simonaubury.com/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://simonaubury.com/favicon-16x16.png">
+  <link href="https://simonaubury.com/css/katex.min.css" rel="stylesheet">
+  
+  
+  
+  
+  <link href="https://simonaubury.com/css/concated.min.css" rel="stylesheet">
+  
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7N67PMRZ6N"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-7N67PMRZ6N', { 'anonymize_ip': false });
+}
+</script>
+
+  
+</head>
+
+  <body class="single-body">
+    <nav class="nav-bar side-padding">
+  <h1 class="nav-header"><a href="https://simonaubury.com/" class="nav-text">simon aubury</a></h1>
+  <div class="hamburger-menu">
+    <input class="hamburger-menu-button" type="checkbox"
+      onclick="hamburgerMenuPressed.call(this)"
+      aria-label="Hamburger Menu Button"
+    >
+    <div class="hamburger-menu-icon">
+      <span></span>
+      <span></span>
+    </div>
+    <ul id="menu" class="hamburger-menu-overlay">
+      <li><a href="https://simonaubury.com/" class="hamburger-menu-overlay-link">Home</a></li>
+      <li><a href="https://simonaubury.com/slides/" class="hamburger-menu-overlay-link">Presentation slides</a></li>
+      <li><a href="https://simonaubury.com/about-me/" class="hamburger-menu-overlay-link">About Simon</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/cat/" class="hamburger-menu-overlay-link">Cat</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/cdc/" class="hamburger-menu-overlay-link">CDC</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/duckdb/" class="hamburger-menu-overlay-link">duckdb</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/flink/" class="hamburger-menu-overlay-link">flink</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/generativeai/" class="hamburger-menu-overlay-link">GenerativeAI</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/gpt/" class="hamburger-menu-overlay-link">GPT</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/homeassistant/" class="hamburger-menu-overlay-link">homeassistant</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/kafka/" class="hamburger-menu-overlay-link">Kafka</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/ml/" class="hamburger-menu-overlay-link">ML</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/raspberry-pi/" class="hamburger-menu-overlay-link">Raspberry Pi</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/snowflake/" class="hamburger-menu-overlay-link">snowflake</a></li>
+      
+      <li><a href="https://simonaubury.com/index.xml" class="hamburger-menu-overlay-link">rss</a></li>
+    </ul>
+  </div>
+</nav>
+
+    <main class="content side-text-padding">
+      <article class="post dropcase">
+        <header class="post-header">
+          <h1 class="post-title">Kafka with AVRO vs., Kafka with Protobuf vs., Kafka with JSON Schema</h1>
+          <p class="post-date">Posted <time datetime="2020-05-02">May 2, 2020</time></p>
+        </header>
+        <picture class="post-figure">
+          
+          
+          
+          <source srcset="https://simonaubury.com/posts/202004_kafkawithavrovskafkawithprotobuf/00000000_hue4a5b87045399449d309d22ffea57b53_79605_711x0_resize_lanczos_3.png 1x, https://simonaubury.com/posts/202004_kafkawithavrovskafkawithprotobuf/00000000_hue4a5b87045399449d309d22ffea57b53_79605_1422x0_resize_lanczos_3.png 2x, https://simonaubury.com/posts/202004_kafkawithavrovskafkawithprotobuf/00000000_hue4a5b87045399449d309d22ffea57b53_79605_2133x0_resize_lanczos_3.png 3x">
+          <img src="https://simonaubury.com/posts/202004_kafkawithavrovskafkawithprotobuf/00000000_hue4a5b87045399449d309d22ffea57b53_79605_711x0_resize_lanczos_3.png" >
+        </picture>
+        
+        
+        <h1 id="kafka-with-avro-vs-kafka-with-protobuf-vs-kafka-with-json-schema">Kafka with AVRO vs., Kafka with Protobuf vs., Kafka with JSON Schema</h1>
+<p>Kafka serialisation schemes — playing with AVRO, Protobuf, JSON Schema in Confluent Streaming Platform. The code for these examples available at <a href="https://github.com/saubury/kafka-serialization">https://github.com/saubury/kafka-serialization</a></p>
+<p>Apache Avro was has been the default Kafka serialisation mechanism for a long time. Confluent <a href="https://www.confluent.io/blog/confluent-platform-now-supports-protobuf-json-schema-custom-formats/">just updated</a> their Kafka streaming platform with additional support for serialising data with Protocol buffers (or <em>protobuf</em>) and JSON Schema serialisation.</p>
+<p>Protobuf is especially cool, and offers up some neat opportunities beyond what was possible in Avro. The inclusion of Protobuf and JSON Schema applies at producer and consumer libraries, schema registry, Kafka connect, ksqlDB along with Control Center. It’s worth a few minutes of your time getting familiar with the new opportunities possible with a choice of serialising strategies for your streaming application.</p>
+<h2 id="do-i-care-about-serialising-structured-data">Do I care about serialising structured data?</h2>
+<p>So why bother with serialising structured data? Let’s start with an example data string … “cookie,50,null” What does this data mean? Is <em>cookie</em> a name, a place or something to eat? And what about <em>50</em> - is this an age, a temperature or something else?</p>
+<p>If you were using a database (such as Postgres or Oracle) to store your data you would create a table definition (with nicely named columns and appropriate data types). The same is true for your streaming platform — you really should pick data format for serialising structured data. Bonus points for and being consistent across your data platform!</p>
+<p>Until recently your choices for serialising structured data within Kafka were limited. You had “bad” choices (such as free text or CSV) or the “better” choice of using Apache Avro. Avro is an open source data serialisation system which marshals your data (and it’s appropriate schema) to a efficient binary format. One of the core features of Avro is the ability to define a schema for our data. So our data cookie,50,null would be associated with a <em>snack</em> Avro schema like this</p>
+<pre><code>{
+  &quot;type&quot;: &quot;record&quot;,
+  &quot;name&quot;: &quot;snacks&quot;,
+  &quot;fields&quot;: [
+      {&quot;name&quot;: &quot;name&quot;,  &quot;type&quot;: &quot;string&quot; }
+    , {&quot;name&quot;: &quot;calories&quot;, &quot;type&quot;: &quot;float&quot; }
+    , {&quot;name&quot;: &quot;colour&quot;, &quot;type&quot;: &quot;string&quot;, &quot;default&quot;: null}
+  ]
+}
+</code></pre>
+<p>Here we can see our data cookie,50,null is snack data (the most important type of data). We can see <em>cookie</em> is a <em>string</em> representing the name of the snack. Our schema offers us a lot of flexibility (our schema can evolve over time) plus ensures data integrity (for example, ensuring calories are integers ).</p>
+<p>Although most of Apache Kafka users use Apache Avro to define contracts for their messages, it’s always been a bit of a “Java thing”. Classes automatically generated by the Apache Avro compiler favour JVM developers. You can certainly use AVRO in pretty much any language, however, Google Protocol Buffer (protobuf) is very popular for serialising, de-serialising and validating data in other languages (Python, Rust, Ruby, Go).</p>
+<h2 id="avro-protobuf-json-schema-use-with-kafka">AVRO, Protobuf, JSON Schema use with Kafka</h2>
+<p>This <em>isn’t</em> a blog on the “best” serialisation strategy. However, let’s get familiar with how we can use new choices for serialising structured data</p>
+<p>We’ll run through a few examples. Remember our initial set of yummy data looks like this saved in the file snacks.txt</p>
+<pre><code>{&quot;name&quot;: &quot;cookie&quot;, &quot;calories&quot;: 500, &quot;colour&quot;: &quot;brown&quot;}
+{&quot;name&quot;: &quot;cake&quot;, &quot;calories&quot;: 260, &quot;colour&quot;: &quot;white&quot;}
+{&quot;name&quot;: &quot;timtam&quot;, &quot;calories&quot;: 80, &quot;colour&quot;: &quot;chocolate&quot;}
+</code></pre>
+<h2 id="avro-serialisation">AVRO serialisation</h2>
+<p>Let’s remind ourselves how to encode our snacks using AVRO serialisation. We’ll use the include command line tool kafka-avro-console-producer as a Kafka producer which can perform serialisation (with a schema provided as a command line parameter). A <em>producer</em> is something that <em>writes</em> data into a Kafka broker.</p>
+<pre><code>kafka-**avro**-console-producer  --broker-list localhost:9092 --topic SNACKS_AVRO --property value.schema='
+**{
+  &quot;type&quot;: &quot;record&quot;,
+  &quot;name&quot;: &quot;myrecord&quot;,
+  &quot;fields&quot;: [
+      {&quot;name&quot;: &quot;name&quot;,  &quot;type&quot;: &quot;string&quot; }
+    , {&quot;name&quot;: &quot;calories&quot;, &quot;type&quot;: &quot;float&quot; }
+    , {&quot;name&quot;: &quot;colour&quot;, &quot;type&quot;: &quot;string&quot; }
+  ]
+}**' &lt; snacks.txt
+</code></pre>
+<p>And to <em>read</em> the data, we can use the kafka-avro-console-consumercommand line application to act as kafka consumer to read and de-serialising our AVRO data</p>
+<pre><code>kafka-**avro**-console-consumer --bootstrap-server localhost:9092 --topic SNACKS_AVRO --from-beginning 
+
+**{&quot;name&quot;:&quot;cookie&quot;,&quot;calories&quot;:500.0,&quot;colour&quot;:&quot;brown&quot;}
+{&quot;name&quot;:&quot;cake&quot;,&quot;calories&quot;:260.0,&quot;colour&quot;:&quot;white&quot;}
+{&quot;name&quot;:&quot;timtam&quot;,&quot;calories&quot;:80.0,&quot;colour&quot;:&quot;chocolate&quot;}**
+</code></pre>
+<h2 id="protocol-buffers-protobuf-serialization">Protocol Buffers (Protobuf) serialization</h2>
+<p>This time we’ll use <em>protobuf</em> serialisation with the new kafka-protobuf-console-producer kafka producer. The concept is similar to to approach we took with AVRO, however this time our Kafka producer will can perform protobuf serialisation. Note the protobuf schema is provided as a command line parameter.</p>
+<pre><code>kafka-**protobuf**-console-producer --broker-list localhost:9092 --topic SNACKS_PROTO --property value.schema='
+**message Snack {
+    required string name = 1;
+    required int64 calories = 2;
+    optional string colour = 3;
+}**' &lt; snacks.txt
+</code></pre>
+<p>And to read the data, we can use the kafka-protobuf-console-consumerkafka consumer for de-serialising our protobuf data</p>
+<pre><code>kafka-**protobuf**-console-consumer --bootstrap-server localhost:9092 --topic SNACKS_PROTO --from-beginning 
+
+**{&quot;name&quot;:&quot;cookie&quot;,&quot;calories&quot;:&quot;500&quot;,&quot;colour&quot;:&quot;brown&quot;}
+{&quot;name&quot;:&quot;cake&quot;,&quot;calories&quot;:&quot;260&quot;,&quot;colour&quot;:&quot;white&quot;}
+{&quot;name&quot;:&quot;timtam&quot;,&quot;calories&quot;:&quot;80&quot;,&quot;colour&quot;:&quot;chocolate&quot;}**
+</code></pre>
+<h2 id="json-schema-serialization">JSON Schema serialization</h2>
+<p>Finally we’ll use JSON Schema serialisation with the new kafka-json-schema-console-producer kafka producer. Note the json-schema schema is provided as a command line parameter.</p>
+<pre><code>kafka-**json-schema**-console-producer --broker-list localhost:9092 --topic SNACKS_JSONSCHEMA --property value.schema='
+**{
+  &quot;definitions&quot; : {
+    &quot;record:myrecord&quot; : {
+      &quot;type&quot; : &quot;object&quot;,
+      &quot;required&quot; : [ &quot;name&quot;, &quot;calories&quot; ],
+      &quot;additionalProperties&quot; : false,
+      &quot;properties&quot; : {
+        &quot;name&quot; : {&quot;type&quot; : &quot;string&quot;},
+        &quot;calories&quot; : {&quot;type&quot; : &quot;number&quot;},
+        &quot;colour&quot; : {&quot;type&quot; : &quot;string&quot;}
+      }
+    }
+  },
+  &quot;$ref&quot; : &quot;#/definitions/record:myrecord&quot;
+}**' &lt; snacks.txt
+</code></pre>
+<p>And to read the data, we can use the kafka-json-schema-console-consumer kafka consumer for de-serialising our json-schema data</p>
+<pre><code>kafka-**json-schema**-console-consumer --bootstrap-server localhost:9092 --topic SNACKS_JSONSCHEMA --from-beginning 
+
+**{&quot;name&quot;:&quot;cookie&quot;,&quot;calories&quot;:&quot;500&quot;,&quot;colour&quot;:&quot;brown&quot;}
+{&quot;name&quot;:&quot;cake&quot;,&quot;calories&quot;:&quot;260&quot;,&quot;colour&quot;:&quot;white&quot;}
+{&quot;name&quot;:&quot;timtam&quot;,&quot;calories&quot;:&quot;80&quot;,&quot;colour&quot;:&quot;chocolate&quot;}**
+</code></pre>
+<h2 id="what-you-can-do-with-protobuf-and-cant-do-with-avro">What you can do with Protobuf and can’t do with Avro?</h2>
+<p>Let’s have a look at a more complex modelling example to illustrate some of the possibilities with Protobuf schemas. Imagine we want to model a meal and describe the ingredients within the meal. We can use a protobuf schema to describe a meal such as a <em>taco</em> is composed of <em>beef filling</em> and <em>cheese topping</em>.</p>
+<p>Our data for a taco and fish-and-chips meal could look like this</p>
+<pre><code>{
+  &quot;name&quot;: &quot;tacos&quot;,
+  &quot;item&quot;: [
+    {
+      &quot;item_name&quot;: &quot;beef&quot;,
+      &quot;type&quot;: &quot;FILLING&quot;
+    },
+    {
+      &quot;item_name&quot;: &quot;cheese&quot;,
+      &quot;type&quot;: &quot;TOPPING&quot;
+    }
+  ]
+}, {
+  &quot;name&quot;: &quot;fish and chips&quot;,
+  &quot;alternate_name&quot;: &quot;fish-n chips&quot;,
+  &quot;item&quot;: []
+}
+</code></pre>
+<p>An example protobuf schema to represent our meals would look like this</p>
+<pre><code>message Meal {
+  required string name = 1;
+  optional string alternate_name = 2;
+
+  enum FoodType {
+    INGREDIENT = 0;
+    FILLING = 1;
+    TOPPING = 2;
+  }
+
+  message MealItems {
+    required string item_name = 1;
+    optional FoodType type = 2 [default = INGREDIENT];
+  }
+
+  repeated MealItems item = 4;
+}
+</code></pre>
+<p>To try this modelling with protobuf in Kafka</p>
+<pre><code>kafka-**protobuf**-console-producer --broker-list localhost:9092 --topic MEALS_PROTO --property value.schema='
+**message Meal {
+  required string name = 1;
+  optional string alternate_name = 2;**
+
+**  enum FoodType {
+    INGREDIENT = 0;
+    FILLING = 1;
+    TOPPING = 2;
+  }**
+
+**  message MealItems {
+    required string item_name = 1;
+    optional FoodType type = 2 [default = INGREDIENT];
+  }**
+
+**  repeated MealItems item = 4;
+}**' &lt; meals.txt
+</code></pre>
+<p>Which gives you an idea of how flexible data representation can be using protobuf in Kafka. But what happens if we need to make changes to these schemas?</p>
+<h2 id="protobuf-with-the-confluent-schema-registry">Protobuf with the Confluent Schema Registry</h2>
+<p>You may have wondered where the schemas actually went in the above examples? The Confluent Schema Registry has been diligently storing these schemas (as part of the serialisation process when using kafka-blah-console-producer). That is, both the schema name (eg., <em>SNACKS_PROTO-value</em>), schema content, version and style (protobuf, Avro) have all been stored. We can peak at the stored schema with curl. For example, to explore the recently used protobuf schema for our snacks</p>
+<pre><code>curl -s -X GET [http://localhost:8081/subjects/SNACKS_PROTO-value/versions/1](http://localhost:8081/subjects/SNACKS_PROTO-value/versions/1)
+</code></pre>
+<p>Which responds the this snack schema (yummy)</p>
+<pre><code>{
+  &quot;subject&quot;: &quot;SNACKS_PROTO-value&quot;,
+  &quot;version&quot;: 1,
+  &quot;id&quot;: 6,
+  &quot;schemaType&quot;: &quot;PROTOBUF&quot;,
+  &quot;schema&quot;: &quot;\nmessage Snack {\n  required string name = 1;\n  required int64 calories = 2;\n  required string colour = 3;\n}\n&quot;
+}
+</code></pre>
+<h2 id="schema-evolution-with-protobuf">Schema Evolution with Protobuf</h2>
+<p>As the saying goes — <em>the only constant is change</em>. Any good data platform needs to accommodate changes — such as additions or changes to a schema. Supporting schema evolution is a fundamental requirement for a streaming platform, so our serialization mechanism also needs to support schema changes (or evolution). Protobuf and Avro both offer mechanisms for updating schema without breaking downstream consumers — which could still be using a previous schema version.</p>
+<h2 id="adding-drinks-to-our-meals">Adding drinks to our meals</h2>
+<p>Tacos and pizza’s sound great — but let’s have something to drink with our meal! We can now add some additional attributes to our schema to include meals. This is sometimes called <em>schema evolution</em>. Note we’ll continue to use the existing MEALS_PROTO topic.</p>
+<p>A new data payload (with the inclusion of <em>beer</em>)</p>
+<pre><code>{
+  &quot;name&quot;: &quot;pizza&quot;,
+  &quot;drink&quot;: [
+    {
+      &quot;drink_name&quot;: &quot;beer&quot;,
+      &quot;type&quot;: &quot;ALCOHOLIC&quot;
+    }
+  ]
+}
+</code></pre>
+<p>So to encode the command looks like</p>
+<pre><code>kafka-**protobuf**-console-producer --broker-list localhost:9092 --topic MEALS_PROTO --property value.schema='
+message Meal {
+  required string name = 1;
+  optional string alternate_name = 2;
+
+  enum FoodType {
+    INGREDIENT = 0;
+    FILLING = 1;
+    TOPPING = 2;
+  }
+
+**  enum DrinkType {
+    BUBBLY = 0;
+    ALCOHOLIC = 1;
+  }**
+
+  message MealItems {
+    required string item_name = 1;
+    optional FoodType type = 2 [default = INGREDIENT];
+  }
+
+**  message DrinkItems {
+    required string drink_name = 1;
+    optional DrinkType type = 2 ;
+  }**
+
+  repeated MealItems item = 4;
+**  repeated DrinkItems drink = 5;
+**}' &lt; meals-2.txt
+</code></pre>
+<h2 id="visualising-schema-difference-with-confluent-control-center">Visualising schema difference with Confluent Control Center</h2>
+<p>One nice inclusion with the <em>Confluent Control Center</em> (the Web GUI included in the Confluent platform) is the ability to look at schemas, and the <em>differences between schemas</em>. For example, we can see version 1 and version 2 of the MEALS_PROTO-value schema</p>
+<p><img src="00000001.png" alt="Schema difference with Confluent Control Center"><em>Schema difference with Confluent Control Center</em></p>
+<h2 id="application-binding--protobuf-classes-with-python">Application Binding — Protobuf classes with Python</h2>
+<p>Let us now build an application demonstrating protobuf classes. To generate protobuf classes you must first install the protobuf compiler protoc. See the <a href="https://developers.google.com/protocol-buffers/docs/pythontutorial">protocol buffer docs</a> for instructions on installing and using protoc.</p>
+<p>We can compile our Python schema like this. This will take our schema (from meal.proto) and will create the meal_pb2.py Python class file.</p>
+<pre><code>protoc -I=. --python_out=. ./meal.proto
+</code></pre>
+<p>Excellent, with the meal_pb2.py Python class file you can now build protobuf classes and produce into Kafka with code like this</p>
+<pre><code>**import meal_pb2
+** 
+mybeer = **Meal.DrinkItems**(drink_name=&quot;beer&quot;)
+mywine = Meal.DrinkItems(drink_name=&quot;wine&quot;)
+meal =   **Meal(name='pizza', drink=[mybeer,mywine])**
+
+producer.produce(topic='MEAL_PROTO', value=meal)
+</code></pre>
+<p>Have a look at <a href="https://github.com/saubury/kafka-serialization/blob/master/producer-protobuf.py">producer-protobuf.py</a> for a complete example of protobuf Kafka producer in Python.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>Kafka continues to grow in capabilities, and having the options of AVRO, Protobuf, JSON Schema use within the Confluent Platform gives even more opportunities to build cool streaming applications</p>
+<p>The code for these examples available at</p>
+<ul>
+<li><a href="https://github.com/saubury/kafka-serialization">https://github.com/saubury/kafka-serialization</a></li>
+</ul>
+
+      </article>
+      
+    </main>
+    <nav class="end-nav side-padding">
+      
+      <a ontouchstart="cardPressed.call(this)" ontouchend="cardReleased.call(this)" ontouchmove="cardReleased.call(this)" 
+  href="https://simonaubury.com/posts/202003_kafkastreamprocessingsortingsockswithksqldb/" class="card blog-card bc-next" rel="bookmark" >
+  
+  <div class="card-img-container">
+    <p class="card-img-overlay">Next Article</p>
+    <picture>
+      
+      
+      
+      <source srcset="https://simonaubury.com/posts/202003_kafkastreamprocessingsortingsockswithksqldb/00000000_hu8fcfb18f72a38c9af2513ab18b784427_138985_400x0_resize_lanczos_3.png 1x, https://simonaubury.com/posts/202003_kafkastreamprocessingsortingsockswithksqldb/00000000_hu8fcfb18f72a38c9af2513ab18b784427_138985_800x0_resize_lanczos_3.png 2x, https://simonaubury.com/posts/202003_kafkastreamprocessingsortingsockswithksqldb/00000000_hu8fcfb18f72a38c9af2513ab18b784427_138985_1200x0_resize_lanczos_3.png 3x">
+      <img src="https://simonaubury.com/posts/202003_kafkastreamprocessingsortingsockswithksqldb/00000000_hu8fcfb18f72a38c9af2513ab18b784427_138985_400x0_resize_lanczos_3.png" class="card-img" >
+    </picture>
+  </div>
+  
+  <article class="card-body">
+    <h2 class="card-title">Kafka stream processing: sorting socks with ksqlDB - Part 2</h2>
+    <p class="card-text">Sorting socks with a streaming solution</p>
+    <div class="card-subtext muted-text">
+      <p>Posted <time datetime="2020-02-23">Feb 23, 2020</time></p>
+      <p>#Kafka </p>
+    </div>
+  </article>
+</a>
+      
+    </nav>
+    <footer class="side-padding" style="background-image: url('https://simonaubury.com/img/home-blob-flip.svg');">
+    <a href="https://simonaubury.com/" class="footer-link">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/home.svg" alt="Home">
+    
+    </a>
+    
+    
+    
+    <a href="https://github.com/saubury" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/github.svg" alt="GitHub"/>
+    
+    </a>
+    
+    
+    
+    <a href="https://www.linkedin.com/in/simonaubury" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/linkedin.svg" alt="LinkedIn"/>
+    
+    </a>
+    
+    
+    <a href="https://simonaubury.com/index.xml" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/rss.svg" alt="RSS"/>
+    
+    </a>
+    
+    
+    
+    
+    
+    
+    
+    
+</footer>
+    
+  <script defer src="https://simonaubury.com/js/katex.min.js"></script>
+
+
+  <script defer src="https://simonaubury.com/js/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+
+<script src="https://simonaubury.com/js/core.min.js"></script>
+
+  </body>
+</html>

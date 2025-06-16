@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en-au" dir="ltr">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>1 Cat, 3 Clouds — Part 1 - Where is Snowy sleeping? &middot; Simon Aubury</title>
+  <meta name="description" content="Compare the same IoT data project in AWS, Azure &amp; Google Cloud" />
+  <link rel="apple-touch-icon" sizes="180x180" href="https://simonaubury.com/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://simonaubury.com/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://simonaubury.com/favicon-16x16.png">
+  <link href="https://simonaubury.com/css/katex.min.css" rel="stylesheet">
+  
+  
+  
+  
+  <link href="https://simonaubury.com/css/concated.min.css" rel="stylesheet">
+  
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7N67PMRZ6N"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-7N67PMRZ6N', { 'anonymize_ip': false });
+}
+</script>
+
+  
+</head>
+
+  <body class="single-body">
+    <nav class="nav-bar side-padding">
+  <h1 class="nav-header"><a href="https://simonaubury.com/" class="nav-text">simon aubury</a></h1>
+  <div class="hamburger-menu">
+    <input class="hamburger-menu-button" type="checkbox"
+      onclick="hamburgerMenuPressed.call(this)"
+      aria-label="Hamburger Menu Button"
+    >
+    <div class="hamburger-menu-icon">
+      <span></span>
+      <span></span>
+    </div>
+    <ul id="menu" class="hamburger-menu-overlay">
+      <li><a href="https://simonaubury.com/" class="hamburger-menu-overlay-link">Home</a></li>
+      <li><a href="https://simonaubury.com/slides/" class="hamburger-menu-overlay-link">Presentation slides</a></li>
+      <li><a href="https://simonaubury.com/about-me/" class="hamburger-menu-overlay-link">About Simon</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/cat/" class="hamburger-menu-overlay-link">Cat</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/cdc/" class="hamburger-menu-overlay-link">CDC</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/duckdb/" class="hamburger-menu-overlay-link">duckdb</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/flink/" class="hamburger-menu-overlay-link">flink</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/generativeai/" class="hamburger-menu-overlay-link">GenerativeAI</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/gpt/" class="hamburger-menu-overlay-link">GPT</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/homeassistant/" class="hamburger-menu-overlay-link">homeassistant</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/kafka/" class="hamburger-menu-overlay-link">Kafka</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/ml/" class="hamburger-menu-overlay-link">ML</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/raspberry-pi/" class="hamburger-menu-overlay-link">Raspberry Pi</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/snowflake/" class="hamburger-menu-overlay-link">snowflake</a></li>
+      
+      <li><a href="https://simonaubury.com/index.xml" class="hamburger-menu-overlay-link">rss</a></li>
+    </ul>
+  </div>
+</nav>
+
+    <main class="content side-text-padding">
+      <article class="post dropcase">
+        <header class="post-header">
+          <h1 class="post-title">1 Cat, 3 Clouds — Part 1 - Where is Snowy sleeping?</h1>
+          <p class="post-date">Posted <time datetime="2021-01-10">Jan 10, 2021</time></p>
+        </header>
+        <picture class="post-figure">
+          
+          
+          
+          <source srcset="https://simonaubury.com/posts/202101_1cat3cloudspart1/00000010_hu49f2bd12950d8871c9d19ee8eb90623b_824850_711x0_resize_lanczos_3.png 1x, https://simonaubury.com/posts/202101_1cat3cloudspart1/00000010_hu49f2bd12950d8871c9d19ee8eb90623b_824850_1422x0_resize_lanczos_3.png 2x, https://simonaubury.com/posts/202101_1cat3cloudspart1/00000010_hu49f2bd12950d8871c9d19ee8eb90623b_824850_2133x0_resize_lanczos_3.png 3x">
+          <img src="https://simonaubury.com/posts/202101_1cat3cloudspart1/00000010_hu49f2bd12950d8871c9d19ee8eb90623b_824850_711x0_resize_lanczos_3.png" >
+        </picture>
+        
+        
+        <h1 id="1-cat-3-cloudswhere-is-snowy-sleeping">1 Cat, 3 Clouds — Where is Snowy sleeping?</h1>
+<p>Our cat Snowy is an outdoor cat — but we are beginning to wonder where she travels once she’s left the house. Let me share how I built a low cost pet tracking device to show Snowy’s location in real-time.</p>
+<blockquote>
+<p>Plus, what’s it like to build the same IoT data project in AWS, Azure &amp; Google Cloud in 2021? This is article 1 in a 4 part series. This first blog post describes the project and details hardware and networking components. The next three articles describe the experience of building the data pipelines with each major cloud.</p>
+</blockquote>
+<p><img src="00000000.gif" alt="Where is Snowy?"><em>Where is Snowy?</em></p>
+<p>You may already know <a href="https://simonaubury.com/posts/201805_usingksqlapachekafkafindtheplanethatwakessnowy/">Snowy the cat</a>; but I’ve always been curious where she goes on her day long travels. With a fascination of small “Internet of Things” devices and a surge of IoT announcement from the major cloud providers I was interesting in building a cat tracking project. Using some standard components could I build a real-time cat tracking solution to find Snowy’s secret sleeping area?</p>
+<h2 id="goals--requirements">Goals &amp; Requirements</h2>
+<p>With limited time, I wanted to ensure I was clear on the goals for the project, the hardware and software.</p>
+<h3 id="project-goals">Project Goals</h3>
+<ul>
+<li>
+<p>Real-time cat location — so I can find her secret hiding lair and take a photo</p>
+</li>
+<li>
+<p>Historic location — so I can trace where she’s been over different days</p>
+</li>
+<li>
+<p>Cool maps — as I really like interactive dynamic maps</p>
+</li>
+<li>
+<p>Compatible with existing cat version</p>
+</li>
+</ul>
+<h3 id="hardware-requirements">Hardware Requirements</h3>
+<ul>
+<li>
+<p>Pet friendly (light, waterproof, not an embarrassment in front of neighborhood cats)</p>
+</li>
+<li>
+<p>Provide an accurate location &amp; provide a real-time up-link of location — preferable without data costs</p>
+</li>
+<li>
+<p>Have a long battery life and capture motion and acceleration</p>
+</li>
+<li>
+<p>Opensource hardware a plus! Oh, and low cost — because I’m cheap</p>
+</li>
+</ul>
+<h3 id="software-requirements">Software Requirements</h3>
+<ul>
+<li>
+<p>Write as little code &amp; use native cloud services where possible</p>
+</li>
+<li>
+<p>Try each cloud to see which is the easiest (plus give me a motivation to blog a bit more about the Amazon Web Services, Microsoft Azure &amp; Google Cloud experiences)</p>
+</li>
+<li>
+<p>Use Python (ominous foreboding; one cloud is not going to make this easy)</p>
+</li>
+<li>
+<p>Low cost — did I mention I’m cheap?</p>
+</li>
+</ul>
+<h3 id="hardware-selection--communication">Hardware Selection &amp; Communication</h3>
+<p>I settled on using a <a href="https://www.iot-store.com.au/collections/connected-devices/products/lorawan-gps-tracker-accelerometer-lgt92">LGT-92 GPS Tracker</a> inspired by <a href="https://www.youtube.com/watch?v=vlaxUEfHkjo">Shermayne Lee’s entertaining Internet of Dog</a> presentation. This compact device uses an onboard GPS module to determine location, and transmits these coordinates on a regular schedule.</p>
+<p>What is interesting about this open-source device is data is sent (and received) via <a href="https://www.thethingsnetwork.org/docs/lorawan/architecture.html">LoRaWAN</a> — a wireless technology designed for extremely long ranges at low data-rates. Devices communicating over a LoRaWAN network can expect up coverage of around 3km in a city to a gateway, while in the rural areas it can reach beyond 10 km.</p>
+<p>The LGT-92 is pre-configured to use <a href="https://www.thethingsnetwork.org/">The Things Network</a> as the LoRaWAN network. The Things Network is a community-based worldwide LoRaWAN network which allows anyone to connect their gateways, register devices and send/receive data for <em>free</em>. That is, you can have hardware devices (such as a cat tracker) sending and receiving small data packets across a community-based network for no charge. As long as your device is less than 10km away from a <a href="https://www.thethingsnetwork.org/map">gateway</a> your data is available via secured Internet end points.</p>
+<p>The module includes a low power GPS module, a 9-axis accelerometer for motion and attitude detection and a rechargeable 1000mA Li-on battery. The power for both of the GPS module (accurate to 2.5m) and accelerometer can be controlled by a motion control unit so power isn’t used if the cat is also conserving energy (eg., sleeping).</p>
+<p>The TL;DR being the LGT-92 is a light-weight, power efficient location tracker — which transmits data via a free network!</p>
+<h2 id="connecting-a-cat-to-the-things-network">Connecting a cat to The Things Network</h2>
+<p>Well, the first task is actually connecting the LGT-92 to The Things Network before adding the device to the cat. If the LGT-92 is attached securely to Snowy, we’ll know where Snowy is when she’s outside.</p>
+<p><img src="00000001.png" alt=""></p>
+<p>The <a href="http://www.dragino.com/downloads/downloads/LGT_92/LGT-92_LoRa_GPS_Tracker_UserManual_v1.5.5.pdf">LGT-92 User Manual</a> provides some well documented steps for how to join the device to TTN LoRaWAN Network. It is however less specific about ways to affix to your cat (I chose a pet harness)</p>
+<p><img src="00000002.png" alt="LGT-92 User Manual — Connections in a LoRaWAN Network"><em>LGT-92 User Manual — Connections in a LoRaWAN Network</em></p>
+<p>The LGT-92 is shipped with a sticker with the the important default key, EUI and application keys.</p>
+<p><img src="00000003.png" alt="The LGT-92 with printed keys"><em>The LGT-92 with printed keys</em></p>
+<p>These keys are input into The Things Network portal so the device can register itself.</p>
+<p><img src="00000004.png" alt="The Things Network portal"><em>The Things Network portal</em></p>
+<p>Well, that’s pretty much it. Once the correct keys are entered, and the device switched on — location updates are broadcast every five minutes when the device moves. Messages from the LGT-92 device to the The Things Network are known as <em>uplink data</em>.</p>
+<p>Within The Things Network portal we can see the uplink payloads, inclusive of the Snowy’s Latitude and Longitude.</p>
+<p><img src="00000005.png" alt="Snowy — we know where you are!"><em>Snowy — we know where you are!</em></p>
+<h2 id="mqtt">MQTT</h2>
+<p>MQTT is a machine-to-machine ”Internet of Things” protocol. It was designed as an extremely lightweight publish/subscribe messaging transport.</p>
+<p>The Things Network uses MQTT to publish messages. That is, each location update goes onto an MQTT topic showing Snowy’s latest location.</p>
+<p>I’m using <a href="https://mqttfx.jensd.de/">MQTT.fx</a> to read the messages and the <a href="https://www.thethingsnetwork.org/docs/applications/mqtt/quick-start.html">TTN MQTT quick start</a> instructions were very helpful in getting setup</p>
+<p>![Connection details for MQTT.fx](00000006.fx*</p>
+<p>By subscribing to the <strong>+/devices/+/up</strong> MQTT topic I can see all of the LGT-92 uplink data</p>
+<p><img src="00000007.png" alt="Subscribing to MQTT topic"><em>Subscribing to MQTT topic</em></p>
+<h3 id="uplink-data-payloads">Uplink Data Payloads</h3>
+<p>The uplink message is a JSON payload from The Think Network are <a href="https://www.thethingsnetwork.org/docs/applications/mqtt/api.html">well documented</a>. I generally only care about the payload_fields as this is where the useful data from the LGT-92 including Latitude, Longitude, Battery level, Motion etc.,</p>
+<p><img src="00000008.png" alt="Data including location"><em>Data including location</em></p>
+<p>The payload also includes some interesting metadata, including the location of the gateway (or gateways) the received the radio transmission.</p>
+<p><img src="00000009.png" alt=""></p>
+<h2 id="sleepy-cats-and-motion-detection">Sleepy cats and motion detection</h2>
+<p>To conserve power, the LGT-92 GPS Tracker will only power up the GPS and broadcast location if movement is detected. By default, the device is set to movement detect mode (AT+MD=1). In this mode, if the tracker is not moving, it will uplink location info every 1 hour. If the tracker moves, it will uplink location info at every 5 minutes.</p>
+<p><img src="00000010.png" alt="Snowy — unsure of the value of this project"><em>Snowy — unsure of the value of this project</em></p>
+<p>Now, Snowy the cat sleeps* a lot. *This meant that while the cat was conserving power so too was the tracker. If Snowy wanted a long nap I may not get a location update for hours!</p>
+<p>I wanted the movement mode disabled, so the location was updated every 5 minutes regardless if Snowy was moving or asleep. This does impact battery life, but this wasn’t a huge issue.</p>
+<p>To change the movement detection mode of the LGT-92 I would need to send a special <em>downlink message</em> (ie., a message from the Internet to the device). By following <a href="https://www.thethingsnetwork.org/docs/applications/http/">these instructions</a> I was able to determine the downlink URL for my device</p>
+<pre><code>export downlink_url=&quot;https://integrations.thethingsnetwork.org/ttn-eu/api/v2/down/saubury-001/mydownlink?key=ttn-account-v2.XXXXxxxxXXX&quot;
+</code></pre>
+<p>To disable the <a href="http://www.dragino.com/downloads/downloads/LGT_92/DRAGINO_LGT92_AT_Commands_v1.5.3.pdf">motion detection mode</a> I would need so send a downlink message of *AT+MD=0 *to my device. This sequence is encoded as <em><strong>0xA500</strong></em> which is <em><strong>pQA=</strong></em> in Base64. To schedule this downlink message I used this curl command</p>
+<pre><code>curl -X POST --data '{&quot;dev_id&quot;: &quot;saubury0001&quot;,  &quot;payload_raw&quot;: &quot;pQA=&quot; }'  ${downlink_url}
+</code></pre>
+<p>This downlink message is queued and visible in The Things Network portal</p>
+<p><img src="00000011.png" alt="Downlink message"><em>Downlink message</em></p>
+<p>With motion detection disabled on the device, Snowy’s location is now updated every 5 minutes regardless if Snowy was moving or asleep</p>
+<h2 id="summary--next-steps">Summary &amp; Next Steps</h2>
+<p>So far I have managed to get reliable location updates broadcast to a secure MQTT topic. These location messages are transmitted every 5 minutes.</p>
+<p>But there is a lot still to do. I need to integrate these IoT messages, store them securely, process &amp; refine the messages and finally plot the paths on a map. These are fairly routine problems, so I wanted to try out each of the major cloud providers (AWS, Azure &amp; Google Cloud) to see how easy it was to build each solution.</p>
+<p><img src="00000012.png" alt="Example map built on AWS cloud technologies"><em>Example map built on AWS cloud technologies</em></p>
+<p>The next three articles in this blog series explores building an end to end project using native cloud services. There are good aspects of each cloud platform, plus a few stumbling blocks where things do not work as expected</p>
+<ul>
+<li>
+<p><a href="https://simonaubury.com/posts/202102_1cat3cloudspart2/">Amazon Web Services — AWS Elastic Beanstalk, AWS IoT, DynamoDB and SageMaker</a></p>
+</li>
+<li>
+<p>Microsoft Azure — Azure Functions, Cosmos DB and Cosmic notebooks (<strong>currently unpublished</strong>)</p>
+</li>
+<li>
+<p>Google Cloud — Cloud Build, Cloud Functions, BigQuery and Geo Viz (<strong>currently unpublished</strong>)</p>
+</li>
+</ul>
+<h2 id="code-for-this-project">Code for this project</h2>
+<p>Thanks for reading this far. All code for this project available at</p>
+<ul>
+<li><a href="https://github.com/saubury/3clouds1cat/">https://github.com/saubury/3clouds1cat/</a></li>
+</ul>
+<h2 id="references-and-links">References and Links</h2>
+<ul>
+<li>
+<p>Shermayne Lee: <a href="https://www.youtube.com/watch?v=vlaxUEfHkjo">Internet of Dog</a></p>
+</li>
+<li>
+<p><a href="https://www.thethingsnetwork.org">The Thing Network</a></p>
+</li>
+<li>
+<p><a href="http://www.dragino.com/downloads/downloads/LGT_92/LGT-92_LoRa_GPS_Tracker_UserManual_v1.5.5.pdf">LGT-92 LoRa GPS Tracker_User Manual</a></p>
+</li>
+<li>
+<p><a href="https://mqttfx.jensd.de/">MQTT.fx</a></p>
+</li>
+</ul>
+
+      </article>
+      
+    </main>
+    <nav class="end-nav side-padding">
+      
+      <a ontouchstart="cardPressed.call(this)" ontouchend="cardReleased.call(this)" ontouchmove="cardReleased.call(this)" 
+  href="https://simonaubury.com/posts/202009_piperipheral/" class="card blog-card bc-next" rel="bookmark" >
+  
+  <div class="card-img-container">
+    <p class="card-img-overlay">Next Article</p>
+    <picture>
+      
+      
+      
+      <source srcset="https://simonaubury.com/posts/202009_piperipheral/00000003_hub172df024d4c2b46d39d419ad5309163_117146_400x0_resize_q75_lanczos.jpeg 1x, https://simonaubury.com/posts/202009_piperipheral/00000003_hub172df024d4c2b46d39d419ad5309163_117146_800x0_resize_q75_lanczos.jpeg 2x, https://simonaubury.com/posts/202009_piperipheral/00000003_hub172df024d4c2b46d39d419ad5309163_117146_1200x0_resize_q75_lanczos.jpeg 3x">
+      <img src="https://simonaubury.com/posts/202009_piperipheral/00000003_hub172df024d4c2b46d39d419ad5309163_117146_400x0_resize_q75_lanczos.jpeg" class="card-img" >
+    </picture>
+  </div>
+  
+  <article class="card-body">
+    <h2 class="card-title">Pi Peripheral - Controlling computer actions with a $10 Raspberry Pi Zero</h2>
+    <p class="card-text">Time to fly ...</p>
+    <div class="card-subtext muted-text">
+      <p>Posted <time datetime="2020-09-21">Sep 21, 2020</time></p>
+      <p>#Raspberry Pi </p>
+    </div>
+  </article>
+</a>
+      
+    </nav>
+    <footer class="side-padding" style="background-image: url('https://simonaubury.com/img/home-blob-flip.svg');">
+    <a href="https://simonaubury.com/" class="footer-link">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/home.svg" alt="Home">
+    
+    </a>
+    
+    
+    
+    <a href="https://github.com/saubury" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/github.svg" alt="GitHub"/>
+    
+    </a>
+    
+    
+    
+    <a href="https://www.linkedin.com/in/simonaubury" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/linkedin.svg" alt="LinkedIn"/>
+    
+    </a>
+    
+    
+    <a href="https://simonaubury.com/index.xml" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/rss.svg" alt="RSS"/>
+    
+    </a>
+    
+    
+    
+    
+    
+    
+    
+    
+</footer>
+    
+  <script defer src="https://simonaubury.com/js/katex.min.js"></script>
+
+
+  <script defer src="https://simonaubury.com/js/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+
+<script src="https://simonaubury.com/js/core.min.js"></script>
+
+  </body>
+</html>

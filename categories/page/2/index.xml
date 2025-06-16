@@ -1,0 +1,21 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Categories - Simon Aubury</title>
+    <link>https://simonaubury.com/categories/</link>
+    <description>Recent content in Categories on Simon Aubury</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-au</language>
+    <lastBuildDate>Sun, 15 Jun 2025 10:22:20 +1100</lastBuildDate>
+    
+        <atom:link href="https://simonaubury.com/categories/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>ML</title>
+      <link>https://simonaubury.com/categories/ml/</link>
+      <pubDate>Tue, 09 Jun 2020 12:00:00 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/categories/ml/</guid>
+      <description></description>
+    </item>
+  </channel>
+</rss>

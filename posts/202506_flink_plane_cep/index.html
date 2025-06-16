@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en-au" dir="ltr">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Aviation data with Apache Flink &middot; Simon Aubury</title>
+  <meta name="description" content="When plans change at 500 feet: Complex event processing of ADS-B aviation data with Apache Flink" />
+  <link rel="apple-touch-icon" sizes="180x180" href="https://simonaubury.com/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://simonaubury.com/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://simonaubury.com/favicon-16x16.png">
+  <link href="https://simonaubury.com/css/katex.min.css" rel="stylesheet">
+  
+  
+  
+  
+  <link href="https://simonaubury.com/css/concated.min.css" rel="stylesheet">
+  
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7N67PMRZ6N"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-7N67PMRZ6N', { 'anonymize_ip': false });
+}
+</script>
+
+  
+</head>
+
+  <body class="single-body">
+    <nav class="nav-bar side-padding">
+  <h1 class="nav-header"><a href="https://simonaubury.com/" class="nav-text">simon aubury</a></h1>
+  <div class="hamburger-menu">
+    <input class="hamburger-menu-button" type="checkbox"
+      onclick="hamburgerMenuPressed.call(this)"
+      aria-label="Hamburger Menu Button"
+    >
+    <div class="hamburger-menu-icon">
+      <span></span>
+      <span></span>
+    </div>
+    <ul id="menu" class="hamburger-menu-overlay">
+      <li><a href="https://simonaubury.com/" class="hamburger-menu-overlay-link">Home</a></li>
+      <li><a href="https://simonaubury.com/slides/" class="hamburger-menu-overlay-link">Presentation slides</a></li>
+      <li><a href="https://simonaubury.com/about-me/" class="hamburger-menu-overlay-link">About Simon</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/cat/" class="hamburger-menu-overlay-link">Cat</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/cdc/" class="hamburger-menu-overlay-link">CDC</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/duckdb/" class="hamburger-menu-overlay-link">duckdb</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/flink/" class="hamburger-menu-overlay-link">flink</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/generativeai/" class="hamburger-menu-overlay-link">GenerativeAI</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/gpt/" class="hamburger-menu-overlay-link">GPT</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/homeassistant/" class="hamburger-menu-overlay-link">homeassistant</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/kafka/" class="hamburger-menu-overlay-link">Kafka</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/ml/" class="hamburger-menu-overlay-link">ML</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/raspberry-pi/" class="hamburger-menu-overlay-link">Raspberry Pi</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/snowflake/" class="hamburger-menu-overlay-link">snowflake</a></li>
+      
+      <li><a href="https://simonaubury.com/index.xml" class="hamburger-menu-overlay-link">rss</a></li>
+    </ul>
+  </div>
+</nav>
+
+    <main class="content side-text-padding">
+      <article class="post dropcase">
+        <header class="post-header">
+          <h1 class="post-title">Aviation data with Apache Flink</h1>
+          <p class="post-date">Posted <time datetime="2025-06-15">Jun 15, 2025</time></p>
+        </header>
+        <picture class="post-figure">
+          
+          
+          
+          <source srcset="https://simonaubury.com/posts/202506_flink_plane_cep/00000000_hu188497275596c51248c64688136cbd0f_679095_711x0_resize_lanczos_3.png 1x, https://simonaubury.com/posts/202506_flink_plane_cep/00000000_hu188497275596c51248c64688136cbd0f_679095_1422x0_resize_lanczos_3.png 2x, https://simonaubury.com/posts/202506_flink_plane_cep/00000000_hu188497275596c51248c64688136cbd0f_679095_2133x0_resize_lanczos_3.png 3x">
+          <img src="https://simonaubury.com/posts/202506_flink_plane_cep/00000000_hu188497275596c51248c64688136cbd0f_679095_711x0_resize_lanczos_3.png" >
+        </picture>
+        
+        
+        <h1 id="when-plans-change-at-500-feet-complex-event-processing-of-ads-b-aviation-data-with-apache-flink">When plans change at 500 feet: Complex event processing of ADS-B aviation data with Apache Flink</h1>
+<p>Using open-source Apache Flink stream processing to process real time aviation data to find missed approaches and paired runway landings. With some neat Flink SQL and custom functions, it’s possible to spot those rare times when planes pair in the sky or abort a landing at the last moment.</p>
+<blockquote>
+<p>Project code available on <a href="https://github.com/saubury/plane_track">https://github.com/saubury/plane_track</a></p>
+</blockquote>
+<p><img src="./00000000.png" alt="Finding missed landing approaches and paired runway landings"><em>Finding missed landing approaches and paired runway landings</em></p>
+<p>Aircraft determine their position using GPS; and periodically transmit that position along with an aircraft identity string, altitude, speed etc as <a href="https://en.wikipedia.org/wiki/Automatic_Dependent_Surveillance%E2%80%93Broadcast">ADS-B signals</a>. These signals are transmitted in clear text — and can be readily received with a small radio receiver. The event stream of data around a local airport is a fascinating source of data for complex event processing.</p>
+<p>I wanted to see if I could determine when infrequent but noteworthy aviation situations occur at my local airport</p>
+<ul>
+<li>
+<p>Missed approach (or go-around) during aircraft landing — an uncommon manoeuvre where a pilot discontinues the final approach to the runway and climbs away from the airport for another attempt at the landing.</p>
+</li>
+<li>
+<p>Paired flight landings where aircraft land (or takeoff) on parallel runways. I was especially interested in the golden photographic moments when the same commercial aircraft type were flying in close formation.</p>
+</li>
+</ul>
+<h2 id="acquiring-the-flight-data">Acquiring the flight data</h2>
+<p>My first attempt at acquiring aircraft transponder messages (ADS-B signals) was with a Raspberry Pi and a <a href="https://www.rtl-sdr.com/about-rtl-sdr/">RTL2832U</a> — a USB dongle originally sold to watch digital TV on a computer. This approach (detailed <a href="https://simonaubury.com/posts/201805_usingksqlapachekafkafindtheplanethatwakessnowy/">here</a>) was only partially successful. Although I got a rich feed of data as planes flew over my house — I was too far from the airport to receive transmissions when the aircraft were on the final descent into my local airport.</p>
+<p>I then discovered <a href="https://adsb.fi/">adsb.fi</a> — a community-driven flight tracker project with a free real-time API for personal projects. Their <a href="https://github.com/adsbfi/opendata/tree/main?tab=readme-ov-file#public-endpoints">API</a> returns aircraft transponder messages within a nominated radius of a specified location point. You can get a glimpse at flights over Sydney with a curl command like this</p>
+<pre><code>curl --silent https://opendata.adsb.fi/api/v2/lat/-33.9401302/lon/151.175371/dist/5 
+</code></pre>
+<p>For me this was an ideal way of receiving live flight location, track and altitude for aircraft within 5 nautical miles of Sydney airport.</p>
+<p><img src="./00000001.png" alt="Sample of aircraft transponder messages (ADS-B signals)"><em>Sample of aircraft transponder messages (ADS-B signals)</em></p>
+<p>OK, now I’ve got a feed of data I need to analyse it to find some interesting flight events.</p>
+<h2 id="processing-the-flight-data-stream">Processing the flight data stream</h2>
+<p>I wrote a <a href="https://github.com/saubury/plane_track/blob/main/monitor_opendata.py">python based aircraft monitor</a> which polls the adsb.fi feed for aircraft transponder messages, and publishes each location update as a new event into an Apache Kafka topic. I used <a href="https://flink.apache.org/">Apache Flink</a> — and more specially <a href="https://nightlies.apache.org/flink/flink-docs-release-2.0/docs/dev/table/sql/overview/">Flink SQL</a>, to transform and analyse my flight data. The TL;DR summary is I can write SQL for my real-time data processing queries — and get the scalability, fault tolerance, and low latency managed by the Flink runtime.</p>
+<h2 id="identifying-missed-approach-landings">Identifying missed approach landings</h2>
+<p>A missed approach is a standard procedure where a pilot discontinues the final approach to landing and climbs away from the runway, typically due to poor visibility, an unstable approach or an unsafe runway condition.</p>
+<p><img src="./00000002.png" alt="Google Earth mapping of missed approach landing"><em>Google Earth mapping of missed approach landing</em></p>
+<p>Missed approaches are not rare but are still relatively uncommon in normal operations. I couldn’t find accurate statistics, but at busy airports (especially in poor weather) roughly 1–3% of approaches might result in a missed approach.</p>
+<p>I needed to define a query for missed approach detection with a go-around-like patterns in flight altitude data. I wanted a SQL Flink statement to find a *sequence where an aircraft <strong>descends</strong>, <strong>lands or nearly lands</strong>, then <strong>climbs again</strong>, reaching a minimum safe altitude. *An example series of altitude measurements could be graphed over time like this:-</p>
+<p><img src="./00000003.jpg" alt="Missed approach series of altitude measurements"><em>Missed approach series of altitude measurements</em></p>
+<p>I classified a <em>is-descending</em> landing as seeing 5 consecutive decreasing values, followed by a <em>is_near_ground</em> event of descending below 800 ft, followed by an <em>is_ascending</em> event.</p>
+<p>My final <a href="https://github.com/saubury/plane_track/blob/main/README.md#find-missed-approaches">Flink SQL</a> query uses <a href="https://nightlies.apache.org/flink/flink-docs-release-1.15/docs/dev/table/sql/queries/match_recognize/">MATCH_RECOGNIZE</a>, a powerful pattern recognition feature in Flink SQL for complex event processing. It identifies specific flight altitude patterns in a stream of aircraft data, partitioned by callsign (i.e., individual aircraft).</p>
+<pre><code>SELECT *
+FROM flight
+MATCH_RECOGNIZE(
+    PARTITION BY callsign
+    ORDER BY proc_time
+    MEASURES
+        IS_DESCENDING.flightts as desc_UTC,
+        IS_GROUND.flightts as ground_UTC,
+        IS_ASCENDING.flightts AS asc_UTC,
+        IS_ABOVE_MIN.flightts AS abvm_UTC,
+        IS_GROUND.altitude AS grd_altitude,
+        IS_ASCENDING.altitude AS asc_altitude
+    ONE ROW PER MATCH
+    AFTER MATCH SKIP TO LAST IS_ASCENDING
+    PATTERN (IS_DESCENDING{5,} IS_GROUND{1,} IS_ASCENDING IS_ABOVE_MIN)
+    DEFINE
+        IS_DESCENDING AS (LAST(altitude, 1) IS NULL AND altitude &gt;= 1000) OR altitude &lt; LAST(altitude, 1),
+        IS_GROUND AS altitude &lt;= 800,
+        IS_ASCENDING AS altitude &gt; last(altitude,1),
+        IS_ABOVE_MIN AS altitude &gt; 1000
+) AS T
+where TIMESTAMPDIFF(second, desc_UTC, asc_UTC) between 0 and 1000;
+</code></pre>
+<p>When I originally wrote this query I got a number of false positives where planes would land, and take off a few hours later with the same flight code. To exclude these particular conditions I added an additional predicate to only return matches where the time between the descent and the subsequent ascent is within 1000 seconds.</p>
+<p>With my query running it actually took a few days to identify the first missed approach. On a particularly stormy morning I managed to identify three occasions when a go-around was performed — and validated the result by looking up the flights historic path with <a href="https://www.flightradar24.com/.">FlightRadar24</a>.</p>
+<p><img src="./00000004.png" alt="A flight identified as missed approach landing"><em>A flight identified as missed approach landing</em></p>
+<p>With my data acquisition successfully finding missed approach I wanted to move onto more complex event processing this time with multiple aircraft events.</p>
+<h2 id="identifying-twin-landings">Identifying twin landings</h2>
+<p>Paired flight landings occur when aircraft land on parallel runways.</p>
+<p><img src="./00000005.gif" alt=""></p>
+<p>As I wanted to determine the distance between aircraft I used a <a href="https://docs.confluent.io/cloud/current/flink/how-to-guides/create-udf.html">user-defined function</a> (UDF) to extend the capabilities of Apache Flink to implement custom logic beyond what is supported by built-in SQL functions. By adding a <a href="https://github.com/saubury/plane_track/blob/main/java/example/Distance.java">distance scalar</a> Java function I could calculate distance between two aircraft.</p>
+<pre><code>    // Equirectangular approximation to calculate distance in km between two points 
+    public float eval(float lat1, float lon1, float lat2, float lon2) {
+        float EARTH_RADIUS = 6371;
+        float lat1Rad = (float) Math.toRadians(lat1);
+        float lat2Rad = (float) Math.toRadians(lat2);
+        float lon1Rad = (float) Math.toRadians(lon1);
+        float lon2Rad = (float) Math.toRadians(lon2);
+
+        float x = (float) ((lon2Rad - lon1Rad) * Math.cos((lat1Rad + lat2Rad) / 2));
+        float y = (lat2Rad - lat1Rad);
+        float distance = (float) (Math.sqrt(x * x + y * y) * EARTH_RADIUS);
+
+        return distance;
+    }
+</code></pre>
+<p>Refer to the <a href="https://github.com/saubury/plane_track?tab=readme-ov-file#flink-udf">readme</a> for jar build steps and the operations to add to Flink. But the short summary is compile the JAR with mvn clean package and then register the UDF function in Flink with</p>
+<pre><code>ADD JAR '/target-jars/udf_example-1.0.jar';
+
+CREATE FUNCTION distancekm  AS 'com.example.my.Distance';
+</code></pre>
+<p>OK — with my Flink distance UDF available I can run a query that finds pairs of flights that were geographically close (within 1.5 km) of each other during overlapping or near-overlapping times (within 20 seconds), and reports their callsigns and distance.</p>
+<pre><code>SELECT f1.callsign AS f1, 
+f2.callsign AS f2,
+CAST(ROUND(distancekm(f1.latitude , f1.longtitude, f2.latitude, f2.longtitude), 1) AS VARCHAR) as km
+FROM flight f1, flight f2
+WHERE f1.flightts BETWEEN f2.flightts - interval '20' SECOND AND f2.flightts
+AND f1.callsign &lt; f2.callsign
+AND distancekm(f1.latitude , f1.longtitude, f2.latitude, f2.longtitude) &lt; 1.5;
+</code></pre>
+<p>The query identifies flights that came close together in both space and time and reports the distance between them.</p>
+<p><img src="./00000006.png" alt="Nearby flights"><em>Nearby flights</em></p>
+<p>This works — but is showing <em>any <em>paired aircraft movement</em>.</em> What I really wanted to do was find was the less common occurrence of the same aircraft type (such as two Boeing 737’s) flying in formation. I need a bit more data …</p>
+<h2 id="annotating-ads-b-messages-with-aircraft-type-and-routes">Annotating ADS-B messages with aircraft type and routes</h2>
+<p>Peering into the ADS-B messages I have raw messages from the aircraft. Each payload comes with an ICAO 24-bit <a href="https://en.wikipedia.org/wiki/Transponder_(aviation)">transponder</a> code specifically assigned to each aircraft (eg. 7c7a3d) and a flight route code (eg. 7VOZ518). What I want to do is load a static reference set of data to map</p>
+<ul>
+<li>
+<p>Aircraft ICAO codes such as 7c7a3d to airframes such as Boeing,737NG 8FE</p>
+</li>
+<li>
+<p>Flight code such as 7VOZ518 a route from the Gold Coast (OOL) to Sydney (SYD)</p>
+</li>
+</ul>
+<p>A very convenient capability of Flink SQL is the ability to create a table directly from a CSV file. So I can populate the aircraft_lookup table with a command like this</p>
+<pre><code>CREATE TABLE aircraft_lookup (
+    icao24  varchar(100) not null,
+    country  varchar(100),
+    manufacturerName varchar(100),
+    model varchar(100),
+    owner varchar(100),
+    registration varchar(100),
+    typecode varchar(100)
+) WITH ( 
+    'connector' = 'filesystem',
+    'path' = '/data_csv/aircraft_lookup.csv',
+    'format' = 'csv'  
+);
+</code></pre>
+<p>I downloaded aircraft data from the <a href="https://opensky-network.org/datasets/metadata/#metadata/">Opensky data</a> archive. With aircraft_lookup and route_lookup data loaded, I created a Flink view to supplement the data coming in from the flight Kafka topic</p>
+<pre><code>CREATE OR REPLACE VIEW flight_decorated
+AS
+SELECT f.*, a.model, a.owner, a.typecode, r.route
+FROM flight f 
+LEFT JOIN aircraft_lookup a ON (f.icao = a.icao24)
+LEFT JOIN route_lookup r ON (f.callsign = r.flight);
+</code></pre>
+<p>With data loaded and the flight feed decorated with aircraft type and route information I can now search for the perfect photographic moment of twin planes landing.</p>
+<h2 id="twin-landings">Twin landings</h2>
+<p>I now have a live feed of data with aircraft location, airframe type and route information. Along with my distance function I can query the stream to find the golden photographic moments when the same commercial aircraft type were flying in close formation.</p>
+<pre><code>SELECT f1.flightts,
+f1.callsign || ' ('  || COALESCE(f1.route, '-') ||')' || ' ' || f1.typecode AS f1,
+CAST(ROUND(DISTANCEKM(f1.latitude , f1.longtitude, f2.latitude, f2.longtitude), 1) AS VARCHAR) AS km,
+f2.callsign || ' ('  || COALESCE(f2.route, '-') ||')' || ' ' || f2.typecode AS f2
+FROM flight_decorated f1, flight_decorated f2
+WHERE f1.flightts BETWEEN f2.flightts - interval '20' SECOND AND f2.flightts
+AND f1.callsign &lt; f2.callsign
+AND f1.typecode = f2.typecode
+AND DISTANCEKM(f1.latitude , f1.longtitude, f2.latitude, f2.longtitude) &lt; 1.5;
+</code></pre>
+<p>Which indeed finds the moment when two similarly typed aircraft land together</p>
+<p><img src="./00000007.png" alt="Two Boing 737’s landing on parallel runways"><em>Two Boing 737’s landing on parallel runways</em></p>
+<h2 id="conclusions">Conclusions</h2>
+<p>This project was a fun exercise — and shows how Apache Flink can turn a stream of aircraft transponder pings into a hunt for interesting aviation moments like go-arounds and perfect twin landings.</p>
+<p>With some neat Flink SQL and custom functions, it’s possible to spot those rare times when planes pair in the sky or wave off a landing at the last second.</p>
+<p>✈️ Project code available on <a href="https://github.com/saubury/plane_track">https://github.com/saubury/plane_track</a></p>
+
+      </article>
+      
+    </main>
+    <nav class="end-nav side-padding">
+      
+      <a ontouchstart="cardPressed.call(this)" ontouchend="cardReleased.call(this)" ontouchmove="cardReleased.call(this)" 
+  href="https://simonaubury.com/posts/202502_puppydata/" class="card blog-card bc-next" rel="bookmark" >
+  
+  <div class="card-img-container">
+    <p class="card-img-overlay">Next Article</p>
+    <picture>
+      
+      
+      
+      <source srcset="https://simonaubury.com/posts/202502_puppydata/00000000_hu4efc0301962280752544e46501bacae3_327072_400x0_resize_lanczos_3.png 1x, https://simonaubury.com/posts/202502_puppydata/00000000_hu4efc0301962280752544e46501bacae3_327072_800x0_resize_lanczos_3.png 2x, https://simonaubury.com/posts/202502_puppydata/00000000_hu4efc0301962280752544e46501bacae3_327072_1200x0_resize_lanczos_3.png 3x">
+      <img src="https://simonaubury.com/posts/202502_puppydata/00000000_hu4efc0301962280752544e46501bacae3_327072_400x0_resize_lanczos_3.png" class="card-img" >
+    </picture>
+  </div>
+  
+  <article class="card-body">
+    <h2 class="card-title">Puppy data</h2>
+    <p class="card-text">🐾 Puppy Data 🐾 combines a love of data and dogs — a project to track Barney the puppy</p>
+    <div class="card-subtext muted-text">
+      <p>Posted <time datetime="2025-02-15">Feb 15, 2025</time></p>
+      <p>#GenerativeAI #homeassistant #snowflake </p>
+    </div>
+  </article>
+</a>
+      
+    </nav>
+    <footer class="side-padding" style="background-image: url('https://simonaubury.com/img/home-blob-flip.svg');">
+    <a href="https://simonaubury.com/" class="footer-link">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/home.svg" alt="Home">
+    
+    </a>
+    
+    
+    
+    <a href="https://github.com/saubury" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/github.svg" alt="GitHub"/>
+    
+    </a>
+    
+    
+    
+    <a href="https://www.linkedin.com/in/simonaubury" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/linkedin.svg" alt="LinkedIn"/>
+    
+    </a>
+    
+    
+    <a href="https://simonaubury.com/index.xml" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/rss.svg" alt="RSS"/>
+    
+    </a>
+    
+    
+    
+    
+    
+    
+    
+    
+</footer>
+    
+  <script defer src="https://simonaubury.com/js/katex.min.js"></script>
+
+
+  <script defer src="https://simonaubury.com/js/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+
+<script src="https://simonaubury.com/js/core.min.js"></script>
+
+  </body>
+</html>

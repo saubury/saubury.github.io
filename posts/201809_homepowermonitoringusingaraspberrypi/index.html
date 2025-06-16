@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en-au" dir="ltr">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Home Power Monitoring using a Raspberry Pi &middot; Simon Aubury</title>
+  <meta name="description" content="Home electricity usage monitoring using a Raspberry Pi" />
+  <link rel="apple-touch-icon" sizes="180x180" href="https://simonaubury.com/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://simonaubury.com/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://simonaubury.com/favicon-16x16.png">
+  <link href="https://simonaubury.com/css/katex.min.css" rel="stylesheet">
+  
+  
+  
+  
+  <link href="https://simonaubury.com/css/concated.min.css" rel="stylesheet">
+  
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7N67PMRZ6N"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-7N67PMRZ6N', { 'anonymize_ip': false });
+}
+</script>
+
+  
+</head>
+
+  <body class="single-body">
+    <nav class="nav-bar side-padding">
+  <h1 class="nav-header"><a href="https://simonaubury.com/" class="nav-text">simon aubury</a></h1>
+  <div class="hamburger-menu">
+    <input class="hamburger-menu-button" type="checkbox"
+      onclick="hamburgerMenuPressed.call(this)"
+      aria-label="Hamburger Menu Button"
+    >
+    <div class="hamburger-menu-icon">
+      <span></span>
+      <span></span>
+    </div>
+    <ul id="menu" class="hamburger-menu-overlay">
+      <li><a href="https://simonaubury.com/" class="hamburger-menu-overlay-link">Home</a></li>
+      <li><a href="https://simonaubury.com/slides/" class="hamburger-menu-overlay-link">Presentation slides</a></li>
+      <li><a href="https://simonaubury.com/about-me/" class="hamburger-menu-overlay-link">About Simon</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/cat/" class="hamburger-menu-overlay-link">Cat</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/cdc/" class="hamburger-menu-overlay-link">CDC</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/duckdb/" class="hamburger-menu-overlay-link">duckdb</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/flink/" class="hamburger-menu-overlay-link">flink</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/generativeai/" class="hamburger-menu-overlay-link">GenerativeAI</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/gpt/" class="hamburger-menu-overlay-link">GPT</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/homeassistant/" class="hamburger-menu-overlay-link">homeassistant</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/kafka/" class="hamburger-menu-overlay-link">Kafka</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/ml/" class="hamburger-menu-overlay-link">ML</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/raspberry-pi/" class="hamburger-menu-overlay-link">Raspberry Pi</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/snowflake/" class="hamburger-menu-overlay-link">snowflake</a></li>
+      
+      <li><a href="https://simonaubury.com/index.xml" class="hamburger-menu-overlay-link">rss</a></li>
+    </ul>
+  </div>
+</nav>
+
+    <main class="content side-text-padding">
+      <article class="post dropcase">
+        <header class="post-header">
+          <h1 class="post-title">Home Power Monitoring using a Raspberry Pi</h1>
+          <p class="post-date">Posted <time datetime="2018-09-01">Sep 1, 2018</time></p>
+        </header>
+        <picture class="post-figure">
+          
+          
+          
+          <source srcset="https://simonaubury.com/posts/201809_homepowermonitoringusingaraspberrypi/00000000_hudeb601be7d816c40270fdecab51bec3c_404515_711x0_resize_lanczos_3.png 1x, https://simonaubury.com/posts/201809_homepowermonitoringusingaraspberrypi/00000000_hudeb601be7d816c40270fdecab51bec3c_404515_1422x0_resize_lanczos_3.png 2x, https://simonaubury.com/posts/201809_homepowermonitoringusingaraspberrypi/00000000_hudeb601be7d816c40270fdecab51bec3c_404515_2133x0_resize_lanczos_3.png 3x">
+          <img src="https://simonaubury.com/posts/201809_homepowermonitoringusingaraspberrypi/00000000_hudeb601be7d816c40270fdecab51bec3c_404515_711x0_resize_lanczos_3.png" >
+        </picture>
+        
+        
+        <h1 id="home-power-monitoring-using-a-raspberry-pi">Home Power Monitoring using a Raspberry Pi.</h1>
+<p>Home electricity usage monitoring using a Raspberry Pi. Plus some shaky maths to find out when we left the heater on.</p>
+<p>As we approached the colder months I wanted a way of monitoring our household power consumption. Our electric heaters are fairly ancient, and I had no accurate way of monitoring their cost (either financially or environmentally).</p>
+<p>We don’t have a “smart” power meter, and our wall heaters are certainly not clever either. However our power meter has a tiny red light-emitting diode (LED) that blinks each time we consume 1Wh of power.</p>
+<p><img src="00000001.png" alt="Our power meter has a light — that blinks!"><em>Our power meter has a light — that blinks!</em></p>
+<p>The LED pulse corresponds to a defined amount of energy passing through the meter. That is, each pulse equals one 1Wh of usage, and 1000 pulses means 1 kWh of power has been used. I *could *sit outside and count the pulses … or work out a way to automatically process the rate LED flashes.</p>
+<p>For the very modest price of 50 cents I purchased a couple of Light Dependent Resistors (LDR’s). A LDR is a type of resistor whose resistance varies according to light. Resistance will increase with an increase in light intensity (and the reverse is true too). So, a bit of Google magic leads me to this this helpful site <a href="https://iotguider.in/raspberrypi/interfacing-light-dependent-resistor-ldr-in-raspberry-pi/">Interfacing Light Dependent Resistor LDR in Raspberry Pi</a>.</p>
+<p><img src="00000002.png" alt="Light Dependent Resistors and 1uF Capacitor"><em>Light Dependent Resistors and 1uF Capacitor</em></p>
+<p>By constructing two of these circuits allowed me to monitor both LED’s on the power-board. The Raspberry Pi is a tiny computer that is perfect for the tedious task of methodically capturing “blinks” and writing the hourly total to a data store (or streaming to an MQTT broker).</p>
+<p>A powerful feature of the Raspberry Pi is the row of GPIO (general-purpose input/output) pins along the top edge of the board. This is an interface between the physical world of lights and wires and the software world of zero’s and one’s</p>
+<p><img src="00000003.png" alt="LDR attached to a Raspberry Pi"><em>LDR attached to a Raspberry Pi</em></p>
+<p>Hardware — done! Let’s move onto the software.</p>
+<h3 id="let-them-eat-code">Let them eat code</h3>
+<p>TL;DR — Python is awesome for event driven coding — allowing code to respond to electrical pulses on the GPIO pins on the Raspberry Pi. A function is written to handle the a light pulse (ie., increase a counter) and this function is attached to an event handler for the appropriate GPIO pin. A quick code segment below (<a href="https://github.com/saubury/power-pi">full repository</a>)</p>
+<!-- raw HTML omitted -->
+<h3 id="the-pretty-graphs">The Pretty Graphs</h3>
+<p>Running this code for 3 months allowed me to start understanding the rate of power usage each hour. The graph below is daily power consumption trends using a month of data. The horizontal axis is 24 hours, with midnight on the left to 11pm on the right. Minimum consumption is shown in blue, average consumption in orange and maximum consumption in white.</p>
+<p>![Hourly power consumption trends using 1 month of data — midnight (left) to 11pm (right). Minimum consumption shown in blue, average consumption in orange and maximum consumption in white.](00000004.*</p>
+<p>With an hourly breakdown of the power consumption for each day of winter, I began noticing some themes.</p>
+<ul>
+<li>
+<p>Nothing happens before 5am</p>
+</li>
+<li>
+<p>Average evening load is around twice morning consumption</p>
+</li>
+<li>
+<p>The maximum power consumption noted (3,745 kWh on 16th at 8pm) correlated to accidentally leaving the heater on</p>
+</li>
+<li>
+<p>The consistently low consumption (blue line on the 11th) correlated to a mini holiday</p>
+</li>
+</ul>
+<h3 id="next-steps">Next steps</h3>
+<p>Analysing power consumption got me thinking about behaviour trends and providing more immediate feedback to the household.</p>
+<p>My next project will take this data in real-time a provide some actionable feedback … like tell me when we do something silly or forgetful. Perhaps a nice alarm when we leave the heater on accidentally!</p>
+<p>Interested in doing something similar — this project hosted at <a href="https://github.com/saubury/power-pi">https://github.com/saubury/power-pi</a></p>
+
+      </article>
+      
+    </main>
+    <nav class="end-nav side-padding">
+      
+      <a ontouchstart="cardPressed.call(this)" ontouchend="cardReleased.call(this)" ontouchmove="cardReleased.call(this)" 
+  href="https://simonaubury.com/posts/201805_usingksqlapachekafkafindtheplanethatwakessnowy/" class="card blog-card bc-next" rel="bookmark" >
+  
+  <div class="card-img-container">
+    <p class="card-img-overlay">Next Article</p>
+    <picture>
+      
+      
+      
+      <source srcset="https://simonaubury.com/posts/201805_usingksqlapachekafkafindtheplanethatwakessnowy/00000003_hu5a63df5c04a385efaa6300a478a8b844_637285_400x0_resize_lanczos_1.gif 1x, https://simonaubury.com/posts/201805_usingksqlapachekafkafindtheplanethatwakessnowy/00000003_hu5a63df5c04a385efaa6300a478a8b844_637285_800x0_resize_lanczos_1.gif 2x, https://simonaubury.com/posts/201805_usingksqlapachekafkafindtheplanethatwakessnowy/00000003_hu5a63df5c04a385efaa6300a478a8b844_637285_1200x0_resize_lanczos_1.gif 3x">
+      <img src="https://simonaubury.com/posts/201805_usingksqlapachekafkafindtheplanethatwakessnowy/00000003_hu5a63df5c04a385efaa6300a478a8b844_637285_400x0_resize_lanczos_1.gif" class="card-img" >
+    </picture>
+  </div>
+  
+  <article class="card-body">
+    <h2 class="card-title">Using KSQL, Apache Kafka, a Raspberry Pi and a software defined radio to find the plane that wakes Snowy the cat</h2>
+    <p class="card-text">Map the correlation between aircraft traffic and cat behaviour</p>
+    <div class="card-subtext muted-text">
+      <p>Posted <time datetime="2018-05-20">May 20, 2018</time></p>
+      <p>#Kafka </p>
+    </div>
+  </article>
+</a>
+      
+    </nav>
+    <footer class="side-padding" style="background-image: url('https://simonaubury.com/img/home-blob-flip.svg');">
+    <a href="https://simonaubury.com/" class="footer-link">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/home.svg" alt="Home">
+    
+    </a>
+    
+    
+    
+    <a href="https://github.com/saubury" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/github.svg" alt="GitHub"/>
+    
+    </a>
+    
+    
+    
+    <a href="https://www.linkedin.com/in/simonaubury" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/linkedin.svg" alt="LinkedIn"/>
+    
+    </a>
+    
+    
+    <a href="https://simonaubury.com/index.xml" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/rss.svg" alt="RSS"/>
+    
+    </a>
+    
+    
+    
+    
+    
+    
+    
+    
+</footer>
+    
+  <script defer src="https://simonaubury.com/js/katex.min.js"></script>
+
+
+  <script defer src="https://simonaubury.com/js/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+
+<script src="https://simonaubury.com/js/core.min.js"></script>
+
+  </body>
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en-au" dir="ltr">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Sorting my socks with deep learning — Part 1 &middot; Simon Aubury</title>
+  <meta name="description" content="Can I arrange my sock drawer using machine learning?" />
+  <link rel="apple-touch-icon" sizes="180x180" href="https://simonaubury.com/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://simonaubury.com/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://simonaubury.com/favicon-16x16.png">
+  <link href="https://simonaubury.com/css/katex.min.css" rel="stylesheet">
+  
+  
+  
+  
+  <link href="https://simonaubury.com/css/concated.min.css" rel="stylesheet">
+  
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7N67PMRZ6N"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-7N67PMRZ6N', { 'anonymize_ip': false });
+}
+</script>
+
+  
+</head>
+
+  <body class="single-body">
+    <nav class="nav-bar side-padding">
+  <h1 class="nav-header"><a href="https://simonaubury.com/" class="nav-text">simon aubury</a></h1>
+  <div class="hamburger-menu">
+    <input class="hamburger-menu-button" type="checkbox"
+      onclick="hamburgerMenuPressed.call(this)"
+      aria-label="Hamburger Menu Button"
+    >
+    <div class="hamburger-menu-icon">
+      <span></span>
+      <span></span>
+    </div>
+    <ul id="menu" class="hamburger-menu-overlay">
+      <li><a href="https://simonaubury.com/" class="hamburger-menu-overlay-link">Home</a></li>
+      <li><a href="https://simonaubury.com/slides/" class="hamburger-menu-overlay-link">Presentation slides</a></li>
+      <li><a href="https://simonaubury.com/about-me/" class="hamburger-menu-overlay-link">About Simon</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/cat/" class="hamburger-menu-overlay-link">Cat</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/cdc/" class="hamburger-menu-overlay-link">CDC</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/duckdb/" class="hamburger-menu-overlay-link">duckdb</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/flink/" class="hamburger-menu-overlay-link">flink</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/generativeai/" class="hamburger-menu-overlay-link">GenerativeAI</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/gpt/" class="hamburger-menu-overlay-link">GPT</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/homeassistant/" class="hamburger-menu-overlay-link">homeassistant</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/kafka/" class="hamburger-menu-overlay-link">Kafka</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/ml/" class="hamburger-menu-overlay-link">ML</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/raspberry-pi/" class="hamburger-menu-overlay-link">Raspberry Pi</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/snowflake/" class="hamburger-menu-overlay-link">snowflake</a></li>
+      
+      <li><a href="https://simonaubury.com/index.xml" class="hamburger-menu-overlay-link">rss</a></li>
+    </ul>
+  </div>
+</nav>
+
+    <main class="content side-text-padding">
+      <article class="post dropcase">
+        <header class="post-header">
+          <h1 class="post-title">Sorting my socks with deep learning — Part 1</h1>
+          <p class="post-date">Posted <time datetime="2020-02-10">Feb 10, 2020</time></p>
+        </header>
+        <picture class="post-figure">
+          
+          
+          
+          <source srcset="https://simonaubury.com/posts/202002_sortingmysockswithdeeplearningpart1/00000000_hu03258042b559ef741163ba21bb068b91_181023_711x0_resize_lanczos_3.png 1x, https://simonaubury.com/posts/202002_sortingmysockswithdeeplearningpart1/00000000_hu03258042b559ef741163ba21bb068b91_181023_1422x0_resize_lanczos_3.png 2x, https://simonaubury.com/posts/202002_sortingmysockswithdeeplearningpart1/00000000_hu03258042b559ef741163ba21bb068b91_181023_2133x0_resize_lanczos_3.png 3x">
+          <img src="https://simonaubury.com/posts/202002_sortingmysockswithdeeplearningpart1/00000000_hu03258042b559ef741163ba21bb068b91_181023_711x0_resize_lanczos_3.png" >
+        </picture>
+        
+        
+        <h1 id="sorting-my-socks-with-deep-learningpart-1">Sorting my socks with deep learning — Part 1</h1>
+<p>Can I arrange my sock drawer using machine learning? An adventure in pairing my socks using transfer learning to build a custom sock image classification model. A small project to train and deploy an object recognition model on AWS DeepLens hardware for identifying my socks.</p>
+<h2 id="the-idea">The Idea</h2>
+<p>I have a crazy idea that I can pair my mismatched socks with machine learning. That is, building an image recognition model on the socks I have sitting in my sock drawer. With sufficient training data I should be able to tech a machine to classify a sock, and determine when I have a pair of identical socks. No more mismatched socks!</p>
+<p><img src="00000001.gif" alt="A deep learning model saving me from household chores"><em>A deep learning model saving me from household chores</em></p>
+<p>This project is also a good chance to test (or justify?) my new <a href="https://aws.amazon.com/deeplens/">AWS Deeplens</a> — a “deep-learning enabled video camera”. A Deeplens is a $300 hardware device with a 4MP video camera, Intel Atom Processor, 8GB RAM and runs Ubuntu. Plenty of hardware to help sort my socks.</p>
+<p><img src="00000002.png" alt="A Deeplens in sock-classification action"><em>A Deeplens in sock-classification action</em></p>
+<p>This project and all the files are available <a href="https://github.com/saubury/socksort/">here</a>.</p>
+<h2 id="image-capture">Image Capture</h2>
+<p>Any good machine vision project starts with training data. In my case, I need to prepare a set of training images to teach a model to recognise similar classification of socks. More specifically, I need to take a lot of photos of socks, and classify the images so I can run a supervised learning image classification. Much like you can teach a child to recognise something with a few examples, so too a ML model. With enough images of socks (tagged with their known sock type) a model can be created to classify socks into their correct type.</p>
+<p><img src="00000003.png" alt="One sock at a time gets a photo"><em>One sock at a time gets a photo</em></p>
+<p>Taking photos of socks is just as exciting as it sounds. Luckily I found around 30 photos of each sock were sufficient to accurately identify each sock variety— so it didn’t take too long to capture images.</p>
+<p><img src="00000004.png" alt="Each sock has around 30 different photos"><em>Each sock has around 30 different photos</em></p>
+<p>To save time, I made sure each sock filled the camera frame. This means I didn’t need to add bounding boxes to the images as the entire image frame was filled with a single sock image.</p>
+<h2 id="image-preparation">Image Preparation</h2>
+<p><img src="00000005.png" alt="The exciting task of image preparation"><em>The exciting task of image preparation</em></p>
+<p>While you can train a model on a folder full of images, it’s preferable to optimise the format of the images so that it’s less IO intensive during model training. I’ll prepare my dataset of sock images in <a href="https://gluon-cv.mxnet.io/build/examples_datasets/recordio.html">ImageRecord</a> format.</p>
+<p>To prepare my sock dataset in ImageRecord format I first need to generate a .lst file, a text file describing images classification and filename. I can use the Apache MXNet* im2rec.py* python file to help with these steps</p>
+<pre><code>python3 -m venv myenv
+source myenv/bin/activate
+pip install mxnet opencv-python
+curl --output im2rec.py [https://raw.githubusercontent.com/apache/incubator-mxnet/master/tools/im2rec.py](https://raw.githubusercontent.com/apache/incubator-mxnet/master/tools/im2rec.py)
+</code></pre>
+<p>I chose to split the photos into 80% training images and 20% for model validation. My data had 8 classification (ie., 8 different sock varieties) each with around 30 images. To randomly allocate the images into training and validation sets I run</p>
+<pre><code>python im2rec.py --list  --train-ratio 0.8   --recursive ./sock-images_rec sock-images/
+</code></pre>
+<p>After the execution, you find files sock-images_rec_train.lst and sock-images_rec_val.lst generated. These text files describe the images and classification for training and validation sets</p>
+<pre><code>wc -l *.lst
+544 sock-images_rec_train.lst
+137 sock-images_rec_val.lst
+681 total
+</code></pre>
+<p>Now I want to actually crunch my sock images into ImageRecord, reducing the size of each image down to a 512x512 pixel image.</p>
+<pre><code>python im2rec.py   --resize 512   --center-crop   --num-thread 4 ./sock-images_rec ./sock-images/
+</code></pre>
+<p>It gives you four more files: (sock-images_rec_train.idx, sock-images_rec_train.rec, sock-images_rec_val.idx, sock-images_rec_val.rec). Now, I’ve got ImageRecord files for both the training and validation. I’ll copy these up to an s3 so I can run the training in d’ cloud.</p>
+<pre><code>aws s3 cp . s3://deeplens-sagemaker-socksort --exclude &quot;*&quot; --include &quot;*.idx&quot;  --include &quot;*.rec&quot;  --include &quot;*.lst&quot; --recursive
+</code></pre>
+<h2 id="model-training">Model Training</h2>
+<p><img src="00000006.png" alt=""></p>
+<p>Now we want to train an image classification model that can classify sock images. We will use <a href="https://en.wikipedia.org/wiki/Transfer_learning">transfer learning</a> to leverage the knowledge gained from similar classification tasks to bootstrap my sock classification model. I can run this model training in a hosted Jupyter Notebook (AWS Sagemaker) in Python.</p>
+<p>The basic steps being</p>
+<ul>
+<li>
+<p>Import the sock dataset as a <em>recordio</em> format.</p>
+</li>
+<li>
+<p>Build an image classification model — see <a href="https://github.com/saubury/socksort/blob/master/20-model-training/sock-classification.ipynb">*sock-classification.ipynb</a>*. All going well after running this notebook you should have a model file called${S3_BUCKET}/ic-transfer-learning/output/image-classification-${DATE}/output/model.tar.gz</p>
+</li>
+<li>
+<p>Deploy a temporary classifier to test the inference function (that is, spin up your model with a temporary end point)</p>
+</li>
+<li>
+<p>Test a few demonstration images can be correctly classified</p>
+</li>
+<li>
+<p>Convince myself this is time well spent</p>
+</li>
+</ul>
+<p>A more extensive explanation <a href="https://github.com/awslabs/amazon-sagemaker-examples/blob/master/introduction_to_amazon_algorithms/imageclassification_caltech/Image-classification-transfer-learning-highlevel.ipynb">here</a></p>
+<h2 id="deeplens-mxnet-model--lambda-function">Deeplens MXNet Model &amp; Lambda Function</h2>
+<p>So far we’ve managed to train a model, and test it with a cloud hosted interactive Jupyter Notebook. Now I want to have this model running on my local hardware against images captured and processed on the Deeplens camera hardware. I’ll need to deploy the trained model locally and write a local lambda python function.</p>
+<p><img src="00000007.png" alt=""></p>
+<p>To create this local run-time project we need to build, publish and deploy a Sock Sort AWS DeepLens Inference Lambda Function. This is essentially a zip file containing my Python code (which pulls images from the camera and calls the classification model) along with support Python libraries (such as MQTT broker libraries) along with basic configuration settings.</p>
+<p>Steps to build sock_deeplens_inference_function.zip are detailed <a href="https://github.com/saubury/socksort/blob/master/README.md#deeplens-lambda-function">here</a>. So too are the steps required to load our previously created object classification model into my Deeplens hardware.</p>
+<h2 id="publish-sock-sort-aws-deeplens-inference-lambda-function">Publish Sock Sort AWS DeepLens Inference Lambda Function</h2>
+<p><img src="00000008.png" alt="DeepLens with model and local Lambda sending predictions to browser and MQTT"><em>DeepLens with model and local Lambda sending predictions to browser and MQTT</em></p>
+<p>Now we have a trained model and Python Inference Lambda Function deployed locally to my Deeplens hardware. Powering up the device should run all images captured by the camera through the classification model. If a likely match is found, the details are overlaid on the image. I can review a live camera feed within as web-browser, and a text overlay displays the sock classification. I’m also pushing the classification prediction into an MQTT topic (more about that in part-2).</p>
+<p><img src="00000009.png" alt="Socks — identified with model"><em>Socks — identified with model</em></p>
+<h2 id="to-be-continued-">To be continued …</h2>
+<p>Thanks for reading this far. We’ve got a model running locally that can identify single socks … but we’re only half way there! Our next part of the process needs to be able to identify our matching socks.</p>
+<p>Have a look at <a href="https://medium.com/@simon.aubury/kafka-stream-processing-sorting-socks-with-ksqldb-e4174ae5e703">p</a>art 2 — <a href="https://medium.com/@simon.aubury/kafka-stream-processing-sorting-socks-with-ksqldb-e4174ae5e703">Kafka stream processing: sorting socks with ksqlDB</a>.</p>
+<p><img src="00000010.png" alt="Socks — paired!"><em>Socks — paired!</em></p>
+<h3 id="project-files">Project Files</h3>
+<p>Project files with code used available at <a href="https://github.com/saubury/socksort/">https://github.com/saubury/socksort/</a></p>
+
+      </article>
+      
+    </main>
+    <nav class="end-nav side-padding">
+      
+      <a ontouchstart="cardPressed.call(this)" ontouchend="cardReleased.call(this)" ontouchmove="cardReleased.call(this)" 
+  href="https://simonaubury.com/posts/202001_kafkaconnectsecretsmanagementwithksqldb/" class="card blog-card bc-next" rel="bookmark" >
+  
+  <div class="card-img-container">
+    <p class="card-img-overlay">Next Article</p>
+    <picture>
+      
+      
+      
+      <source srcset="https://simonaubury.com/posts/202001_kafkaconnectsecretsmanagementwithksqldb/00000000_hu8f63f2d76d79e1c8ee1060593f9c9703_23585_400x0_resize_lanczos_3.png 1x, https://simonaubury.com/posts/202001_kafkaconnectsecretsmanagementwithksqldb/00000000_hu8f63f2d76d79e1c8ee1060593f9c9703_23585_800x0_resize_lanczos_3.png 2x, https://simonaubury.com/posts/202001_kafkaconnectsecretsmanagementwithksqldb/00000000_hu8f63f2d76d79e1c8ee1060593f9c9703_23585_1200x0_resize_lanczos_3.png 3x">
+      <img src="https://simonaubury.com/posts/202001_kafkaconnectsecretsmanagementwithksqldb/00000000_hu8f63f2d76d79e1c8ee1060593f9c9703_23585_400x0_resize_lanczos_3.png" class="card-img" >
+    </picture>
+  </div>
+  
+  <article class="card-body">
+    <h2 class="card-title">Kafka Connect Secrets Management with ksqlDB</h2>
+    <p class="card-text">Keeping the secrets, sectret</p>
+    <div class="card-subtext muted-text">
+      <p>Posted <time datetime="2020-01-14">Jan 14, 2020</time></p>
+      <p>#Kafka </p>
+    </div>
+  </article>
+</a>
+      
+    </nav>
+    <footer class="side-padding" style="background-image: url('https://simonaubury.com/img/home-blob-flip.svg');">
+    <a href="https://simonaubury.com/" class="footer-link">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/home.svg" alt="Home">
+    
+    </a>
+    
+    
+    
+    <a href="https://github.com/saubury" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/github.svg" alt="GitHub"/>
+    
+    </a>
+    
+    
+    
+    <a href="https://www.linkedin.com/in/simonaubury" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/linkedin.svg" alt="LinkedIn"/>
+    
+    </a>
+    
+    
+    <a href="https://simonaubury.com/index.xml" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/rss.svg" alt="RSS"/>
+    
+    </a>
+    
+    
+    
+    
+    
+    
+    
+    
+</footer>
+    
+  <script defer src="https://simonaubury.com/js/katex.min.js"></script>
+
+
+  <script defer src="https://simonaubury.com/js/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+
+<script src="https://simonaubury.com/js/core.min.js"></script>
+
+  </body>
+</html>

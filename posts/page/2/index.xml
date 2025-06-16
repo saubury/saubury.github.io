@@ -1,0 +1,84 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts - Simon Aubury</title>
+    <link>https://simonaubury.com/posts/</link>
+    <description>Recent content in Posts on Simon Aubury</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-au</language>
+    <lastBuildDate>Sun, 15 Jun 2025 10:22:20 +1100</lastBuildDate>
+    
+        <atom:link href="https://simonaubury.com/posts/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Can ML predict where my cat is now — part 1</title>
+      <link>https://simonaubury.com/posts/202202_cat_predition1/</link>
+      <pubDate>Tue, 01 Feb 2022 10:22:20 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202202_cat_predition1/</guid>
+      <description>I know I have a cat somewhere ...</description>
+    </item><item>
+      <title>Cleaning messy sensor data in Kafka with ksqlDB</title>
+      <link>https://simonaubury.com/posts/202107_cleaning_messy_sensor_data_kafka/</link>
+      <pubDate>Sun, 25 Jul 2021 12:00:00 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202107_cleaning_messy_sensor_data_kafka/</guid>
+      <description>Cats make messy data</description>
+    </item><item>
+      <title>Snowy’s eating — tweeting my cats weight &amp; dining habits with a Raspberry Pi</title>
+      <link>https://simonaubury.com/posts/202107_cat_fit_part_1/</link>
+      <pubDate>Sat, 10 Jul 2021 12:00:00 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202107_cat_fit_part_1/</guid>
+      <description>Body shaming my cat</description>
+    </item><item>
+      <title>🍹 Cocktail Pi</title>
+      <link>https://simonaubury.com/posts/202005_cocktailpi/</link>
+      <pubDate>Tue, 18 May 2021 12:00:00 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202005_cocktailpi/</guid>
+      <description>ML to make cocktails!</description>
+    </item><item>
+      <title>Oracle to Kafka — Playing with Confluent’s new Oracle CDC Source Connector in Docker</title>
+      <link>https://simonaubury.com/posts/202102_oracle_cdc_kafka/</link>
+      <pubDate>Thu, 18 Feb 2021 12:00:00 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202102_oracle_cdc_kafka/</guid>
+      <description>Streaming Oracle data into Kafka</description>
+    </item><item>
+      <title>Cat tracking with Amazon Web Services— AWS IoT, DynamoDB and SageMaker</title>
+      <link>https://simonaubury.com/posts/202102_1cat3cloudspart2/</link>
+      <pubDate>Thu, 04 Feb 2021 12:00:00 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202102_1cat3cloudspart2/</guid>
+      <description>Cat tracking with AWS</description>
+    </item><item>
+      <title>1 Cat, 3 Clouds — Part 1 - Where is Snowy sleeping?</title>
+      <link>https://simonaubury.com/posts/202101_1cat3cloudspart1/</link>
+      <pubDate>Sun, 10 Jan 2021 12:00:00 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202101_1cat3cloudspart1/</guid>
+      <description>Compare the same IoT data project in AWS, Azure &amp; Google Cloud</description>
+    </item><item>
+      <title>Pi Peripheral - Controlling computer actions with a $10 Raspberry Pi Zero</title>
+      <link>https://simonaubury.com/posts/202009_piperipheral/</link>
+      <pubDate>Mon, 21 Sep 2020 12:00:00 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202009_piperipheral/</guid>
+      <description>Time to fly ...</description>
+    </item><item>
+      <title>Home office ergonomics — with TensorFlow</title>
+      <link>https://simonaubury.com/posts/202006_homeofficeergonomicswithtensorflow/</link>
+      <pubDate>Tue, 09 Jun 2020 12:00:00 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202006_homeofficeergonomicswithtensorflow/</guid>
+      <description>Monitor good posture — with machine learning</description>
+    </item><item>
+      <title>Kafka with AVRO vs., Kafka with Protobuf vs., Kafka with JSON Schema</title>
+      <link>https://simonaubury.com/posts/202004_kafkawithavrovskafkawithprotobuf/</link>
+      <pubDate>Sat, 02 May 2020 12:00:00 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202004_kafkawithavrovskafkawithprotobuf/</guid>
+      <description>Kafka serialisation schemes</description>
+    </item>
+  </channel>
+</rss>

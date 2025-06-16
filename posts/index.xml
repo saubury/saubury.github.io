@@ -1,0 +1,84 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts - Simon Aubury</title>
+    <link>https://simonaubury.com/posts/</link>
+    <description>Recent content in Posts on Simon Aubury</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-au</language>
+    <lastBuildDate>Sun, 15 Jun 2025 10:22:20 +1100</lastBuildDate>
+    
+        <atom:link href="https://simonaubury.com/posts/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Aviation data with Apache Flink</title>
+      <link>https://simonaubury.com/posts/202506_flink_plane_cep/</link>
+      <pubDate>Sun, 15 Jun 2025 10:22:20 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202506_flink_plane_cep/</guid>
+      <description>When plans change at 500 feet: Complex event processing of ADS-B aviation data with Apache Flink</description>
+    </item><item>
+      <title>Puppy data</title>
+      <link>https://simonaubury.com/posts/202502_puppydata/</link>
+      <pubDate>Sat, 15 Feb 2025 10:22:20 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202502_puppydata/</guid>
+      <description>🐾 Puppy Data 🐾 combines a love of data and dogs — a project to track Barney the puppy</description>
+    </item><item>
+      <title>FridgeBot — GPT-4o shopping list automation</title>
+      <link>https://simonaubury.com/posts/202405_fridgebot/</link>
+      <pubDate>Wed, 15 May 2024 10:22:20 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202405_fridgebot/</guid>
+      <description>GPT-4o shopping list automation - no excuse to forget the milk</description>
+    </item><item>
+      <title>🍹GinAI - Cocktails mixed with generative AI</title>
+      <link>https://simonaubury.com/posts/202310_ginai/</link>
+      <pubDate>Wed, 18 Oct 2023 10:22:20 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202310_ginai/</guid>
+      <description>Cocktails mixed with generative AI</description>
+    </item><item>
+      <title>My data, your LLM</title>
+      <link>https://simonaubury.com/posts/202309_paranoid_genai/</link>
+      <pubDate>Sun, 10 Sep 2023 10:22:20 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202309_paranoid_genai/</guid>
+      <description>Paranoid analysis of iMessage chats with OpenAI, LlamaIndex &amp; DuckDB</description>
+    </item><item>
+      <title>GenPiCam - Generative AI Camera</title>
+      <link>https://simonaubury.com/posts/202307_genai_camera/</link>
+      <pubDate>Tue, 27 Jun 2023 10:22:20 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202307_genai_camera/</guid>
+      <description>GenPiCam — a RaspberryPi based camera that reimagines the world with GenAI</description>
+    </item><item>
+      <title>Fitbit activity analysis with DuckDB</title>
+      <link>https://simonaubury.com/posts/202306_duckdb_fitbit/</link>
+      <pubDate>Thu, 01 Jun 2023 10:22:20 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202306_duckdb_fitbit/</guid>
+      <description>My (very) personal data warehouse — Fitbit activity analysis with DuckDB</description>
+    </item><item>
+      <title>Mastodon usage — counting toots with Kafka, DuckDB &amp; Seaborn </title>
+      <link>https://simonaubury.com/posts/202302_mastodon_duckdb/</link>
+      <pubDate>Wed, 22 Feb 2023 10:22:20 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202302_mastodon_duckdb/</guid>
+      <description>Counting toots in a decentralized social networking platform 🐘🦆📊</description>
+    </item><item>
+      <title>Real-Time Wildlife Monitoring with Apache Kafka</title>
+      <link>https://simonaubury.com/posts/202301_wildlife_monitoring/</link>
+      <pubDate>Thu, 19 Jan 2023 10:22:20 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202301_wildlife_monitoring/</guid>
+      <description>Where did I leave the zebra?</description>
+    </item><item>
+      <title>Can ML predict where my cat is now — part 2</title>
+      <link>https://simonaubury.com/posts/202207_cat_predition2/</link>
+      <pubDate>Fri, 01 Jul 2022 10:22:20 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202207_cat_predition2/</guid>
+      <description>Where did I leave the cat?</description>
+    </item>
+  </channel>
+</rss>

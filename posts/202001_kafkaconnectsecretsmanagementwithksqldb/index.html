@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en-au" dir="ltr">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Kafka Connect Secrets Management with ksqlDB &middot; Simon Aubury</title>
+  <meta name="description" content="Keeping the secrets, sectret" />
+  <link rel="apple-touch-icon" sizes="180x180" href="https://simonaubury.com/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://simonaubury.com/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://simonaubury.com/favicon-16x16.png">
+  <link href="https://simonaubury.com/css/katex.min.css" rel="stylesheet">
+  
+  
+  
+  
+  <link href="https://simonaubury.com/css/concated.min.css" rel="stylesheet">
+  
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7N67PMRZ6N"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-7N67PMRZ6N', { 'anonymize_ip': false });
+}
+</script>
+
+  
+</head>
+
+  <body class="single-body">
+    <nav class="nav-bar side-padding">
+  <h1 class="nav-header"><a href="https://simonaubury.com/" class="nav-text">simon aubury</a></h1>
+  <div class="hamburger-menu">
+    <input class="hamburger-menu-button" type="checkbox"
+      onclick="hamburgerMenuPressed.call(this)"
+      aria-label="Hamburger Menu Button"
+    >
+    <div class="hamburger-menu-icon">
+      <span></span>
+      <span></span>
+    </div>
+    <ul id="menu" class="hamburger-menu-overlay">
+      <li><a href="https://simonaubury.com/" class="hamburger-menu-overlay-link">Home</a></li>
+      <li><a href="https://simonaubury.com/slides/" class="hamburger-menu-overlay-link">Presentation slides</a></li>
+      <li><a href="https://simonaubury.com/about-me/" class="hamburger-menu-overlay-link">About Simon</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/cat/" class="hamburger-menu-overlay-link">Cat</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/cdc/" class="hamburger-menu-overlay-link">CDC</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/duckdb/" class="hamburger-menu-overlay-link">duckdb</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/flink/" class="hamburger-menu-overlay-link">flink</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/generativeai/" class="hamburger-menu-overlay-link">GenerativeAI</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/gpt/" class="hamburger-menu-overlay-link">GPT</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/homeassistant/" class="hamburger-menu-overlay-link">homeassistant</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/kafka/" class="hamburger-menu-overlay-link">Kafka</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/ml/" class="hamburger-menu-overlay-link">ML</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/raspberry-pi/" class="hamburger-menu-overlay-link">Raspberry Pi</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/snowflake/" class="hamburger-menu-overlay-link">snowflake</a></li>
+      
+      <li><a href="https://simonaubury.com/index.xml" class="hamburger-menu-overlay-link">rss</a></li>
+    </ul>
+  </div>
+</nav>
+
+    <main class="content side-text-padding">
+      <article class="post dropcase">
+        <header class="post-header">
+          <h1 class="post-title">Kafka Connect Secrets Management with ksqlDB</h1>
+          <p class="post-date">Posted <time datetime="2020-01-14">Jan 14, 2020</time></p>
+        </header>
+        <picture class="post-figure">
+          
+          
+          
+          <source srcset="https://simonaubury.com/posts/202001_kafkaconnectsecretsmanagementwithksqldb/00000000_hu8f63f2d76d79e1c8ee1060593f9c9703_23585_711x0_resize_lanczos_3.png 1x, https://simonaubury.com/posts/202001_kafkaconnectsecretsmanagementwithksqldb/00000000_hu8f63f2d76d79e1c8ee1060593f9c9703_23585_1422x0_resize_lanczos_3.png 2x, https://simonaubury.com/posts/202001_kafkaconnectsecretsmanagementwithksqldb/00000000_hu8f63f2d76d79e1c8ee1060593f9c9703_23585_2133x0_resize_lanczos_3.png 3x">
+          <img src="https://simonaubury.com/posts/202001_kafkaconnectsecretsmanagementwithksqldb/00000000_hu8f63f2d76d79e1c8ee1060593f9c9703_23585_711x0_resize_lanczos_3.png" >
+        </picture>
+        
+        
+        <h1 id="kafka-connect-secrets-management-with-ksqldb">Kafka Connect Secrets Management with ksqlDB</h1>
+<p>Get data into and out of Kafka with ease using ksqlDB &hellip; without sharing your passwords</p>
+<p>Kafka Connect is a scalable, flexible framework for streaming data between Apache Kafka and other data systems. Got data in a database table and want to stream it into Kafka? No problem, a simple bit of configuration and a JDBC driver will get you going.</p>
+<p>What’s even better is this Kafka Connect configuration can be setup and managed with <a href="http://ksqldb.io">ksqlDB </a>with Confluent Platform 5.4 onward. That is, you can use a SQL dialect to both manage your real-time data processing against Apache Kafka *and *run connectors to get data to and from your Kafka cluster.</p>
+<p>Apache Kafka 2.0 <a href="https://cwiki.apache.org/confluence/display/KAFKA/KIP-297%3A+Externalizing+Secrets+for+Connect+Configurations">added support</a> for external secrets using a flexible ConfigProvider class. You can externalise secrets using a variety of mechanisms (Vault, KMS, etc.,) However, it’s not immediately obvious how to get this capability running with ksqlDB. Let’s explore ways you can setup your distributed cluster, and keep your secrets, … secret.</p>
+<h2 id="example-context">Example Context</h2>
+<p>We’ll take a simple example. We wish to define a Kafka Connect JDBC source, and want to hide the username and password required to connect to the source database.</p>
+<p><img src="00000001.png" alt="A typical Kafka Connect configuration with a password"><em>A typical Kafka Connect configuration with a password</em></p>
+<p>We want a fully distributed setup, with the ksqlDB server controlling our Kafka Connect cluster. We’ll load our Kafka Connect cluster with a JDBC Postgres JAR driver, so it can communicate with a Postgres database.</p>
+<p><img src="00000002.png" alt=""></p>
+<p>Let’s setup out database</p>
+<pre><code>CREATE TABLE socks (
+    sockname VARCHAR
+  , ref SERIAL PRIMARY KEY
+  );
+
+INSERT INTO socks (sockname) VALUES ('Black wool socks');
+INSERT INTO socks (sockname) VALUES ('Yellow colourful socks');
+INSERT INTO socks (sockname) VALUES ('Old brown socks'); 
+</code></pre>
+<p>For simplicity, we’ll manage out secrets via the FileConfigProvide class (ie., an external credentials file). We can create a <em>secrets</em> file (cred.properties ) and must remember not to check it into to version control (use a .gitignore or equivalent)</p>
+<pre><code>PG_URI=jdbc:postgresql://postgres:5432/postgres
+PG_USER=postgres
+PG_PASS=Sup3rS3c3t
+</code></pre>
+<p>And then you can concentrate on defining your configuration like this. Note the username and password are simply references into the cred.properties file</p>
+<pre><code>CREATE SOURCE CONNECTOR `postgres-jdbc-source` WITH(
+  &quot;connector.class&quot;='io.confluent.connect.jdbc.JdbcSourceConnector',
+  &quot;connection.url&quot;='${file:/scripts/cred.properties:PG_URI}',
+  &quot;mode&quot;='incrementing',
+  &quot;incrementing.column.name&quot;='ref',
+  &quot;table.whitelist&quot;='socks',
+  &quot;connection.user&quot;='${file:/scripts/cred.properties:PG_USER}',
+  &quot;connection.password&quot;='${file:/scripts/cred.properties:PG_PASS}',
+  &quot;topic.prefix&quot;='db-',
+  &quot;key&quot;='sockname'); 
+</code></pre>
+<h2 id="lets-see-if-it-works">Let’s see if it works</h2>
+<p>From ksqlDB run this</p>
+<pre><code>print 'db-socks' from beginning;
+</code></pre>
+<p>And you should see this</p>
+<pre><code>{&quot;sockname&quot;: &quot;Black wool socks&quot;, &quot;ref&quot;: 1}
+{&quot;sockname&quot;: &quot;Yellow colourful socks&quot;, &quot;ref&quot;: 2}
+{&quot;sockname&quot;: &quot;Old brown socks&quot;, &quot;ref&quot;: 3}
+</code></pre>
+<p>In another window, insert a new database row</p>
+<pre><code>psql -U postgres -c &quot;INSERT INTO socks (sockname) VALUES ('Mismatched socks');&quot;
+</code></pre>
+<p>And your ksqlDB prompt should now show one additional row (notice the Kafka connect cluster found the new row)</p>
+<pre><code>{&quot;sockname&quot;: &quot;Mismatched socks&quot;, &quot;ref&quot;: 4}
+</code></pre>
+<h2 id="try-it-yourself">Try it yourself</h2>
+<p>A complete docker-compose to run this setup available at
+<a href="https://github.com/saubury/ksqldb-demo/tree/master/ksqldb-connect-demo"><strong>saubury/ksqldb-demo</strong>
+*How to setup Kafka Connect with ksqlDB ..*github.com</a></p>
+
+      </article>
+      
+    </main>
+    <nav class="end-nav side-padding">
+      
+      <a ontouchstart="cardPressed.call(this)" ontouchend="cardReleased.call(this)" ontouchmove="cardReleased.call(this)" 
+  href="https://simonaubury.com/posts/201910_kafkasummit_2019sanfranciscoareview/" class="card blog-card bc-next" rel="bookmark" >
+  
+  <div class="card-img-container">
+    <p class="card-img-overlay">Next Article</p>
+    <picture>
+      
+      
+      
+      <source srcset="https://simonaubury.com/posts/201910_kafkasummit_2019sanfranciscoareview/00000000_huf0f87906e2fc274c7762b48267ef15a0_183620_400x0_resize_lanczos_3.png 1x, https://simonaubury.com/posts/201910_kafkasummit_2019sanfranciscoareview/00000000_huf0f87906e2fc274c7762b48267ef15a0_183620_800x0_resize_lanczos_3.png 2x, https://simonaubury.com/posts/201910_kafkasummit_2019sanfranciscoareview/00000000_huf0f87906e2fc274c7762b48267ef15a0_183620_1200x0_resize_lanczos_3.png 3x">
+      <img src="https://simonaubury.com/posts/201910_kafkasummit_2019sanfranciscoareview/00000000_huf0f87906e2fc274c7762b48267ef15a0_183620_400x0_resize_lanczos_3.png" class="card-img" >
+    </picture>
+  </div>
+  
+  <article class="card-body">
+    <h2 class="card-title">Kafka Summit 2019 San Francisco: a review</h2>
+    <p class="card-text">Kafka Summit 2019 San Francisco</p>
+    <div class="card-subtext muted-text">
+      <p>Posted <time datetime="2019-10-12">Oct 12, 2019</time></p>
+      <p>#Kafka </p>
+    </div>
+  </article>
+</a>
+      
+    </nav>
+    <footer class="side-padding" style="background-image: url('https://simonaubury.com/img/home-blob-flip.svg');">
+    <a href="https://simonaubury.com/" class="footer-link">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/home.svg" alt="Home">
+    
+    </a>
+    
+    
+    
+    <a href="https://github.com/saubury" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/github.svg" alt="GitHub"/>
+    
+    </a>
+    
+    
+    
+    <a href="https://www.linkedin.com/in/simonaubury" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/linkedin.svg" alt="LinkedIn"/>
+    
+    </a>
+    
+    
+    <a href="https://simonaubury.com/index.xml" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/rss.svg" alt="RSS"/>
+    
+    </a>
+    
+    
+    
+    
+    
+    
+    
+    
+</footer>
+    
+  <script defer src="https://simonaubury.com/js/katex.min.js"></script>
+
+
+  <script defer src="https://simonaubury.com/js/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+
+<script src="https://simonaubury.com/js/core.min.js"></script>
+
+  </body>
+</html>

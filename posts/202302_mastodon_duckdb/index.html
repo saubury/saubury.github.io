@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en-au" dir="ltr">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Mastodon usage — counting toots with Kafka, DuckDB &amp; Seaborn  &middot; Simon Aubury</title>
+  <meta name="description" content="Counting toots in a decentralized social networking platform 🐘🦆📊" />
+  <link rel="apple-touch-icon" sizes="180x180" href="https://simonaubury.com/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://simonaubury.com/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://simonaubury.com/favicon-16x16.png">
+  <link href="https://simonaubury.com/css/katex.min.css" rel="stylesheet">
+  
+  
+  
+  
+  <link href="https://simonaubury.com/css/concated.min.css" rel="stylesheet">
+  
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7N67PMRZ6N"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-7N67PMRZ6N', { 'anonymize_ip': false });
+}
+</script>
+
+  
+</head>
+
+  <body class="single-body">
+    <nav class="nav-bar side-padding">
+  <h1 class="nav-header"><a href="https://simonaubury.com/" class="nav-text">simon aubury</a></h1>
+  <div class="hamburger-menu">
+    <input class="hamburger-menu-button" type="checkbox"
+      onclick="hamburgerMenuPressed.call(this)"
+      aria-label="Hamburger Menu Button"
+    >
+    <div class="hamburger-menu-icon">
+      <span></span>
+      <span></span>
+    </div>
+    <ul id="menu" class="hamburger-menu-overlay">
+      <li><a href="https://simonaubury.com/" class="hamburger-menu-overlay-link">Home</a></li>
+      <li><a href="https://simonaubury.com/slides/" class="hamburger-menu-overlay-link">Presentation slides</a></li>
+      <li><a href="https://simonaubury.com/about-me/" class="hamburger-menu-overlay-link">About Simon</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/cat/" class="hamburger-menu-overlay-link">Cat</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/cdc/" class="hamburger-menu-overlay-link">CDC</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/duckdb/" class="hamburger-menu-overlay-link">duckdb</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/flink/" class="hamburger-menu-overlay-link">flink</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/generativeai/" class="hamburger-menu-overlay-link">GenerativeAI</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/gpt/" class="hamburger-menu-overlay-link">GPT</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/homeassistant/" class="hamburger-menu-overlay-link">homeassistant</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/kafka/" class="hamburger-menu-overlay-link">Kafka</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/ml/" class="hamburger-menu-overlay-link">ML</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/raspberry-pi/" class="hamburger-menu-overlay-link">Raspberry Pi</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/snowflake/" class="hamburger-menu-overlay-link">snowflake</a></li>
+      
+      <li><a href="https://simonaubury.com/index.xml" class="hamburger-menu-overlay-link">rss</a></li>
+    </ul>
+  </div>
+</nav>
+
+    <main class="content side-text-padding">
+      <article class="post dropcase">
+        <header class="post-header">
+          <h1 class="post-title">Mastodon usage — counting toots with Kafka, DuckDB &amp; Seaborn</h1>
+          <p class="post-date">Posted <time datetime="2023-02-22">Feb 22, 2023</time></p>
+        </header>
+        <picture class="post-figure">
+          
+          
+          
+          <source srcset="https://simonaubury.com/posts/202302_mastodon_duckdb/00000000_hu97bfc9e4029d3fb5b4a83a7140d8f696_215608_711x0_resize_lanczos_3.png 1x, https://simonaubury.com/posts/202302_mastodon_duckdb/00000000_hu97bfc9e4029d3fb5b4a83a7140d8f696_215608_1422x0_resize_lanczos_3.png 2x, https://simonaubury.com/posts/202302_mastodon_duckdb/00000000_hu97bfc9e4029d3fb5b4a83a7140d8f696_215608_2133x0_resize_lanczos_3.png 3x">
+          <img src="https://simonaubury.com/posts/202302_mastodon_duckdb/00000000_hu97bfc9e4029d3fb5b4a83a7140d8f696_215608_711x0_resize_lanczos_3.png" >
+        </picture>
+        
+        
+        <h1 id="mastodon-usage">Mastodon usage </h1>
+<p><em>Counting toots with Kafka, DuckDB &amp; Seaborn 🐘🦆📊</em></p>
+<p>Mastodon is a decentralized social networking platform. Users are members of a specific Mastodon instance, and servers are capable of joining other servers to form a federated social network.</p>
+<blockquote>
+<p>I wanted to start exploring Mastodon usage; and perform exploratory data analysis of user activity, server popularity and language usage. I used distributed stream processing tools to collect data from multiple instances to get a glimpse into what’s happening in the <a href="https://en.wikipedia.org/wiki/Fediverse">fediverse</a>.</p>
+</blockquote>
+<p>This blog covers the tools for data collection and data processing (<a href="https://kafka.apache.org/">Apache Kafka</a> stream processing). If this doesn’t interest you you can jump straight to the <a href="#data-analysis">data analysis</a> (<a href="https://duckdb.org/">DuckDB</a> and <a href="https://seaborn.pydata.org/">Seaborn</a>). For the enthusiastic you can <a href="https://github.com/saubury/mastodon-stream">run the code</a></p>
+<h3 id="tools-used">Tools used</h3>
+<ul>
+<li><a href="https://mastodonpy.readthedocs.io/">Mastodon.py</a> — Python library for interacting with the Mastodon API</li>
+<li><a href="https://kafka.apache.org/">Apache Kafka</a> — distributed event streaming platform</li>
+<li><a href="https://duckdb.org/">DuckDB</a> — in-process SQL OLAP database and the <a href="https://duckdb.org/docs/extensions/httpfs.html">HTTPFS DuckDB extension</a> for reading remote/writing remote files of object storage using the S3 API</li>
+<li><a href="https://min.io/">MinIO</a> — S3 compatible server</li>
+<li><a href="https://seaborn.pydata.org/">Seaborn</a> — visualization library</li>
+</ul>
+<h2 id="data-collection--the-mastodon-listener">Data collection — the Mastodon listener</h2>
+<p>ℹ️ If you’re not interested in the data collection … jump straight to the <a href="#data-analysis">data analysis</a></p>
+<p><img src="00000001.png" alt="Data collection architecture"><em>Data collection architecture</em></p>
+<p>There is a <a href="https://joinmastodon.org/servers">large collection</a> of Mastodon servers with a wide variety of subjects, topics and interesting communities. Accessing a public stream is generally possible without authenticating, so no account is required to work out what’s happening on each server.</p>
+<p>In the decentralized Mastodon network, not every message is sent to every server. <a href="https://commons.wikimedia.org/wiki/File:Mastodon_timelines.png">Generally</a>, public toots from instance-A will only be sent to instance-B if a user from B follows that user from A.</p>
+<p>I wrote a python application mastodonlisten to listen for public posts from a given server. By running multiple listeners I could collect toots from both popular and niche instances. Each python listener collects public toots from that server to and publishes to a private Kafka broker. To illustrate how multiple Mastodon listeners can be run in the background like this:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>python mastodonlisten.py --baseURL https://mastodon.social --enableKafka &amp;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>python mastodonlisten.py --baseURL https://universeodon.com --enableKafka &amp;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>python mastodonlisten.py --baseURL https://hachyderm.io --enableKafka &amp;
+</span></span></code></pre></div><h2 id="kafka-connect">Kafka Connect</h2>
+<p>I’ve now got multiple Mastodon listeners feeding public posts from multiple servers into a single Kafka topic. My next task is to understand what’s going on with all this activity from the decentralised network.</p>
+<p>I decided to incrementally dump the “toots” into Parquet files on an S3 object store. Parquet is a columnar storage that is optimised for analytical querying. I chose to use Kafka Connect to streaming data between my Kafka topic and land the data into S3 using the S3SinkConnector</p>
+<p>That sounds like a lot of work — but the TL;DR is with a bit of configuration, I can instruct Kafka Connect to do everything for me. To consume the mastodon-topic from Kafka and create a new parquet file on S3 every 1000 records I can accomplish with this configuration</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    &#34;name&#34;: <span style="color:#009c00">&#34;mastodon-sink-s3&#34;</span>,
+</span></span><span style="display:flex;"><span>    &#34;connector.class&#34;: <span style="color:#009c00">&#34;io.confluent.connect.s3.S3SinkConnector&#34;</span>,
+</span></span><span style="display:flex;"><span>    &#34;topics&#34;: <span style="color:#009c00">&#34;mastodon-topic&#34;</span>,
+</span></span><span style="display:flex;"><span>    &#34;format.class&#34;: <span style="color:#009c00">&#34;io.confluent.connect.s3.format.parquet.ParquetFormat&#34;</span>,
+</span></span><span style="display:flex;"><span>    &#34;flush.size&#34;: <span style="color:#009c00">&#34;1000&#34;</span>,
+</span></span><span style="display:flex;"><span>    &#34;s3.bucket.name&#34;: <span style="color:#009c00">&#34;mastodon&#34;</span>,
+</span></span><span style="display:flex;"><span>    &#34;aws.access.key.id&#34;: <span style="color:#009c00">&#34;minio&#34;</span>,
+</span></span><span style="display:flex;"><span>    &#34;aws.secret.access.key&#34;: <span style="color:#009c00">&#34;minio123&#34;</span>,
+</span></span><span style="display:flex;"><span>    &#34;storage.class&#34;: <span style="color:#009c00">&#34;io.confluent.connect.s3.storage.S3Storage&#34;</span>,
+</span></span><span style="display:flex;"><span>    &#34;store.url&#34;: <span style="color:#009c00">&#34;http://minio:9000&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>To check this is all working correctly, I can see new files are being regularly created by looking in the MinIO web-based object browser.</p>
+<p><img src="00000002.png" alt="MinIO web-based object browser"><em>MinIO web-based object browser</em></p>
+<h2 id="data-analysis">Data analysis</h2>
+<p>Now we have collected a week of Mastodon activity, let’s have a look at some data. These steps are detailed in the <a href="https://github.com/saubury/mastodon-stream/blob/main/notebooks/mastodon-analysis.ipynb">notebook</a></p>
+<blockquote>
+<p>⚠️ Observations in this section are based on naive interpretation on a few days worth of data. Please don’t rely on any of this analysis, but feel free to use these techniques yourself to explore and learn</p>
+</blockquote>
+<p>Firstly, some quick statistics from the data collected over 10 days (3 Feb to 12 Feb 2023)</p>
+<ul>
+<li>🔢 Number of Mastodon toots seen 1,622,149</li>
+<li>👤 Number of unique Mastodon users 142,877</li>
+<li>💻 Number of unique Mastodon instances 8,309</li>
+<li>🌏 Number of languages seen 131</li>
+<li>✍️ Shortest toot 0 characters, average toot length 151 characters and longest toot 68,991 characters (If you’re curious, the longest toot was a silly comment followed the repeating the same emoji 68,930 times)</li>
+<li>📚 Total of all toots 245,245,677 characters</li>
+<li>🦆 DuckDB memory used to hold <strong>1.6 million toots is just 745.5MB</strong> (which is tiny!)</li>
+<li>⏱ Time it takes to calculate the above statistics in a single SQL query is** 0.7 seconds** (wow — fast!)</li>
+</ul>
+<p>DuckDB’s Python client can be used <a href="https://duckdb.org/docs/guides/python/jupyter">directly in Jupyter notebook</a>. The first step is import the relevant libraries. DuckDB Python package can run queries directly on Pandas. With a few <a href="https://www.datacamp.com/tutorial/sql-interface-within-jupyterlab">SqlMagic</a> settings it’s possible to configure the notebook to directly output data to Pandas</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>%load_ext <span style="color:#00f">sql</span>
+</span></span><span style="display:flex;"><span>%<span style="color:#00f">sql</span> duckdb:///:memory:
+</span></span><span style="display:flex;"><span>%config SqlMagic.autopandas = <span style="color:#00f">True</span>
+</span></span><span style="display:flex;"><span>%config SqlMagic.feedback = <span style="color:#00f">False</span>
+</span></span><span style="display:flex;"><span>%config SqlMagic.displaycon = <span style="color:#00f">False</span>
+</span></span></code></pre></div><p>Plus we can use the <a href="https://duckdb.org/docs/extensions/httpfs.html">HTTPFS DuckDB extension</a> for reading remote/writing remote files of object storage using the S3 API</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>%%<span style="color:#00f">sql</span>
+</span></span><span style="display:flex;"><span>INSTALL httpfs;
+</span></span><span style="display:flex;"><span><span style="color:#00f">LOAD</span> httpfs;
+</span></span></code></pre></div><h2 id="establish-s3-endpoint">Establish s3 endpoint</h2>
+<p>Here we’re using a local <a href="https://min.io/">MinIO</a> as an Open Source, Amazon S3 compatible server (and no, you shouldn’t share your secret_access_key). Set the S3 endpoint settings like this</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>%%<span style="color:#00f">sql</span>
+</span></span><span style="display:flex;"><span><span style="color:#00f">set</span> s3_endpoint=<span style="color:#009c00">&#39;localhost:9000&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#00f">set</span> s3_access_key_id=<span style="color:#009c00">&#39;minio&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#00f">set</span> s3_secret_access_key=<span style="color:#009c00">&#39;minio123&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#00f">set</span> s3_use_ssl=<span style="color:#00f">false</span>;
+</span></span><span style="display:flex;"><span><span style="color:#00f">set</span> s3_region=<span style="color:#009c00">&#39;us-east-1&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#00f">set</span> s3_url_style=<span style="color:#009c00">&#39;path&#39;</span>;
+</span></span></code></pre></div><p>And I can now query the parquet files directly from s3</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>%%<span style="color:#00f">sql</span>
+</span></span><span style="display:flex;"><span><span style="color:#00f">select</span> *
+</span></span><span style="display:flex;"><span><span style="color:#00f">from</span> read_parquet(<span style="color:#009c00">&#39;s3://mastodon/topics/mastodon-topic/partition=0/*&#39;</span>);
+</span></span></code></pre></div><p><img src="00000003.png" alt="Reading parquet from s3 without leaving the notebook"><em>Reading parquet from s3 without leaving the notebook</em></p>
+<p>This is pretty cool — we can read the parquet data directly, which is sitting in our S3 bucket.</p>
+<h2 id="duckdb-sql-to-process-mastodon-activity">DuckDB SQL to process Mastodon activity</h2>
+<p>Before moving on, I had a bit of data cleanup which I could do within DuckDB, loading remote parquet files (from s3).</p>
+<ul>
+<li>Map the ISO 639–1 (two-letter) language code (zh, cy, en) to a language description (Chinese, Welsh, English). We can create alanguage lookup table and load languages from <a href="../duckdb/language.csv">language.csv</a>.</li>
+<li>Calculate created_timestamp from the created_at integer. The created_at timestamp is calculated as number of seconds from EPOC (1/1/1970)</li>
+<li>Determine the originating instance with a regular expression to strip the URL</li>
+<li>Create the table mastodon_toot as a join of mastodon_toot_raw to language</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#00f">CREATE</span> <span style="color:#00f">TABLE</span> <span style="color:#00f">language</span>(lang_iso VARCHAR <span style="color:#00f">PRIMARY</span> <span style="color:#00f">KEY</span>, language_name VARCHAR);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#00f">insert</span> <span style="color:#00f">into</span> <span style="color:#00f">language</span>
+</span></span><span style="display:flex;"><span><span style="color:#00f">select</span> *
+</span></span><span style="display:flex;"><span><span style="color:#00f">from</span> read_csv(<span style="color:#009c00">&#39;./language.csv&#39;</span>, AUTO_DETECT=<span style="color:#00f">TRUE</span>, header=<span style="color:#00f">True</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#00f">create</span> <span style="color:#00f">table</span> mastodon_toot_raw <span style="color:#00f">as</span>
+</span></span><span style="display:flex;"><span><span style="color:#00f">select</span> m_id
+</span></span><span style="display:flex;"><span>, created_at, (<span style="color:#009c00">&#39;EPOCH&#39;</span>::<span style="color:#00f">TIMESTAMP</span> + INTERVAL (created_at::INT) seconds)::TIMESTAMPTZ  <span style="color:#00f">as</span> created_tz
+</span></span><span style="display:flex;"><span>, app
+</span></span><span style="display:flex;"><span>, url
+</span></span><span style="display:flex;"><span>, regexp_replace(regexp_replace(url, <span style="color:#009c00">&#39;^http[s]://&#39;</span>, <span style="color:#009c00">&#39;&#39;</span>), <span style="color:#009c00">&#39;/.*$&#39;</span>, <span style="color:#009c00">&#39;&#39;</span>) <span style="color:#00f">as</span> from_instance
+</span></span><span style="display:flex;"><span>, base_url
+</span></span><span style="display:flex;"><span>, <span style="color:#00f">language</span>
+</span></span><span style="display:flex;"><span>, favourites
+</span></span><span style="display:flex;"><span>, username
+</span></span><span style="display:flex;"><span>, bot
+</span></span><span style="display:flex;"><span>, tags
+</span></span><span style="display:flex;"><span>, characters
+</span></span><span style="display:flex;"><span>, mastodon_text
+</span></span><span style="display:flex;"><span><span style="color:#00f">from</span> read_parquet(<span style="color:#009c00">&#39;s3://mastodon/topics/mastodon-topic/partition=0/*&#39;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#00f">create</span> <span style="color:#00f">table</span> mastodon_toot <span style="color:#00f">as</span>
+</span></span><span style="display:flex;"><span><span style="color:#00f">select</span> mr.*, ln.language_name
+</span></span><span style="display:flex;"><span><span style="color:#00f">from</span> mastodon_toot_raw mr 
+</span></span><span style="display:flex;"><span><span style="color:#00f">left</span> <span style="color:#00f">outer</span> <span style="color:#00f">join</span> <span style="color:#00f">language</span> ln <span style="color:#00f">on</span> (mr.<span style="color:#00f">language</span> = ln.lang_iso);
+</span></span></code></pre></div><p>🪄Being able to do this cleanup and transformation in SQL and have it execute in 0.8 seconds is like magic to me.</p>
+<p><img src="00000004.png" alt="Very fast processing — less then a second"><em>Very fast processing — less then a second</em></p>
+<h2 id="daily-mastodon-usage">Daily Mastodon usage</h2>
+<p>We can query the mastodon_toot table directly to see the number of <em>toots</em>, <em>users</em> each day by counting and grouping the activity by the day. We can use the <a href="https://duckdb.org/docs/sql/aggregates.html#statistical-aggregates">mode</a> aggregate function to find the most frequent “bot” and “not-bot” users to find the most active Mastodon users</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>%%<span style="color:#00f">sql</span>
+</span></span><span style="display:flex;"><span><span style="color:#00f">select</span> strftime(created_tz, <span style="color:#009c00">&#39;%Y/%m/%d %a&#39;</span>) <span style="color:#00f">as</span> <span style="color:#009c00">&#34;Created day&#34;</span>
+</span></span><span style="display:flex;"><span>, <span style="color:#00f">count</span>(*) <span style="color:#00f">as</span> <span style="color:#009c00">&#34;Num toots&#34;</span>
+</span></span><span style="display:flex;"><span>, <span style="color:#00f">count</span>(<span style="color:#00f">distinct</span>(username)) <span style="color:#00f">as</span> <span style="color:#009c00">&#34;Num users&#34;</span>
+</span></span><span style="display:flex;"><span>, <span style="color:#00f">count</span>(<span style="color:#00f">distinct</span>(from_instance)) <span style="color:#00f">as</span> <span style="color:#009c00">&#34;Num urls&#34;</span>
+</span></span><span style="display:flex;"><span>, <span style="color:#00f">mode</span>(<span style="color:#00f">case</span> <span style="color:#00f">when</span> bot=<span style="color:#009c00">&#39;False&#39;</span> <span style="color:#00f">then</span> username <span style="color:#00f">end</span>) <span style="color:#00f">as</span> <span style="color:#009c00">&#34;Most freq non-bot&#34;</span>
+</span></span><span style="display:flex;"><span>, <span style="color:#00f">mode</span>(<span style="color:#00f">case</span> <span style="color:#00f">when</span> bot=<span style="color:#009c00">&#39;True&#39;</span> <span style="color:#00f">then</span> username <span style="color:#00f">end</span>) <span style="color:#00f">as</span> <span style="color:#009c00">&#34;Most freq bot&#34;</span>
+</span></span><span style="display:flex;"><span>, <span style="color:#00f">mode</span>(base_url) <span style="color:#00f">as</span> <span style="color:#009c00">&#34;Most freq host&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#00f">from</span> mastodon_toot
+</span></span><span style="display:flex;"><span><span style="color:#00f">group</span> <span style="color:#00f">by</span> 1
+</span></span><span style="display:flex;"><span><span style="color:#00f">order</span> <span style="color:#00f">by</span> 1;
+</span></span></code></pre></div><p><img src="00000005.png" alt="Raw daily counts of activity"><em>Raw daily counts of activity</em></p>
+<p>️ℹ️ ️The first few days were a bit sporadic as I was playing with the data collection. Once everything was setup I was generally seeing</p>
+<ul>
+<li>200,000 toots a day from 50,000 users</li>
+<li>masterdon.social was the most popular host</li>
+<li>news organisations are the biggest generator of content (and they don’t always set the “bot” attribute)</li>
+</ul>
+<h2 id="the-mastodon-app-landscape">The Mastodon app landscape</h2>
+<p>What clients are used to access mastodon instance. We take the query the mastodon_toot table, excluding &ldquo;bots&rdquo; and load query results into the mastodon_app_df Panda dataframe</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>%%<span style="color:#00f">sql</span>
+</span></span><span style="display:flex;"><span>mastodon_app_df &lt;&lt; 
+</span></span><span style="display:flex;"><span>    <span style="color:#00f">select</span> *
+</span></span><span style="display:flex;"><span>    <span style="color:#00f">from</span> mastodon_toot
+</span></span><span style="display:flex;"><span>    <span style="color:#00f">where</span> app <span style="color:#00f">is</span> <span style="color:#00f">not</span> <span style="color:#00f">null</span> 
+</span></span><span style="display:flex;"><span>    <span style="color:#00f">and</span> app &lt;&gt; <span style="color:#009c00">&#39;&#39;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#00f">and</span> bot=<span style="color:#009c00">&#39;False&#39;</span>;
+</span></span></code></pre></div><p><a href="https://seaborn.pydata.org/">Seaborn</a> is a visualization library for statistical graphics in Python, built on the top of <a href="https://matplotlib.org/">matplotlib</a>. It also works really well with Panda data structures.</p>
+<p>We can use <a href="https://seaborn.pydata.org/generated/seaborn.countplot.html">seaborn.countplot</a> to show the counts of Mastodon app usage observations in each categorical bin using bars. Note, we are limiting this to the 10 highest occurances</p>
+<pre><code>sns.countplot(data=mastodon_app_df, y=&quot;app&quot;, order=mastodon_app_df.app.value_counts().iloc[:10].index)
+</code></pre>
+<p><img src="00000006.png" alt="Web, Ivory and Moa are popular ways of toot’ing"><em>Web, Ivory and Moa are popular ways of toot’ing</em></p>
+<p>ℹ️ The Mastodon application landscape is rapidly changing. Web usage is the preferred client, with mobile apps like Ivory, Moa, Tusky and the Mastodon app</p>
+<p>⚠️ The <a href="https://mastodonpy.readthedocs.io/en/stable/02_return_values.html#toot-status-dicts">Mastodon API</a> attempts to report application for the client used to post the toot. Generally this attribute does not federate and is therefore undefined for remote toots.</p>
+<h2 id="time-of-day-mastodon-usage">Time of day Mastodon usage</h2>
+<p>Let’s see when Mastodon is used throughout the day and night. I want to get a raw hourly count of <em>toots</em> each hour of each day. We can load the results of this query into the mastodon_usage_df dataframe</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>%%<span style="color:#00f">sql</span>
+</span></span><span style="display:flex;"><span>mastodon_usage_df &lt;&lt; 
+</span></span><span style="display:flex;"><span>    <span style="color:#00f">select</span> strftime(created_tz, <span style="color:#009c00">&#39;%Y/%m/%d %a&#39;</span>) <span style="color:#00f">as</span> created_day
+</span></span><span style="display:flex;"><span>    , date_part(<span style="color:#009c00">&#39;hour&#39;</span>, created_tz) <span style="color:#00f">as</span> created_hour
+</span></span><span style="display:flex;"><span>    , <span style="color:#00f">count</span>(*) <span style="color:#00f">as</span> num
+</span></span><span style="display:flex;"><span>    <span style="color:#00f">from</span> mastodon_toot
+</span></span><span style="display:flex;"><span>    <span style="color:#00f">group</span> <span style="color:#00f">by</span> 1,2 
+</span></span><span style="display:flex;"><span>    <span style="color:#00f">order</span> <span style="color:#00f">by</span> 1,2;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sns.lineplot(<span style="color:#00f">data</span>=mastodon_usage_df, x=<span style="color:#009c00">&#34;created_hour&#34;</span>, y=<span style="color:#009c00">&#34;num&#34;</span>, hue=<span style="color:#009c00">&#34;created_day&#34;</span>).set_xticks(range(24))
+</span></span></code></pre></div><p><img src="00000007.png" alt=""></p>
+<p>⏰ It was interesting to see daily activity follow a very similar usage pattern.</p>
+<ul>
+<li>The lowest activity was seen at 3:00pm in Australia (12:00pm in China, 8:00pm in California and 4:00am in London)</li>
+<li>The highest activity was seen at 2:00am in Australia (11:00pm in China, 7:00am in California and 3:00pm in London)</li>
+</ul>
+<h2 id="language-usage">Language usage</h2>
+<p>The language of the toot, can be specified by the server or the client — so it’s not always an accurate indicator of the language within the toot. So consider this is a wildly inaccurate investigation of language tags.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>%%<span style="color:#00f">sql</span>
+</span></span><span style="display:flex;"><span>mastodon_usage_df &lt;&lt; 
+</span></span><span style="display:flex;"><span>    <span style="color:#00f">select</span> *
+</span></span><span style="display:flex;"><span>    <span style="color:#00f">from</span> mastodon_toot;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sns.countplot(<span style="color:#00f">data</span>=mastodon_usage_df, y=<span style="color:#009c00">&#34;language_name&#34;</span>, <span style="color:#00f">order</span>=mastodon_usage_df.language_name.value_counts().iloc[:20].<span style="color:#00f">index</span>)
+</span></span></code></pre></div><p><img src="00000008.png" alt="English is prominent language, followed by Japanese"><em>English is prominent language, followed by Japanese</em></p>
+<h2 id="toot-length-by-language-usage">Toot length by language usage</h2>
+<p>I was also curious what the length of toots looked like over different languages.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>%%<span style="color:#00f">sql</span>
+</span></span><span style="display:flex;"><span>mastodon_lang_df &lt;&lt; 
+</span></span><span style="display:flex;"><span>    <span style="color:#00f">select</span> *
+</span></span><span style="display:flex;"><span>    <span style="color:#00f">from</span> mastodon_toot
+</span></span><span style="display:flex;"><span>    <span style="color:#00f">where</span> <span style="color:#00f">language</span> <span style="color:#00f">not</span> <span style="color:#00f">in</span> (<span style="color:#009c00">&#39;unknown&#39;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sns.boxplot(<span style="color:#00f">data</span>=mastodon_lang_df, x=<span style="color:#009c00">&#34;characters&#34;</span>, y=<span style="color:#009c00">&#34;language_name&#34;</span>, whis=100, orient=<span style="color:#009c00">&#34;h&#34;</span>, <span style="color:#00f">order</span>=mastodon_lang_df.language_name.value_counts().iloc[:20].<span style="color:#00f">index</span>)
+</span></span></code></pre></div><p><img src="00000009.png" alt=""></p>
+<p>What’s interesting to see is the typical Chinese, Japanese and Korean toot is shorter than English, wheres Galicia and Finish messages are longer. A possible explanation is logographic languages (like Mandarin) may be able to convey more with fewer characters.</p>
+<h2 id="closing-thoughts">Closing thoughts</h2>
+<p>The <a href="https://www.bleepingcomputer.com/news/technology/mastodon-now-has-over-1-million-users-amid-twitter-tensions/">rise of Mastodon</a> is something I’ve been really interested in. The open sharing nature has helped with the rapid adoption by communities and new users (<a href="https://data-folks.masto.host/@saubury">myself included</a>).</p>
+<p>It’s been great to explore the <a href="https://en.wikipedia.org/wiki/Fediverse">fediverse</a> with powerful open source distributed stream processing tools. Performing exploratory data analysis in a Jupyter notebook with DuckDB is like pressing a turbo button ⏩. Reading parquet from s3 without leaving the notebook is neat, and DuckDB’s ability to run queries directly on Pandas data without ever importing or copying any data is really snappy.</p>
+<p>I’m going to conclude with my two favourite statistics. DuckDB memory used to hold <strong>1.6 million toots is just 745.5MB</strong> and to process my results in <strong>0.7 seconds</strong> is like a super power 🪄</p>
+<ul>
+<li>⚒️ <a href="https://github.com/saubury/mastodon-stream/">Code</a></li>
+<li>🐘 <a href="https://data-folks.masto.host/@saubury">Simon on Mastodon</a></li>
+</ul>
+
+      </article>
+      
+    </main>
+    <nav class="end-nav side-padding">
+      
+      <a ontouchstart="cardPressed.call(this)" ontouchend="cardReleased.call(this)" ontouchmove="cardReleased.call(this)" 
+  href="https://simonaubury.com/posts/202301_wildlife_monitoring/" class="card blog-card bc-next" rel="bookmark" >
+  
+  <div class="card-img-container">
+    <p class="card-img-overlay">Next Article</p>
+    <picture>
+      
+      
+      
+      <source srcset="https://simonaubury.com/posts/202301_wildlife_monitoring/00000002_hude9b391c17d31f38a10d22707f9d3fab_142649_400x0_resize_q75_lanczos.jpg 1x, https://simonaubury.com/posts/202301_wildlife_monitoring/00000002_hude9b391c17d31f38a10d22707f9d3fab_142649_800x0_resize_q75_lanczos.jpg 2x, https://simonaubury.com/posts/202301_wildlife_monitoring/00000002_hude9b391c17d31f38a10d22707f9d3fab_142649_1200x0_resize_q75_lanczos.jpg 3x">
+      <img src="https://simonaubury.com/posts/202301_wildlife_monitoring/00000002_hude9b391c17d31f38a10d22707f9d3fab_142649_400x0_resize_q75_lanczos.jpg" class="card-img" >
+    </picture>
+  </div>
+  
+  <article class="card-body">
+    <h2 class="card-title">Real-Time Wildlife Monitoring with Apache Kafka</h2>
+    <p class="card-text">Where did I leave the zebra?</p>
+    <div class="card-subtext muted-text">
+      <p>Posted <time datetime="2023-01-19">Jan 19, 2023</time></p>
+      <p>#Kafka </p>
+    </div>
+  </article>
+</a>
+      
+    </nav>
+    <footer class="side-padding" style="background-image: url('https://simonaubury.com/img/home-blob-flip.svg');">
+    <a href="https://simonaubury.com/" class="footer-link">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/home.svg" alt="Home">
+    
+    </a>
+    
+    
+    
+    <a href="https://github.com/saubury" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/github.svg" alt="GitHub"/>
+    
+    </a>
+    
+    
+    
+    <a href="https://www.linkedin.com/in/simonaubury" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/linkedin.svg" alt="LinkedIn"/>
+    
+    </a>
+    
+    
+    <a href="https://simonaubury.com/index.xml" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/rss.svg" alt="RSS"/>
+    
+    </a>
+    
+    
+    
+    
+    
+    
+    
+    
+</footer>
+    
+  <script defer src="https://simonaubury.com/js/katex.min.js"></script>
+
+
+  <script defer src="https://simonaubury.com/js/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+
+<script src="https://simonaubury.com/js/core.min.js"></script>
+
+  </body>
+</html>

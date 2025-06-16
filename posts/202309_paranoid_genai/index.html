@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en-au" dir="ltr">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>My data, your LLM &middot; Simon Aubury</title>
+  <meta name="description" content="Paranoid analysis of iMessage chats with OpenAI, LlamaIndex &amp; DuckDB" />
+  <link rel="apple-touch-icon" sizes="180x180" href="https://simonaubury.com/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://simonaubury.com/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://simonaubury.com/favicon-16x16.png">
+  <link href="https://simonaubury.com/css/katex.min.css" rel="stylesheet">
+  
+  
+  
+  
+  <link href="https://simonaubury.com/css/concated.min.css" rel="stylesheet">
+  
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7N67PMRZ6N"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-7N67PMRZ6N', { 'anonymize_ip': false });
+}
+</script>
+
+  
+</head>
+
+  <body class="single-body">
+    <nav class="nav-bar side-padding">
+  <h1 class="nav-header"><a href="https://simonaubury.com/" class="nav-text">simon aubury</a></h1>
+  <div class="hamburger-menu">
+    <input class="hamburger-menu-button" type="checkbox"
+      onclick="hamburgerMenuPressed.call(this)"
+      aria-label="Hamburger Menu Button"
+    >
+    <div class="hamburger-menu-icon">
+      <span></span>
+      <span></span>
+    </div>
+    <ul id="menu" class="hamburger-menu-overlay">
+      <li><a href="https://simonaubury.com/" class="hamburger-menu-overlay-link">Home</a></li>
+      <li><a href="https://simonaubury.com/slides/" class="hamburger-menu-overlay-link">Presentation slides</a></li>
+      <li><a href="https://simonaubury.com/about-me/" class="hamburger-menu-overlay-link">About Simon</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/cat/" class="hamburger-menu-overlay-link">Cat</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/cdc/" class="hamburger-menu-overlay-link">CDC</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/duckdb/" class="hamburger-menu-overlay-link">duckdb</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/flink/" class="hamburger-menu-overlay-link">flink</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/generativeai/" class="hamburger-menu-overlay-link">GenerativeAI</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/gpt/" class="hamburger-menu-overlay-link">GPT</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/homeassistant/" class="hamburger-menu-overlay-link">homeassistant</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/kafka/" class="hamburger-menu-overlay-link">Kafka</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/ml/" class="hamburger-menu-overlay-link">ML</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/raspberry-pi/" class="hamburger-menu-overlay-link">Raspberry Pi</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/snowflake/" class="hamburger-menu-overlay-link">snowflake</a></li>
+      
+      <li><a href="https://simonaubury.com/index.xml" class="hamburger-menu-overlay-link">rss</a></li>
+    </ul>
+  </div>
+</nav>
+
+    <main class="content side-text-padding">
+      <article class="post dropcase">
+        <header class="post-header">
+          <h1 class="post-title">My data, your LLM</h1>
+          <p class="post-date">Posted <time datetime="2023-09-10">Sep 10, 2023</time></p>
+        </header>
+        <picture class="post-figure">
+          
+          
+          
+          <source srcset="https://simonaubury.com/posts/202309_paranoid_genai/00000001_hu074179da6abb53be1247ad3607aa30fe_229407_711x0_resize_lanczos_3.png 1x, https://simonaubury.com/posts/202309_paranoid_genai/00000001_hu074179da6abb53be1247ad3607aa30fe_229407_1422x0_resize_lanczos_3.png 2x, https://simonaubury.com/posts/202309_paranoid_genai/00000001_hu074179da6abb53be1247ad3607aa30fe_229407_2133x0_resize_lanczos_3.png 3x">
+          <img src="https://simonaubury.com/posts/202309_paranoid_genai/00000001_hu074179da6abb53be1247ad3607aa30fe_229407_711x0_resize_lanczos_3.png" >
+        </picture>
+        
+        
+        <h1 id="my-data-your-llm--paranoid-analysis-of-imessage-chats-with-openai-llamaindex--duckdb">My data, your LLM — paranoid analysis of iMessage chats with OpenAI, LlamaIndex &amp; DuckDB</h1>
+<p><em>Can I safely combine my local personal data with a public large language model to understand my texting behaviour? A project combining natural language and generative AI models to explore my private data without sharing (too much of) my personal life with the robots.</em></p>
+<p><img src="./00000000.png" alt="Data architecture — image by author"><em>Data architecture — image by author</em></p>
+<p>✍️ A blog about exploratory data analysis of my private iMessage chats — with equal parts of wonder and paranoia.</p>
+<h2 id="motivation-">Motivation 🤔</h2>
+<p><a href="https://en.wikipedia.org/wiki/IMessage">iMessage</a> is an instant messaging service for text communication between users on Apple devices. Behind the scenes, iMessage uses a local <a href="https://en.wikipedia.org/wiki/SQLite">SQLite</a> database to store a copy of message conversations. This means I have a complete local copy of all my messages in a relational database on my Mac laptop.</p>
+<p>With 2 years of iMessage history I wanted to explore the text data to create data visualisations — with natural language prompts. The data however is very personal — so I needed to use a privacy preserving design to ensure my personal communications doesn’t leave my machine.</p>
+<h3 id="tech-stack-">Tech stack 🔧</h3>
+<p>To explore my text messages I’m using</p>
+<ul>
+<li>
+<p><a href="https://duckdb.org/">DuckDB</a> open-source, embedded, in-process OLAP database. With the <a href="https://duckdb.org/docs/extensions/sqlite_scanner.html">SQLite extension</a> to directly read from an iMessage SQLite database file</p>
+</li>
+<li>
+<p><a href="https://www.llamaindex.ai/">LlamaIndex</a> — framework for connecting custom data sources to large language models, allowing for natural language querying of my data</p>
+</li>
+<li>
+<p><a href="https://platform.openai.com/docs/models/gpt-3-5">OpenAI gpt-3.5-turbo</a> model for code generation to create the python to make the visualisations</p>
+</li>
+<li>
+<p><a href="https://mitmproxy.org/">mitmproxy</a> — an open source interactive HTTPS proxy to view encrypted network traffic</p>
+</li>
+</ul>
+<h3 id="what-am-i-working-towards-">What am I working towards? 📈</h3>
+<p>My goal is explore my messaging behaviour, such as texting frequency and time of day usage. I want to “talk” to my data using generative AI — to create visualisations on top of my private data.</p>
+<p><img src="./00000001.png" alt="Image by author"><em>Image by author</em></p>
+<p>🎉 Tada! Creating charts locally on my private data from a natural language prompt. Let’s now see how I built this, breaking this down into three parts</p>
+<ul>
+<li>
+<p><a href="#wrangling-imessage-data-with-duckdb-%F0%9F%A6%86">Wrangling iMessage data </a>— with DuckDB to ingest and pre-process my iMessage history</p>
+</li>
+<li>
+<p><a href="#inspecting-the-network-traffic-with-mitmproxy-%F0%9F%95%B5%EF%B8%8F%E2%80%8D%E2%99%80%EF%B8%8F">Inspecting the network traffic</a> — with a “Man in the Middle” proxy to view request and response encrypted traffic.</p>
+</li>
+<li>
+<p><a href="#prompted-visualisations-with-pandasqueryengine-and-llamaindex-%F0%9F%93%8A">Prompted visualisations</a> — with PandasQueryEngine and LlamaIndex  connecting my local custom data iMessage data sources to a public large language models.</p>
+</li>
+</ul>
+<p>🛠️ The complete notebook is available at <a href="https://github.com/saubury/paranoid_text_LLM/">https://github.com/saubury/paranoid_text_LLM/</a></p>
+<h2 id="wrangling-imessage-data-with-duckdb-">Wrangling iMessage data with DuckDB 🦆</h2>
+<p>The first task is to extract my iMessages and transform into a sensible form for data analysis.</p>
+<p>⏩ If you’re not interested in the data engineering step you can jump ahead to reading about <a href="#talking-to-my-data--generative-ai-on-pandas-with-llamaindex-%F0%9F%97%A3%EF%B8%8F">generative AI with Pandas and LlamaIndex</a>.</p>
+<p>I’ve <a href="https://towardsdatascience.com/my-very-personal-data-warehouse-fitbit-activity-analysis-with-duckdb-8d1193046133">written before</a> about <a href="https://duckdb.org/why_duckdb">DuckDB</a> — a lightweight, free yet powerful analytical database designed to streamline data analysis workflows which runs locally. I’m using 🦆 DuckDB’s as a quick way to ingest and pre-process my iMessage history. My first task is to load the <a href="https://duckdb.org/docs/extensions/sqlite_scanner">SQLite Scanner DuckDB extension</a> which allows DuckDB to directly read data from a SQLite database such as iMessage.</p>
+<pre tabindex="0"><code>INSTALL sqlite_scanner;
+LOAD sqlite_scanner;
+</code></pre><p>If you are on a Mac, logged into your iCloud account you can copy the local iMessage SQLite database and load it. If you receive the error Operation not permitted you may need to run the command in a terminal and accept the prompts to interact with privileged files.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cp ~/Library/Messages/chat.db ./sql/chat.db
+</span></span></code></pre></div><p>With DuckDB, we will open the iMessage SQLite database, with the <a href="https://duckdb.org/docs/sql/statements/attach.html">attach</a> command. This will open the SQLite database file ./sql/chat.db in the schema namespace chat_sqlite chat.</p>
+<pre tabindex="0"><code>ATTACH &#39;./sql/chat.db&#39; as chat_sqlite (TYPE sqlite,  READ_ONLY TRUE);
+</code></pre><h3 id="load-messages-into-table">Load messages into table</h3>
+<p>We create the chat_messages DuckDB table by joining three tables from the iMessage SQLite database. Within the same query I also want to</p>
+<ul>
+<li>
+<p>determine the message time by evaluating the interval (number of seconds since EPOC of <code>2001-01-01</code>)</p>
+</li>
+<li>
+<p>extract the phone number country calling code (eg, +1, +61)</p>
+</li>
+<li>
+<p>redact phone number like <code>+61412341234</code> to <code>+614...41234</code> (for screenshots in this blog)</p>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#00f">CREATE</span> <span style="color:#00f">OR</span> <span style="color:#00f">REPLACE</span> <span style="color:#00f">TABLE</span> chat_messages <span style="color:#00f">AS</span>
+</span></span><span style="display:flex;"><span><span style="color:#00f">SELECT</span> <span style="color:#00f">TIMESTAMP</span> <span style="color:#009c00">&#39;2001-01-01&#39;</span> + INTERVAL (msg.date / 1000000000) seconds <span style="color:#00f">as</span> message_date,
+</span></span><span style="display:flex;"><span>msg.text,
+</span></span><span style="display:flex;"><span>msg.attributedBody,
+</span></span><span style="display:flex;"><span>msg.is_from_me,
+</span></span><span style="display:flex;"><span><span style="color:#00f">CASE</span> <span style="color:#00f">WHEN</span> ct.chat_identifier <span style="color:#00f">like</span> <span style="color:#009c00">&#39;+1%&#39;</span> <span style="color:#00f">then</span> <span style="color:#00f">SUBSTRING</span>(ct.chat_identifier, 1, 2) <span style="color:#00f">when</span> ct.chat_identifier <span style="color:#00f">like</span> <span style="color:#009c00">&#39;+%&#39;</span> <span style="color:#00f">then</span> <span style="color:#00f">SUBSTRING</span>(ct.chat_identifier, 1, 3) <span style="color:#00f">end</span> <span style="color:#00f">as</span> phone_country_calling_code,
+</span></span><span style="display:flex;"><span>regexp_replace(ct.chat_identifier, <span style="color:#009c00">&#39;^(\+[0-9][0-9][0-9])([0-9][0-9][0-9])&#39;</span>, <span style="color:#009c00">&#39;\1...\3&#39;</span>) <span style="color:#00f">as</span> phone_number
+</span></span><span style="display:flex;"><span><span style="color:#00f">FROM</span> chat_sqlite.chat ct
+</span></span><span style="display:flex;"><span><span style="color:#00f">JOIN</span> chat_sqlite.chat_message_join cmj <span style="color:#00f">ON</span> ct.<span style="color:#009c00">&#34;ROWID&#34;</span> = cmj.chat_id
+</span></span><span style="display:flex;"><span><span style="color:#00f">JOIN</span> chat_sqlite.message msg <span style="color:#00f">ON</span> cmj.message_id = msg.<span style="color:#009c00">&#34;ROWID&#34;</span>;
+</span></span></code></pre></div><p>I can peek at the chat_messages DuckDB table by querying it (with good old select * ).</p>
+<p><img src="./00000002.png" alt="Sample of chat_messages — image by author"><em>Sample of chat_messages — image by author</em></p>
+<p>I can now send the contents of the chat_messages DuckDB table into a chat_messages_df dataframe with <code>&lt;&lt;</code> within a sql magic.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>%%<span style="color:#00f">sql</span>
+</span></span><span style="display:flex;"><span>chat_messages_df &lt;&lt;
+</span></span><span style="display:flex;"><span>  <span style="color:#00f">SELECT</span> *
+</span></span><span style="display:flex;"><span>  <span style="color:#00f">FROM</span> chat_messages
+</span></span><span style="display:flex;"><span>  <span style="color:#00f">ORDER</span> <span style="color:#00f">BY</span> message_date <span style="color:#00f">DESC</span>;
+</span></span></code></pre></div><h3 id="decoding-attributedbody-">Decoding attributedBody 🪄</h3>
+<p>The iMessage database has a mixture of encoding formats, with older messages as plain text in the text field, with newer messages encoded in the attributedBody field. Sometime around November 2022 the messages started coming in in new format which migh be related to a message upgrade related to the release of iOS 16. I’m thankful to the <a href="https://github.com/my-other-github-account/imessage_tools/">iMessage-Tools</a> project which had the logic to extract the text content is hidden within the attributedBody field. The decode_message utility function extracts the text regardless of format.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#00f">import</span> re
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#00f">def</span> <span style="color:#c34e00">decode_message</span>(row):
+</span></span><span style="display:flex;"><span>  msg_text = row[<span style="color:#009c00">&#39;text&#39;</span>]
+</span></span><span style="display:flex;"><span>  msg_attributed_body = row[<span style="color:#009c00">&#39;attributedBody&#39;</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f00;font-style:italic"># Logic from https://github.com/my-other-github-account/imessage_tools</span>
+</span></span><span style="display:flex;"><span>  body=<span style="color:#009c00">&#39;&#39;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#00f">if</span> not msg_text:
+</span></span><span style="display:flex;"><span>    body = msg_text
+</span></span><span style="display:flex;"><span>  <span style="color:#00f">elif</span> msg_attributed_body is <span style="color:#00f">None</span>:
+</span></span><span style="display:flex;"><span>    body = <span style="color:#009c00">&#39;&#39;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#00f">else</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#00f">try</span>:
+</span></span><span style="display:flex;"><span>      msg_attributed_body = msg_attributed_body.decode(<span style="color:#009c00">&#39;utf-8&#39;</span>, errors=<span style="color:#009c00">&#39;replace&#39;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#00f">except</span> AttributeError <span style="color:#00f">as</span> err:
+</span></span><span style="display:flex;"><span>      <span style="color:#00f">pass</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#00f">if</span> <span style="color:#009c00">&#34;NSNumber&#34;</span> in str(msg_attributed_body):
+</span></span><span style="display:flex;"><span>      msg_attributed_body = str(msg_attributed_body).split(<span style="color:#009c00">&#34;NSNumber&#34;</span>)[0]
+</span></span><span style="display:flex;"><span>      <span style="color:#00f">if</span> <span style="color:#009c00">&#34;NSString&#34;</span> in msg_attributed_body:
+</span></span><span style="display:flex;"><span>        msg_attributed_body = str(msg_attributed_body).split(<span style="color:#009c00">&#34;NSString&#34;</span>)[1]
+</span></span><span style="display:flex;"><span>        <span style="color:#00f">if</span> <span style="color:#009c00">&#34;NSDictionary&#34;</span> in msg_attributed_body:
+</span></span><span style="display:flex;"><span>          msg_attributed_body = str(msg_attributed_body).split(<span style="color:#009c00">&#34;NSDictionary&#34;</span>)[0]
+</span></span><span style="display:flex;"><span>          msg_attributed_body = msg_attributed_body[6:-12]
+</span></span><span style="display:flex;"><span>          body = msg_attributed_body
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  body = re.sub(<span style="color:#009c00">r</span><span style="color:#009c00">&#39;\n&#39;</span>, <span style="color:#009c00">&#39; &#39;</span>, body)
+</span></span><span style="display:flex;"><span>  <span style="color:#00f">return</span> body
+</span></span></code></pre></div><h3 id="inline-message-extraction">Inline message extraction</h3>
+<p>We&rsquo;ll use a the <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.apply.html">pandas apply()</a> method to apply the decode_message function to the DataFrame. In short, we’ll set message_text to something readable, regardless of the format the text came in.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>chat_messages_df[<span style="color:#009c00">&#39;message_text&#39;</span>] = chat_messages_df.apply(decode_message, axis=1)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>chat_messages_df.head()
+</span></span></code></pre></div><p>With the messages decoded, I can peek at the first few records.</p>
+<p><img src="./00000003.png" alt="Sample of iMessage texts sent and received — image by author"><em>Sample of iMessage texts sent and received — image by author</em></p>
+<p>With my several thousand iMessages loaded into the chat_messages_df dataframe, I can move onto some prompted analysis.</p>
+<h2 id="talking-to-my-data--generative-ai-on-pandas-with-llamaindex-">Talking to my data — Generative AI on Pandas with LlamaIndex 🗣️</h2>
+<p>I’ll be using <a href="https://www.llamaindex.ai/">LlamaIndex</a> — a flexible data framework for connecting custom data sources to large language models. LlamaIndex uses <a href="https://research.ibm.com/blog/retrieval-augmented-generation-RAG">Retrieval Augmented Generation (RAG)</a> systems that combine a large language model (such as those provided by OpenAI or Hugging Face) with a private data set (set as my personal copy of iMessages).</p>
+<p>The RAG pipeline retrieves the most relevant context for my query (such as the shape of my data), and passes that to the LLM to generate a response. The response should be the python code necessary to execute on my local data to visualise a result in response to my query.</p>
+<p><img src="./00000004.png" alt=""><em>LlamaIndex — <a href="https://gpt-index.readthedocs.io/en/latest/getting_started/concepts.html">High-Level Concepts</a></em></p>
+<h3 id="llamaindex">LlamaIndex</h3>
+<p>I will be using the paid OpenAI service, and have created a <a href="https://platform.openai.com/account/api-keys">secret API key</a> which is saved in the notebook.cfg configuration file.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#00f">import</span> pandas <span style="color:#00f">as</span> pd
+</span></span><span style="display:flex;"><span><span style="color:#00f">from</span> llama_index.query_engine.pandas_query_engine <span style="color:#00f">import</span> PandasQueryEngine
+</span></span><span style="display:flex;"><span><span style="color:#00f">import</span> openai
+</span></span><span style="display:flex;"><span><span style="color:#00f">import</span> configparser
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>config = configparser.ConfigParser()
+</span></span><span style="display:flex;"><span>config.read(<span style="color:#009c00">&#39;notebook.cfg&#39;</span>)
+</span></span><span style="display:flex;"><span>openai_api_token = config.get(<span style="color:#009c00">&#39;openai&#39;</span>, <span style="color:#009c00">&#39;api_token&#39;</span>)
+</span></span><span style="display:flex;"><span>openai.api_key =  openai_api_token
+</span></span></code></pre></div><p>I can now take my chat_messages_dfdata frame — and ask a question like “What is the most frequent phone_number?”</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>query_engine = PandasQueryEngine(df=chat_messages_df)
+</span></span><span style="display:flex;"><span>response = query_engine.query(<span style="color:#009c00">&#34;What is the most frequent phone_number?&#34;</span>)
+</span></span><span style="display:flex;"><span>print(response)
+</span></span></code></pre></div><p>Which generates a small fragment of Python code, which can be applied to my data .. and gives me the value for the most frequently iMessaged user!</p>
+<pre tabindex="0"><code>&gt; Pandas Instructions:
+eval(&#34;df[&#39;phone_number&#39;].value_counts().idxmax()&#34;)
+
++61 412 321915
+</code></pre><p>🎉 Whoa — that’s pretty amazing. By simply asking the query engine for a goal, the public LLM has generated the correct Python code that when run locally on my data frame gives me the correct answer. My wife will be happy to know she is the most frequently messaged from my phone 😅!</p>
+<p>Let’s have a peek into the traffic to see what’s happening behind the scenes.</p>
+<h2 id="inspecting-the-network-traffic-with-mitmproxy-">Inspecting the network traffic with mitmproxy 🕵️‍♀️</h2>
+<p>I was curious to see what kinds of requests the code was making to OpenAI and what kind of responses it is getting back.</p>
+<p>⏩ This is an optional step for the paranoid, and if you’re not interested in the network analysis you can skip to <a href="#prompted-visualisations-with-pandasqueryengine-and-llamaindex-%F0%9F%93%8A">prompted visualisations</a> to analyse data.</p>
+<p>I used a <a href="https://earthly.dev/blog/mitmproxy/">great guide</a> to get started with <a href="https://mitmproxy.org/">mitmproxy</a> to observe to capture encrypted  requests &amp; responses. The short summary is the mitmproxy proxy sits between the local Python code and the internet, to intercept and inspect SSL/TLS-protected traffic.</p>
+<p>To view the traffic, start mitmweb proxy and set the following environment variables to metwork traffic passes through the local proxy, signed with a local certificate (which is conveniently created when you first run mitmproxy).</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#00f">import</span> os
+</span></span><span style="display:flex;"><span>os.environ[<span style="color:#009c00">&#39;http_proxy&#39;</span>] = <span style="color:#009c00">&#34;http://127.0.0.1:8080&#34;</span> 
+</span></span><span style="display:flex;"><span>os.environ[<span style="color:#009c00">&#39;https_proxy&#39;</span>] = <span style="color:#009c00">&#34;https://127.0.0.1:8080&#34;</span> 
+</span></span><span style="display:flex;"><span>os.environ[<span style="color:#009c00">&#39;REQUESTS_CA_BUNDLE&#39;</span>] = <span style="color:#009c00">&#34;/Users/saubury/.mitmproxy/mitmproxy-ca-cert.pem&#34;</span>
+</span></span></code></pre></div><p>With the proxy established, both network requests and responses are visible in the web dashboard.</p>
+<p><img src="./00000005.png" alt="“Man in the Middle” HTTPS proxy — mitmproxy web page"><em>“Man in the Middle” HTTPS proxy — mitmproxy web page</em></p>
+<p>With the proxy running, I can start running some tests.</p>
+<h2 id="prompted-visualisations-with-pandasqueryengine-and-llamaindex-">Prompted visualisations with PandasQueryEngine and LlamaIndex 📊</h2>
+<h3 id="when-do-i-send-and-receive-texts-throughout-the-day">When do I send and receive texts throughout the day?</h3>
+<p>Let’s try a query and see what requests and responses are seen by the proxy. I’ll use the <a href="https://gpt-index.readthedocs.io/en/stable/examples/query_engine/pandas_query_engine.html">PandasQueryEngine</a> of LlamaIndex to query my iMessage data, and ask for the following visualisation to be created …</p>
+<blockquote>
+<p>Extract hour of day from message_date. Visualize a distribution of the hour extracted from message_date. Add a title and label the axis. Use colors and add a gap between bars. Colour the bars with an hour of 5 in red and the rest in blue.</p>
+</blockquote>
+<p>LlamaIndex will compose a request to OpenAI, and I can capture the outward request</p>
+<p><img src="./00000006.png" alt="Request sent to OpenAI"><em>Request sent to OpenAI</em></p>
+<p>It appears that a sample (5 rows) of my data is sent outwards to describe the data. In this case I’m not all that worried as these are simply dates, but obviously sending a sample of something more personal would concern me more.</p>
+<p>Within a few seconds, LlamaIndex will relay the response and we can peek at the code returned by OpenAI.</p>
+<p><img src="./00000007.png" alt="Response returned with python embedded"><em>Response returned with python embedded</em></p>
+<p>The code is then automatically run against my entire local dataset. I was especially impressed the code to extract the “hour” from the timestamp field worked as expected. The result of the generated python code appears exactly as I had asked.</p>
+<p><img src="./00000008.png" alt="Message time distribution by hour of day — image by author"><em>Message time distribution by hour of day — image by author</em></p>
+<p>🎉 Voilà — the code is correct — and generates and run code that renders a distribution shows most of my messages and sent between 6am and 9pm.</p>
+<h2 id="further-experiments-">Further experiments 🔬</h2>
+<p>Let’s see a few more examples of data queries, and the payloads which need to be sent to create working python code.</p>
+<h3 id="most-frequent-contacts">Most frequent contacts</h3>
+<blockquote>
+<p>Create a plot a bar chart showing the frequency of top eight phone_numbers. The X axis labels should be at a 45 degree angle. Use a different colour for each bar</p>
+</blockquote>
+<p><img src="./00000009.png" alt="Most frequent contacts — image by author"><em>Most frequent contacts — image by author</em></p>
+<p>To build a bar chart of my most frequent contacts, LlamaIndex sent a sample of 5 phone numbers to OpenAI to describe the datatypes expected in the dataframe. The resulting Python code executed locally on my entire data set created the correct bar chart. I was impressed the request to turn the X-axis labels 45 degrees was honoured.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#00f">import</span> pandas <span style="color:#00f">as</span> pd
+</span></span><span style="display:flex;"><span><span style="color:#00f">import</span> matplotlib.pyplot <span style="color:#00f">as</span> plt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f00;font-style:italic"># Count the frequency of each phone_number</span>
+</span></span><span style="display:flex;"><span>phone_number_counts = df[<span style="color:#009c00">&#39;phone_number&#39;</span>].value_counts().head(8)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f00;font-style:italic"># Create a bar chart</span>
+</span></span><span style="display:flex;"><span>plt.bar(phone_number_counts.index, phone_number_counts.values, color=[<span style="color:#009c00">&#39;red&#39;</span>, <span style="color:#009c00">&#39;blue&#39;</span>, <span style="color:#009c00">&#39;green&#39;</span>, <span style="color:#009c00">&#39;yellow&#39;</span>, <span style="color:#009c00">&#39;orange&#39;</span>, <span style="color:#009c00">&#39;purple&#39;</span>, <span style="color:#009c00">&#39;pink&#39;</span>, <span style="color:#009c00">&#39;brown&#39;</span>])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f00;font-style:italic"># Add a title</span>
+</span></span><span style="display:flex;"><span>plt.title(<span style="color:#009c00">&#39;Frequency of Top Eight Phone Numbers&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f00;font-style:italic"># Rotate x-axis labels by 45 degrees</span>
+</span></span><span style="display:flex;"><span>plt.xticks(rotation=45)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f00;font-style:italic"># Show the plot</span>
+</span></span><span style="display:flex;"><span>plt.show()
+</span></span></code></pre></div><h3 id="message-length">Message length</h3>
+<blockquote>
+<p>Visualize a distribution of the length of message_text. Use a logarithmic scale. Add a title and label both axis. Add a space between bars.</p>
+</blockquote>
+<p><img src="./00000010.png" alt="Distribution of the length of message text — image by author."></p>
+<p>To display a distribution of the length of messages, LlamaIndex sent the contents of 5 sample messages t to OpenAI. The resulting Python code executed locally on my entire data set created a lambda function to run locally to determine message length. A logarithmic scale was created, however my prompt to add a space between bars was incorrectly misinterpreted as at plt.tight_layout.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#00f">import</span> matplotlib.pyplot <span style="color:#00f">as</span> plt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f00;font-style:italic"># Calculate the length of each message_text</span>
+</span></span><span style="display:flex;"><span>df[<span style="color:#009c00">&#39;message_length&#39;</span>] = df[<span style="color:#009c00">&#39;message_text&#39;</span>].apply(<span style="color:#00f">lambda</span> x: len(x))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f00;font-style:italic"># Create a histogram of the message_length with a logarithmic scale</span>
+</span></span><span style="display:flex;"><span>plt.hist(df[<span style="color:#009c00">&#39;message_length&#39;</span>], bins=10, log=<span style="color:#00f">True</span>, edgecolor=<span style="color:#009c00">&#39;black&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f00;font-style:italic"># Add a title and label both axes</span>
+</span></span><span style="display:flex;"><span>plt.title(<span style="color:#009c00">&#39;Distribution of Message Text Length&#39;</span>)
+</span></span><span style="display:flex;"><span>plt.xlabel(<span style="color:#009c00">&#39;Message Length&#39;</span>)
+</span></span><span style="display:flex;"><span>plt.ylabel(<span style="color:#009c00">&#39;Frequency&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f00;font-style:italic"># Add a space between bars</span>
+</span></span><span style="display:flex;"><span>plt.tight_layout()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f00;font-style:italic"># Show the plot</span>
+</span></span><span style="display:flex;"><span>plt.show()
+</span></span></code></pre></div><h3 id="inbound-vs-outbound-messages">Inbound vs., outbound messages</h3>
+<blockquote>
+<p>Visualize a pie chart of the proportion of is_from_me. Label the value 0 as ‘inbound’. Add a percentage rounded to 1 decimal places.</p>
+</blockquote>
+<p><img src="./00000011.png" alt="Pie chart of the proportion inbound and outbound messages — image by author"><em>Pie chart of the proportion inbound and outbound messages — image by author</em></p>
+<p>To build a pie chart showing the proportion of inbound to outbound messages, LlamaIndex simply sent a sample of “is_from_me” boolean records to OpenAI. The resulting Python code executed locally on my entire data set created the correct pie chart. I was impressed the label of <em>outbound</em> to the value of <em>1</em>, which was a clever inference from me describing value <em>0</em> as <em>outbound</em>.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#00f">import</span> matplotlib.pyplot <span style="color:#00f">as</span> plt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f00;font-style:italic"># Count the number of occurrences of each value in the &#39;is_from_me&#39; column</span>
+</span></span><span style="display:flex;"><span>value_counts = df[<span style="color:#009c00">&#39;is_from_me&#39;</span>].value_counts()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f00;font-style:italic"># Create a pie chart using the value counts</span>
+</span></span><span style="display:flex;"><span>plt.pie(value_counts, labels=[<span style="color:#009c00">&#39;inbound&#39;</span>, <span style="color:#009c00">&#39;outbound&#39;</span>], autopct=<span style="color:#009c00">&#39;</span><span style="color:#009c00">%.1f%%</span><span style="color:#009c00">&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f00;font-style:italic"># Display the pie chart</span>
+</span></span><span style="display:flex;"><span>plt.show()
+</span></span></code></pre></div><h2 id="summary">Summary</h2>
+<p>To answer the question “can I safely combine my local personal data with a public large language model”— well, kind of sort of.</p>
+<p>I set a clear boundary between my personal iMessage data (kept private to my machine) and the public generative models to build the logic for my data analysis. I am satisfied with the compromises I made, with a handful of records shared outside of my network used to generate high-quality Python code quickly and effectively address my queries.</p>
+<p>Yes, I could next time use dummy data, inspect the code, obfuscate the payloads or run the models locally. In fact — that’s what I might do in a future blog.</p>
+<p>For now, I’m happy with my paranoid analysis of iMessage chats.</p>
+<p>🛠️ The complete notebook is available at <a href="https://github.com/saubury/paranoid_text_LLM/">https://github.com/saubury/paranoid_text_LLM/</a></p>
+
+      </article>
+      
+    </main>
+    <nav class="end-nav side-padding">
+      
+      <a ontouchstart="cardPressed.call(this)" ontouchend="cardReleased.call(this)" ontouchmove="cardReleased.call(this)" 
+  href="https://simonaubury.com/posts/202307_genai_camera/" class="card blog-card bc-next" rel="bookmark" >
+  
+  <div class="card-img-container">
+    <p class="card-img-overlay">Next Article</p>
+    <picture>
+      
+      
+      
+      <source srcset="https://simonaubury.com/posts/202307_genai_camera/00000001_hu8f4d0833d1b632e9726f7502bf912a31_1429964_400x0_resize_lanczos_3.png 1x, https://simonaubury.com/posts/202307_genai_camera/00000001_hu8f4d0833d1b632e9726f7502bf912a31_1429964_800x0_resize_lanczos_3.png 2x, https://simonaubury.com/posts/202307_genai_camera/00000001_hu8f4d0833d1b632e9726f7502bf912a31_1429964_1200x0_resize_lanczos_3.png 3x">
+      <img src="https://simonaubury.com/posts/202307_genai_camera/00000001_hu8f4d0833d1b632e9726f7502bf912a31_1429964_400x0_resize_lanczos_3.png" class="card-img" >
+    </picture>
+  </div>
+  
+  <article class="card-body">
+    <h2 class="card-title">GenPiCam - Generative AI Camera</h2>
+    <p class="card-text">GenPiCam — a RaspberryPi based camera that reimagines the world with GenAI</p>
+    <div class="card-subtext muted-text">
+      <p>Posted <time datetime="2023-06-27">Jun 27, 2023</time></p>
+      <p>#GenerativeAI </p>
+    </div>
+  </article>
+</a>
+      
+    </nav>
+    <footer class="side-padding" style="background-image: url('https://simonaubury.com/img/home-blob-flip.svg');">
+    <a href="https://simonaubury.com/" class="footer-link">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/home.svg" alt="Home">
+    
+    </a>
+    
+    
+    
+    <a href="https://github.com/saubury" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/github.svg" alt="GitHub"/>
+    
+    </a>
+    
+    
+    
+    <a href="https://www.linkedin.com/in/simonaubury" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/linkedin.svg" alt="LinkedIn"/>
+    
+    </a>
+    
+    
+    <a href="https://simonaubury.com/index.xml" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/rss.svg" alt="RSS"/>
+    
+    </a>
+    
+    
+    
+    
+    
+    
+    
+    
+</footer>
+    
+  <script defer src="https://simonaubury.com/js/katex.min.js"></script>
+
+
+  <script defer src="https://simonaubury.com/js/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+
+<script src="https://simonaubury.com/js/core.min.js"></script>
+
+  </body>
+</html>
