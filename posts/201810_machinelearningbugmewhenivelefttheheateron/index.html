@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en-au" dir="ltr">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Machine learning &amp; Kafka KSQL stream processing — bug me when I’ve left the heater on &middot; Simon Aubury</title>
+  <meta name="description" content="Bug me when I’ve left the heater on" />
+  <link rel="apple-touch-icon" sizes="180x180" href="https://simonaubury.com/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://simonaubury.com/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://simonaubury.com/favicon-16x16.png">
+  <link href="https://simonaubury.com/css/katex.min.css" rel="stylesheet">
+  
+  
+  
+  
+  <link href="https://simonaubury.com/css/concated.min.css" rel="stylesheet">
+  
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7N67PMRZ6N"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-7N67PMRZ6N', { 'anonymize_ip': false });
+}
+</script>
+
+  
+</head>
+
+  <body class="single-body">
+    <nav class="nav-bar side-padding">
+  <h1 class="nav-header"><a href="https://simonaubury.com/" class="nav-text">simon aubury</a></h1>
+  <div class="hamburger-menu">
+    <input class="hamburger-menu-button" type="checkbox"
+      onclick="hamburgerMenuPressed.call(this)"
+      aria-label="Hamburger Menu Button"
+    >
+    <div class="hamburger-menu-icon">
+      <span></span>
+      <span></span>
+    </div>
+    <ul id="menu" class="hamburger-menu-overlay">
+      <li><a href="https://simonaubury.com/" class="hamburger-menu-overlay-link">Home</a></li>
+      <li><a href="https://simonaubury.com/slides/" class="hamburger-menu-overlay-link">Presentation slides</a></li>
+      <li><a href="https://simonaubury.com/about-me/" class="hamburger-menu-overlay-link">About Simon</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/cat/" class="hamburger-menu-overlay-link">Cat</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/cdc/" class="hamburger-menu-overlay-link">CDC</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/duckdb/" class="hamburger-menu-overlay-link">duckdb</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/flink/" class="hamburger-menu-overlay-link">flink</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/generativeai/" class="hamburger-menu-overlay-link">GenerativeAI</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/gpt/" class="hamburger-menu-overlay-link">GPT</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/homeassistant/" class="hamburger-menu-overlay-link">homeassistant</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/kafka/" class="hamburger-menu-overlay-link">Kafka</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/ml/" class="hamburger-menu-overlay-link">ML</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/raspberry-pi/" class="hamburger-menu-overlay-link">Raspberry Pi</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/snowflake/" class="hamburger-menu-overlay-link">snowflake</a></li>
+      
+      <li><a href="https://simonaubury.com/index.xml" class="hamburger-menu-overlay-link">rss</a></li>
+    </ul>
+  </div>
+</nav>
+
+    <main class="content side-text-padding">
+      <article class="post dropcase">
+        <header class="post-header">
+          <h1 class="post-title">Machine learning &amp; Kafka KSQL stream processing — bug me when I’ve left the heater on</h1>
+          <p class="post-date">Posted <time datetime="2018-09-08">Sep 8, 2018</time></p>
+        </header>
+        <picture class="post-figure">
+          
+          
+          
+          <source srcset="https://simonaubury.com/posts/201810_machinelearningbugmewhenivelefttheheateron/00000000_hue391978f60f2f84b9f39c955c804d55e_70998_711x0_resize_lanczos_3.png 1x, https://simonaubury.com/posts/201810_machinelearningbugmewhenivelefttheheateron/00000000_hue391978f60f2f84b9f39c955c804d55e_70998_1422x0_resize_lanczos_3.png 2x, https://simonaubury.com/posts/201810_machinelearningbugmewhenivelefttheheateron/00000000_hue391978f60f2f84b9f39c955c804d55e_70998_2133x0_resize_lanczos_3.png 3x">
+          <img src="https://simonaubury.com/posts/201810_machinelearningbugmewhenivelefttheheateron/00000000_hue391978f60f2f84b9f39c955c804d55e_70998_711x0_resize_lanczos_3.png" >
+        </picture>
+        
+        
+        <h1 id="machine-learning--kafka-ksql-stream-processingbug-me-when-ive-left-the-heater-on">Machine learning &amp; Kafka KSQL stream processing — bug me when I’ve left the heater on</h1>
+<p>Continuous household power monitoring with a trained model to alert on unexpected power usage for time of day. Let my Google Home and Phone notify me when I’ve used more electricity than expected.</p>
+<h2 id="what-on-earth-is-this">What on earth is this?</h2>
+<p>Household power consumption fluctuates throughout the day. However, the *pattern *of electricity use follows a typical curve and becomes predictable after sufficient observations. Would it surprise you that very little power is used at night when everyone is asleep? Probably not — but a sudden sudden surge of power used 4 am this is worth checking via an alert on my phone</p>
+<p>Ready for the buzz words? Data capture via a Raspberry Pi streamed via Apache Kafka. Real-time processing using KSQL streaming engine enriched with a trained model. Unexpected time of day power usage events get sent via mobile notifications to my phone along with a spoken message via our home speaker.</p>
+<p>Inspiration for this project comes from <a href="https://github.com/kaiwaehner">Kai Waehner</a> and his project <a href="https://github.com/kaiwaehner/ksql-udf-deep-learning-mqtt-iot">Deep Learning UDF for KSQL</a>. The notification system was inspired by <a href="https://www.confluent.io/blog/author/robin/">Robin Moffatt</a> and his blog on <a href="https://www.confluent.io/blog/real-time-syslog-processing-with-apache-kafka-and-ksql-part-2-event-driven-alerting-with-slack/">Event-Driven Alerting with Slack</a>.</p>
+<p>The <a href="https://github.com/saubury/stream-smarts">entire project</a> is easy to run and simply requires docker to demonstrate locally.</p>
+<h3 id="im-bored--can-i-get-a-video">I’m bored — can I get a video?</h3>
+<p>Sure</p>
+<!-- raw HTML omitted -->
+<h2 id="training-and-data-capture">Training and Data Capture</h2>
+<p>With 3 months of data from my experiment of <a href="https://medium.com/@simon.aubury/home-power-monitoring-65d0fded7769">Home Power Monitoring using a Raspberry Pi</a> I had a stack of data to determine what our household power consumption looked like throughout the average day.</p>
+<p>Power consumption is measured in “W/hr — Watt hours”. The power consumption range for a 24 hour period in August is shown below. The area shaded in green shows the range from the minimum value for that hour to the highest consumption. In short, values in the green area are normal, and the red area is unexpected.</p>
+<p><img src="00000001.png" alt="Expected range (green) of power consumption by time of day for the month of August"><em>Expected range (green) of power consumption by time of day for the month of August</em></p>
+<p>Using <a href="https://www.h2o.ai/">H2O.ai</a> (the open source machine learning package) and a very helpful <a href="https://www.kaggle.com/sudalairajkumar/getting-started-with-h2o">getting started guide</a> I was able to produce a function that returns an <em>anomaly score</em> based on day, hour and power usage. That is, passed a day of month, hour-of-day and power-usage reading the function returns an anomaly score</p>
+<blockquote>
+<p>*AnomalyScore = *AnomalyFunction (day, hour, power-usage)</p>
+</blockquote>
+<p>Consuming 1500 W/hr at 9 am is pretty normal, however 1500 W/hr power draw at 4 am is a cause for alarm as that’s 500% more than expected. In short, an* anomaly score* above 1.0 signifies power usage beyond what has previously been historically measured at that time and day.</p>
+<p><img src="00000002.png" alt="Anomaly score based on hour and power usage. Values above 1.0 are unusual"> 0 are unusual*</p>
+<h2 id="user-defined-function--and-ksql">User Defined Function — and KSQL</h2>
+<p><a href="https://www.confluent.io/product/ksql/">KSQL </a>is an open source, streaming SQL engine that enables real-time data processing against Apache Kafka. KSQL supports <a href="https://docs.confluent.io/current/ksql/docs/udf.html">creating User Defined Scalar Functions</a> (UDFs) via custom jars that are uploaded to the ext/ directory of the KSQL installation. That is, my compiled anomaly score function can be exposed to the KSQL server — and executed against the Kafka stream</p>
+<p>TL;DR summary — compile some Java and place in the right directory, start ksql server and verify the function is there …</p>
+<pre><code>ksql&gt; list functions;
+
+ Function Name           | Type
+-------------------------------------
+  . . .
+ ANOMOLY_POWER           | SCALAR   &lt;--- I need this one
+ ANOMOLY_WATER           | SCALAR
+</code></pre>
+<p>Firstly a stream (“raw_power_stream”) is created to expose the real-time power-consumption from the kafka topic with real-time power consumption.</p>
+<p>The scripts below show the steps to create the final “anomaly_power” kafka topic which will be a stream of events where the anomaly function (“anomaly_power”) has found a significantly unusual value. That is, the “anomaly_power” topic should be silent unless an unusual event has occurred</p>
+<pre><code>create stream raw_power_stream with (kafka_topic='raw_power', value_format='avro');
+
+create stream  power_stream_rekeyed as \
+select rowtime, hour, kwh, anomoly_power(hour, kwh) as fn \
+from raw_power_stream partition by rowtime;
+
+create stream anomoly_power with (value_format='JSON') as \
+select rowtime as event_ts, hour, kwh, fn \
+from power_stream_rekeyed where fn&gt;1.0;
+</code></pre>
+<h2 id="ringing-the-alarm">Ringing the Alarm</h2>
+<p>The continuous real-time stream processing is fairly useless unless we have a way of raising an alarm when something odd has happened. I wanted notifications to appear on both my mobile phone and be announced over our Google Home smart speaker. Why get bothered only once when I can get annoyed twice?</p>
+<h3 id="mobile-device-notification-via-pushbullet">Mobile Device notification via Pushbullet</h3>
+<p><a href="https://www.pushbullet.com/">Pushbullet</a> is an awesome service bridge that provide a simple <a href="https://docs.pushbullet.com/">API</a> for sending push-notifications to iOS and Android devices.</p>
+<p><img src="00000003.png" alt="An iOS push-notification via push-bullet"><em>An iOS push-notification via push-bullet</em></p>
+<p>A bit of <a href="https://github.com/saubury/stream-smarts/blob/master/scripts/python/kafka_notifier.py">python</a> code consumes the ANOMOLY_POWER topic and calls pushbullet. A consumer is established, and an event handler calls the notification service on receipt of a new Kafka events. Each message generates a new push notification.</p>
+<!-- raw HTML omitted -->
+<h3 id="google-home-text-to-speech-tts-via-home-assistant">Google Home Text-to-Speech (TTS) via Home Assistant</h3>
+<p>I run the <a href="https://www.home-assistant.io/hassio/">Hass.io Home Assistant</a> software locally to control home automation tasks. One nice feature is a simple <a href="https://www.home-assistant.io/components/tts/">API</a> to send text messages as spoken voice commands directly to out Google Home smart speaker. That is, construct a string — and it gets spoken (quite loudly) via the Google Home.</p>
+<!-- raw HTML omitted -->
+<h2 id="what-did-i-learn">What did I learn?</h2>
+<p>The first legitimate alarm I received was when I was on holiday. The notification at 9am on a Saturday morning was an notification signifying the household was using substantially <em>less</em> power than was expected. This was indeed true — maybe I need more holidays to train the model correctly!</p>
+<h2 id="ready-to-try">Ready To Try</h2>
+<p>The <a href="https://github.com/saubury/stream-smarts">entire project</a> simply requires docker to run locally.</p>
+<h3 id="credits--references">Credits &amp; References</h3>
+<ul>
+<li>
+<p>Inspiration for this project comes from <a href="https://github.com/kaiwaehner">Kai Waehner</a> and his project <a href="https://github.com/kaiwaehner/ksql-udf-deep-learning-mqtt-iot">Deep Learning UDF for KSQL</a>.</p>
+</li>
+<li>
+<p>The notification system was inspired by <a href="https://www.confluent.io/blog/author/robin/">Robin Moffatt</a> and his blog on <a href="https://www.confluent.io/blog/real-time-syslog-processing-with-apache-kafka-and-ksql-part-2-event-driven-alerting-with-slack/">Event-Driven Alerting with Slack</a>.</p>
+</li>
+<li>
+<p><a href="https://www.pushbullet.com/">Pushbullet</a> and their helpful <a href="https://docs.pushbullet.com/">API</a></p>
+</li>
+<li>
+<p>The <a href="https://www.home-assistant.io/hassio/">Hass.io Home Assistant</a> software</p>
+</li>
+<li>
+<p><a href="https://www.h2o.ai/">H2O.ai</a> and a very helpful <a href="https://www.kaggle.com/sudalairajkumar/getting-started-with-h2o">getting started guide</a></p>
+</li>
+<li>
+<p><a href="https://medium.com/@simon.aubury/home-power-monitoring-65d0fded7769">Home Power Monitoring using a Raspberry Pi</a></p>
+</li>
+</ul>
+
+      </article>
+      
+    </main>
+    <nav class="end-nav side-padding">
+      
+      <a ontouchstart="cardPressed.call(this)" ontouchend="cardReleased.call(this)" ontouchmove="cardReleased.call(this)" 
+  href="https://simonaubury.com/posts/201809_homepowermonitoringusingaraspberrypi/" class="card blog-card bc-next" rel="bookmark" >
+  
+  <div class="card-img-container">
+    <p class="card-img-overlay">Next Article</p>
+    <picture>
+      
+      
+      
+      <source srcset="https://simonaubury.com/posts/201809_homepowermonitoringusingaraspberrypi/00000000_hudeb601be7d816c40270fdecab51bec3c_404515_400x0_resize_lanczos_3.png 1x, https://simonaubury.com/posts/201809_homepowermonitoringusingaraspberrypi/00000000_hudeb601be7d816c40270fdecab51bec3c_404515_800x0_resize_lanczos_3.png 2x, https://simonaubury.com/posts/201809_homepowermonitoringusingaraspberrypi/00000000_hudeb601be7d816c40270fdecab51bec3c_404515_1200x0_resize_lanczos_3.png 3x">
+      <img src="https://simonaubury.com/posts/201809_homepowermonitoringusingaraspberrypi/00000000_hudeb601be7d816c40270fdecab51bec3c_404515_400x0_resize_lanczos_3.png" class="card-img" >
+    </picture>
+  </div>
+  
+  <article class="card-body">
+    <h2 class="card-title">Home Power Monitoring using a Raspberry Pi</h2>
+    <p class="card-text">Home electricity usage monitoring using a Raspberry Pi</p>
+    <div class="card-subtext muted-text">
+      <p>Posted <time datetime="2018-09-01">Sep 1, 2018</time></p>
+      <p>#Kafka </p>
+    </div>
+  </article>
+</a>
+      
+    </nav>
+    <footer class="side-padding" style="background-image: url('https://simonaubury.com/img/home-blob-flip.svg');">
+    <a href="https://simonaubury.com/" class="footer-link">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/home.svg" alt="Home">
+    
+    </a>
+    
+    
+    
+    <a href="https://github.com/saubury" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/github.svg" alt="GitHub"/>
+    
+    </a>
+    
+    
+    
+    <a href="https://www.linkedin.com/in/simonaubury" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/linkedin.svg" alt="LinkedIn"/>
+    
+    </a>
+    
+    
+    <a href="https://simonaubury.com/index.xml" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/rss.svg" alt="RSS"/>
+    
+    </a>
+    
+    
+    
+    
+    
+    
+    
+    
+</footer>
+    
+  <script defer src="https://simonaubury.com/js/katex.min.js"></script>
+
+
+  <script defer src="https://simonaubury.com/js/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+
+<script src="https://simonaubury.com/js/core.min.js"></script>
+
+  </body>
+</html>

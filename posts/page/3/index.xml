@@ -1,0 +1,77 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts - Simon Aubury</title>
+    <link>https://simonaubury.com/posts/</link>
+    <description>Recent content in Posts on Simon Aubury</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-au</language>
+    <lastBuildDate>Sun, 15 Jun 2025 10:22:20 +1100</lastBuildDate>
+    
+        <atom:link href="https://simonaubury.com/posts/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Kafka stream processing: sorting socks with ksqlDB - Part 2</title>
+      <link>https://simonaubury.com/posts/202003_kafkastreamprocessingsortingsockswithksqldb/</link>
+      <pubDate>Sun, 23 Feb 2020 12:00:00 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202003_kafkastreamprocessingsortingsockswithksqldb/</guid>
+      <description>Sorting socks with a streaming solution</description>
+    </item><item>
+      <title>Sorting my socks with deep learning — Part 1</title>
+      <link>https://simonaubury.com/posts/202002_sortingmysockswithdeeplearningpart1/</link>
+      <pubDate>Mon, 10 Feb 2020 12:00:00 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202002_sortingmysockswithdeeplearningpart1/</guid>
+      <description>Can I arrange my sock drawer using machine learning?</description>
+    </item><item>
+      <title>Kafka Connect Secrets Management with ksqlDB</title>
+      <link>https://simonaubury.com/posts/202001_kafkaconnectsecretsmanagementwithksqldb/</link>
+      <pubDate>Tue, 14 Jan 2020 12:00:00 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202001_kafkaconnectsecretsmanagementwithksqldb/</guid>
+      <description>Keeping the secrets, sectret</description>
+    </item><item>
+      <title>Kafka Summit 2019 San Francisco: a review</title>
+      <link>https://simonaubury.com/posts/201910_kafkasummit_2019sanfranciscoareview/</link>
+      <pubDate>Sat, 12 Oct 2019 12:00:00 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/201910_kafkasummit_2019sanfranciscoareview/</guid>
+      <description>Kafka Summit 2019 San Francisco</description>
+    </item><item>
+      <title>Confluent Kafka Kubernetes Operator — Setup and Playing!</title>
+      <link>https://simonaubury.com/posts/201908_confluentkafkakubernetesoperatorsetupandplaying/</link>
+      <pubDate>Sat, 03 Aug 2019 12:00:00 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/201908_confluentkafkakubernetesoperatorsetupandplaying/</guid>
+      <description>Kafka Kubernetes Operator</description>
+    </item><item>
+      <title>Did I beat Ben? Race tracking with Kafka KSQL, MQTT &amp; Kibana</title>
+      <link>https://simonaubury.com/posts/201905_didibeatbenracetrackingwithkafka/</link>
+      <pubDate>Tue, 28 May 2019 12:00:00 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/201905_didibeatbenracetrackingwithkafka/</guid>
+      <description>Race tracking with Kafka KSQL, MQTT &amp; Kibana</description>
+    </item><item>
+      <title>Machine learning &amp; Kafka KSQL stream processing — bug me when I’ve left the heater on</title>
+      <link>https://simonaubury.com/posts/201810_machinelearningbugmewhenivelefttheheateron/</link>
+      <pubDate>Sat, 08 Sep 2018 12:00:00 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/201810_machinelearningbugmewhenivelefttheheateron/</guid>
+      <description>Bug me when I’ve left the heater on</description>
+    </item><item>
+      <title>Home Power Monitoring using a Raspberry Pi</title>
+      <link>https://simonaubury.com/posts/201809_homepowermonitoringusingaraspberrypi/</link>
+      <pubDate>Sat, 01 Sep 2018 12:00:00 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/201809_homepowermonitoringusingaraspberrypi/</guid>
+      <description>Home electricity usage monitoring using a Raspberry Pi</description>
+    </item><item>
+      <title>Using KSQL, Apache Kafka, a Raspberry Pi and a software defined radio to find the plane that wakes Snowy the cat</title>
+      <link>https://simonaubury.com/posts/201805_usingksqlapachekafkafindtheplanethatwakessnowy/</link>
+      <pubDate>Sun, 20 May 2018 17:53:07 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/201805_usingksqlapachekafkafindtheplanethatwakessnowy/</guid>
+      <description>Map the correlation between aircraft traffic and cat behaviour</description>
+    </item>
+  </channel>
+</rss>

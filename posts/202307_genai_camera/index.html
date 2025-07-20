@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en-au" dir="ltr">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>GenPiCam - Generative AI Camera &middot; Simon Aubury</title>
+  <meta name="description" content="GenPiCam — a RaspberryPi based camera that reimagines the world with GenAI" />
+  <link rel="apple-touch-icon" sizes="180x180" href="https://simonaubury.com/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://simonaubury.com/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://simonaubury.com/favicon-16x16.png">
+  <link href="https://simonaubury.com/css/katex.min.css" rel="stylesheet">
+  
+  
+  
+  
+  <link href="https://simonaubury.com/css/concated.min.css" rel="stylesheet">
+  
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7N67PMRZ6N"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-7N67PMRZ6N', { 'anonymize_ip': false });
+}
+</script>
+
+  
+</head>
+
+  <body class="single-body">
+    <nav class="nav-bar side-padding">
+  <h1 class="nav-header"><a href="https://simonaubury.com/" class="nav-text">simon aubury</a></h1>
+  <div class="hamburger-menu">
+    <input class="hamburger-menu-button" type="checkbox"
+      onclick="hamburgerMenuPressed.call(this)"
+      aria-label="Hamburger Menu Button"
+    >
+    <div class="hamburger-menu-icon">
+      <span></span>
+      <span></span>
+    </div>
+    <ul id="menu" class="hamburger-menu-overlay">
+      <li><a href="https://simonaubury.com/" class="hamburger-menu-overlay-link">Home</a></li>
+      <li><a href="https://simonaubury.com/slides/" class="hamburger-menu-overlay-link">Presentation slides</a></li>
+      <li><a href="https://simonaubury.com/about-me/" class="hamburger-menu-overlay-link">About Simon</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/cat/" class="hamburger-menu-overlay-link">Cat</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/cdc/" class="hamburger-menu-overlay-link">CDC</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/duckdb/" class="hamburger-menu-overlay-link">duckdb</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/flink/" class="hamburger-menu-overlay-link">flink</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/generativeai/" class="hamburger-menu-overlay-link">GenerativeAI</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/gpt/" class="hamburger-menu-overlay-link">GPT</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/homeassistant/" class="hamburger-menu-overlay-link">homeassistant</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/kafka/" class="hamburger-menu-overlay-link">Kafka</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/ml/" class="hamburger-menu-overlay-link">ML</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/raspberry-pi/" class="hamburger-menu-overlay-link">Raspberry Pi</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/snowflake/" class="hamburger-menu-overlay-link">snowflake</a></li>
+      
+      <li><a href="https://simonaubury.com/index.xml" class="hamburger-menu-overlay-link">rss</a></li>
+    </ul>
+  </div>
+</nav>
+
+    <main class="content side-text-padding">
+      <article class="post dropcase">
+        <header class="post-header">
+          <h1 class="post-title">GenPiCam - Generative AI Camera</h1>
+          <p class="post-date">Posted <time datetime="2023-06-27">Jun 27, 2023</time></p>
+        </header>
+        <picture class="post-figure">
+          
+          
+          
+          <source srcset="https://simonaubury.com/posts/202307_genai_camera/00000001_hu8f4d0833d1b632e9726f7502bf912a31_1429964_711x0_resize_lanczos_3.png 1x, https://simonaubury.com/posts/202307_genai_camera/00000001_hu8f4d0833d1b632e9726f7502bf912a31_1429964_1422x0_resize_lanczos_3.png 2x, https://simonaubury.com/posts/202307_genai_camera/00000001_hu8f4d0833d1b632e9726f7502bf912a31_1429964_2133x0_resize_lanczos_3.png 3x">
+          <img src="https://simonaubury.com/posts/202307_genai_camera/00000001_hu8f4d0833d1b632e9726f7502bf912a31_1429964_711x0_resize_lanczos_3.png" >
+        </picture>
+        
+        
+        <h1 id="genpicam---generative-ai-camera">GenPiCam - Generative AI Camera</h1>
+<p>Generative AI (GenAI) is a type of Artificial Intelligence that can create a wide variety of images, video and text. To accelerate the robot uprising I chained two GenAI models together to build a camera which describes the current scene in words, and then uses a second model to create a new generated stylised image. Let me introduce GenPiCam — a RaspberryPi based camera that reimagines the world with GenAI.</p>
+<p><img src="./00000000.gif" alt="Before and after images created by GenPiCam"><em>Before and after images created by GenPiCam</em></p>
+<p>The heavy processing and true smarts of this project is handled by <a href="https://www.midjourney.com/">Midjourney</a> — an external service using  machine learning-based image generators. GenPiCam makes use of two Midjourney capabilities</p>
+<ul>
+<li>
+<p><a href="https://docs.midjourney.com/docs/describe">Describe</a> which starts with an existing photo and creates a text description prompts for the image.</p>
+</li>
+<li>
+<p><a href="https://docs.midjourney.com/docs/quick-start">Imagine</a> which converts natural language prompts into images</p>
+</li>
+</ul>
+<p>Between these two steps I allow of a level of creative input, so the GenPiCam camera has a dial to tweak the style of the final image. This essentially becomes a filter, adding an “anime”, “pop-art” or “futuristic” influence to the generated image.</p>
+<h2 id="im-bored--can-i-get-a-video">I’m bored — can I get a video?</h2>
+<p>Sure — here’s the 2 minute summary</p>
+
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+  <iframe src="https://www.youtube.com/embed/qqwRXybdNeo" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video"></iframe>
+</div>
+
+<h2 id="the-photographic-process">The “photographic” process</h2>
+<p>The initial photo image is taken with a Raspberry Pi Camera Module. An external camera shutter (pushbutton connected to the Raspberry Pi GPIO pins) when pushed takes a still image and saves the photo as a jpeg image.</p>
+<p><img src="./00000001.png" alt="Taking still images of wildlife in the garden"><em>Taking still images of wildlife in the garden</em></p>
+<p>The photo is uploaded to Midjourney which starts with an existing photo and creates a text description prompts for the image. For the curious, I’m using some very inelegant bot interactions with PyAutoGUI to control the mouse and keyboard (as there’s no API) — let <a href="https://github.com/saubury/GenPiCam/blob/main/midjourney.py">this</a> be an example of code you should never write.</p>
+<p>Midjourney’s describe tool takes an image as input, then generates text prompts. This is a pretty clever service, reversing the usual process of “text to image” by doing the reverse, starting with the photo and then extracting text to describe the essence of the image. Here is Snowy, but Midjouney has a much more expressive description.</p>
+<p><img src="./00000002.png" alt="Snowy the cat — laying on bed under yellow blanket …"><em>Snowy the cat — laying on bed under yellow blanket …</em></p>
+<blockquote>
+<p>black cat laying on bed under yellow blanket, in the style of berrypunk, irridescent, glimmering, unpolished, symmetrical, rounded, chinapunk — ar 4:3</p>
+</blockquote>
+<p>The describe function actually returns four descriptions based on the image, but GenPiCam  arbitrarily selects the first description.</p>
+<p>Now for the fun part. We can take that text prompt, and use it to create a brand new image with Generative AI with a new call to Midjouney imagine. Here is a image generate from the previous text prompt.</p>
+<p><img src="./00000003.png" alt="Midjouney imagine generated image from text prompt ">*Midjouney imagine generated image from text prompt *</p>
+<p>GenPiCam has a selection switch to update the prompt with stylistic instructions.</p>
+<p><img src="./00000004.png" alt="Scene selector"><em>Scene selector</em></p>
+<p>This is a 12 way rotary switch connected to the Raspberry Pi GPIO pins. By reading the current “artistic selection” GenPiCam will add a prefix such as “<strong>retro pop art-style illustration”</strong> to the text prompt. A few of the other style prompts include</p>
+<ul>
+<li>
+<p>Anime style</p>
+</li>
+<li>
+<p>Hyper Realistic, whimsical with colourful hat and balloons,</p>
+</li>
+<li>
+<p>Blurry brushstrokes,</p>
+</li>
+<li>
+<p>Futuristic, in a space station, hyper realistic</p>
+</li>
+</ul>
+<p>Let’s see the before and after “pop-art” images for Snowy.</p>
+<p><img src="./00000005.png" alt="Final image with before and after photos along with text prompt ">*Final image with before and after photos along with text prompt *</p>
+<p>The final image is a created using the <a href="https://github.com/python-pillow/Pillow/">Pillow</a> Python imaging library, and is comprised of</p>
+<ul>
+<li>
+<p>Initial photo taken by the Raspberry Pi camera module, resized on the left</p>
+</li>
+<li>
+<p>Final Midjouney image — the first of four images is selected, composited to the right</p>
+</li>
+<li>
+<p>Text prompt — against a coloured background and icon signifying the style mode</p>
+</li>
+</ul>
+<p>Here’s the same process, but adding the text **“Hyper Realistic, whimsical with colourful hat and balloons”. **</p>
+<p><img src="./00000006.png" alt=""></p>
+<p>Even though the image on the right is a creation from Generative AI, there’s still still a sense of disappointment coming through Snowy’s judgmental eyes.</p>
+<h2 id="generative-ai-images--learnings">Generative AI Images — Learnings</h2>
+<p>I had so much fun building the GenPiCam camera — and this was an interesting path for exploring prompt engineering for Generative AI. The better photos were the ones which had a simple composition — essentially images that were easy to put words to. For example, this scene is easy to describe with a colour and definitive objects.</p>
+<p><img src="./00000007.png" alt="A green stuffed animal and white keyboard"><em>A green stuffed animal and white keyboard</em></p>
+<p>However, there were some very strange results while describing more unique scenes. I found the description of a classic Australian cloths line created a unusual image.</p>
+<p><img src="./00000008.png" alt="Australian cloths line"><em>Australian cloths line</em></p>
+<p>One of my favourite reimagined images was the identification of my laser mouse. It turns out a laser mouse has multiple meaning leading to a striking result.</p>
+<p><img src="./00000009.png" alt="Laser mouse"><em>Laser mouse</em></p>
+<h2 id="the-hardware">The hardware</h2>
+<p>The least stylish part of GenPiCam is the hardware which I hastily assembled. If you want to build your own reality distorting camera, you’ll need the following.</p>
+<ul>
+<li>
+<p><a href="https://www.raspberrypi.com/products/raspberry-pi-4-model-b/">RaspberryPi 4</a> running <a href="https://www.raspberrypi.com/software/">Raspberry Pi OS</a></p>
+</li>
+<li>
+<p><a href="https://www.raspberrypi.com/products/camera-module-v2/">Raspberry Pi camera module v2</a></p>
+</li>
+<li>
+<p><a href="https://www.amazon.com.au/dp/B0BPP6MFFJ?ref_=pe_19115062_429603572_302_E_DDE_dt_1">Touchscreen Monitor for Raspberry Pi</a></p>
+</li>
+<li>
+<p><a href="https://www.jaycar.com.au/1-pole-sealed-pcb-rotary/p/SR1210">12 way PCB rotary switch</a></p>
+</li>
+<li>
+<p><a href="https://www.jaycar.com.au/pushbutton-push-on-momentary-spst-red-actuator/p/SP0716">Pushbutton momentary</a></p>
+</li>
+<li>
+<p><a href="https://www.jaycar.com.au/sealed-polycarbonate-enclosure-171-x-121-x-55/p/HB6218">Polycarbonate enclosure</a></p>
+</li>
+<li>
+<p>Rechargeable battery pack</p>
+</li>
+</ul>
+<p><img src="./00000010.png" alt="The inner workings of GenPiCam"><em>The inner workings of GenPiCam</em></p>
+<p>It isn’t the most beautiful of builds — but I’ll just excuse this as being highly functional</p>
+<p><img src="./00000011.png" alt="Boot image for GenPiCam camera"><em>Boot image for GenPiCam camera</em></p>
+<h2 id="summary-code--credits">Summary, code &amp; credits</h2>
+<p>The GenPiCam has been a fun way to explore Generative AI, transforming photos into stylised (and sometime surprising) images.</p>
+<p><img src="./00000012.png" alt="Photo of author on the left — and a stylised version of Simon on the right"><em>Photo of author on the left — and a stylised version of Simon on the right</em></p>
+<h3 id="credits">Credits</h3>
+<ul>
+<li>
+<p><a href="https://twitter.com/nletcher">Ned Letcher</a> — who first got me inspired by showing off the Midjourney describe functionality and provided the concept of recreating images</p>
+</li>
+<li>
+<p><a href="https://medium.com/@neonforge/how-to-create-a-discord-bot-to-download-midjourney-images-automatically-python-step-by-step-guide-3e76d3282871">How to Create a Discord Bot to Download Midjourney Images</a> by Michael King — A great write up showing Python automation for interacting  with Midjourney along with Discord bot configuration.</p>
+</li>
+<li>
+<p><a href="https://docs.midjourney.com/docs/command-list">Midjourney</a> — Midjourney command syntax for bot channels</p>
+</li>
+<li>
+<p><a href="https://discordpy.readthedocs.io/en/stable/">discord.py</a> — Python API wrapper for Discord.</p>
+</li>
+</ul>
+<h3 id="code">Code</h3>
+<p><a href="https://github.com/saubury/GenPiCam">https://github.com/saubury/GenPiCam</a></p>
+
+      </article>
+      
+    </main>
+    <nav class="end-nav side-padding">
+      
+      <a ontouchstart="cardPressed.call(this)" ontouchend="cardReleased.call(this)" ontouchmove="cardReleased.call(this)" 
+  href="https://simonaubury.com/posts/202306_duckdb_fitbit/" class="card blog-card bc-next" rel="bookmark" >
+  
+  <div class="card-img-container">
+    <p class="card-img-overlay">Next Article</p>
+    <picture>
+      
+      
+      
+      <source srcset="https://simonaubury.com/posts/202306_duckdb_fitbit/banner_hue3f9d6df4ebcddb832b8d8cec227f90c_450691_400x0_resize_lanczos_3.png 1x, https://simonaubury.com/posts/202306_duckdb_fitbit/banner_hue3f9d6df4ebcddb832b8d8cec227f90c_450691_800x0_resize_lanczos_3.png 2x, https://simonaubury.com/posts/202306_duckdb_fitbit/banner_hue3f9d6df4ebcddb832b8d8cec227f90c_450691_1200x0_resize_lanczos_3.png 3x">
+      <img src="https://simonaubury.com/posts/202306_duckdb_fitbit/banner_hue3f9d6df4ebcddb832b8d8cec227f90c_450691_400x0_resize_lanczos_3.png" class="card-img" >
+    </picture>
+  </div>
+  
+  <article class="card-body">
+    <h2 class="card-title">Fitbit activity analysis with DuckDB</h2>
+    <p class="card-text">My (very) personal data warehouse — Fitbit activity analysis with DuckDB</p>
+    <div class="card-subtext muted-text">
+      <p>Posted <time datetime="2023-06-01">Jun 1, 2023</time></p>
+      <p>#duckdb </p>
+    </div>
+  </article>
+</a>
+      
+    </nav>
+    <footer class="side-padding" style="background-image: url('https://simonaubury.com/img/home-blob-flip.svg');">
+    <a href="https://simonaubury.com/" class="footer-link">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/home.svg" alt="Home">
+    
+    </a>
+    
+    
+    
+    <a href="https://github.com/saubury" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/github.svg" alt="GitHub"/>
+    
+    </a>
+    
+    
+    
+    <a href="https://www.linkedin.com/in/simonaubury" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/linkedin.svg" alt="LinkedIn"/>
+    
+    </a>
+    
+    
+    <a href="https://simonaubury.com/index.xml" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/rss.svg" alt="RSS"/>
+    
+    </a>
+    
+    
+    
+    
+    
+    
+    
+    
+</footer>
+    
+  <script defer src="https://simonaubury.com/js/katex.min.js"></script>
+
+
+  <script defer src="https://simonaubury.com/js/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+
+<script src="https://simonaubury.com/js/core.min.js"></script>
+
+  </body>
+</html>

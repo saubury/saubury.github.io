@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en-au" dir="ltr">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>FridgeBot — GPT-4o shopping list automation &middot; Simon Aubury</title>
+  <meta name="description" content="GPT-4o shopping list automation - no excuse to forget the milk" />
+  <link rel="apple-touch-icon" sizes="180x180" href="https://simonaubury.com/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://simonaubury.com/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://simonaubury.com/favicon-16x16.png">
+  <link href="https://simonaubury.com/css/katex.min.css" rel="stylesheet">
+  
+  
+  
+  
+  <link href="https://simonaubury.com/css/concated.min.css" rel="stylesheet">
+  
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7N67PMRZ6N"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-7N67PMRZ6N', { 'anonymize_ip': false });
+}
+</script>
+
+  
+</head>
+
+  <body class="single-body">
+    <nav class="nav-bar side-padding">
+  <h1 class="nav-header"><a href="https://simonaubury.com/" class="nav-text">simon aubury</a></h1>
+  <div class="hamburger-menu">
+    <input class="hamburger-menu-button" type="checkbox"
+      onclick="hamburgerMenuPressed.call(this)"
+      aria-label="Hamburger Menu Button"
+    >
+    <div class="hamburger-menu-icon">
+      <span></span>
+      <span></span>
+    </div>
+    <ul id="menu" class="hamburger-menu-overlay">
+      <li><a href="https://simonaubury.com/" class="hamburger-menu-overlay-link">Home</a></li>
+      <li><a href="https://simonaubury.com/slides/" class="hamburger-menu-overlay-link">Presentation slides</a></li>
+      <li><a href="https://simonaubury.com/about-me/" class="hamburger-menu-overlay-link">About Simon</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/cat/" class="hamburger-menu-overlay-link">Cat</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/cdc/" class="hamburger-menu-overlay-link">CDC</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/duckdb/" class="hamburger-menu-overlay-link">duckdb</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/flink/" class="hamburger-menu-overlay-link">flink</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/generativeai/" class="hamburger-menu-overlay-link">GenerativeAI</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/gpt/" class="hamburger-menu-overlay-link">GPT</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/homeassistant/" class="hamburger-menu-overlay-link">homeassistant</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/kafka/" class="hamburger-menu-overlay-link">Kafka</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/ml/" class="hamburger-menu-overlay-link">ML</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/raspberry-pi/" class="hamburger-menu-overlay-link">Raspberry Pi</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/snowflake/" class="hamburger-menu-overlay-link">snowflake</a></li>
+      
+      <li><a href="https://simonaubury.com/index.xml" class="hamburger-menu-overlay-link">rss</a></li>
+    </ul>
+  </div>
+</nav>
+
+    <main class="content side-text-padding">
+      <article class="post dropcase">
+        <header class="post-header">
+          <h1 class="post-title">FridgeBot — GPT-4o shopping list automation</h1>
+          <p class="post-date">Posted <time datetime="2024-05-15">May 15, 2024</time></p>
+        </header>
+        <picture class="post-figure">
+          
+          
+          
+          <source srcset="https://simonaubury.com/posts/202405_fridgebot/00000000_huf8c95e3659be74e80a47f3df041d0fe4_115318_711x0_resize_lanczos_3.png 1x, https://simonaubury.com/posts/202405_fridgebot/00000000_huf8c95e3659be74e80a47f3df041d0fe4_115318_1422x0_resize_lanczos_3.png 2x, https://simonaubury.com/posts/202405_fridgebot/00000000_huf8c95e3659be74e80a47f3df041d0fe4_115318_2133x0_resize_lanczos_3.png 3x">
+          <img src="https://simonaubury.com/posts/202405_fridgebot/00000000_huf8c95e3659be74e80a47f3df041d0fe4_115318_711x0_resize_lanczos_3.png" >
+        </picture>
+        
+        
+        <h1 id="fridgebotgpt-4o-shopping-list-automation">FridgeBot — GPT-4o shopping list automation</h1>
+<p>Monitoring the contents of my fridge and automatically adding grocery items to my shopping list with the new GPT-4o vision API</p>
+<p>OpenAI recently announced their new generative AI model <a href="https://openai.com/index/hello-gpt-4o/">GPT-4o</a> — the “o” stands for “omni,” referring to the model’s ability to use mixed modalities including text, speech and video. I wanted to give GPT-4o a real challenge — helping me keep on top of the shopping list by automatically monitoring the contents of my fridge and adding grocery items when I had run out of something.</p>
+
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+  <iframe src="https://www.youtube.com/embed/d-C8Ur5tISU" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video"></iframe>
+</div>
+
+<h2 id="processing-steps">Processing steps</h2>
+<p>The fridge door light is used as a signal for when to start and stop looking for changes in the fridge. I’m assuming that anything taken from my fridge has been removed when the door is open and the door light illuminated.</p>
+<p>The code does the following</p>
+<ul>
+<li>
+<p>Open the camera feed — and use the <a href="https://opencv.org/">OpenCV</a> library for real-time computer vision processing</p>
+</li>
+<li>
+<p>Every 500ms we take an image from the video feed and convert the image to grey-scale</p>
+</li>
+<li>
+<p>Calculate mean brightness of the grey-scale image — and use the average value as an indicator for if the fridge door is open</p>
+</li>
+<li>
+<p>If the last image was “dark” and the current image is “light”, we assume the fridge door has just been opened. We wait 500ms for the camera white balance to settle, and save this as <em>image-1</em> to represent the initial state.</p>
+</li>
+<li>
+<p>We continue to take photos every 500ms, and save the image temporarily as we don’t know when the door is going to close</p>
+</li>
+<li>
+<p>When the average brightness of the latest image drops significantly, we know the fridge door has just been closed. We discard this image (as it is dark), and use the <em>last</em> image taken and save this as <em>image-2</em> to represent the final state.</p>
+</li>
+</ul>
+<p>Now we have the before and after images, use <em>image-1</em> and <em>image-2</em> as inputs to the OpenAI</p>
+<ul>
+<li>
+<p>We encode both images as <a href="https://en.wikipedia.org/wiki/Base64">base-64</a> to transform the binary image data into a sequence of printable characters</p>
+</li>
+<li>
+<p>We use the OpenAI GPT-4o <a href="https://platform.openai.com/docs/guides/vision">vision API</a> along with prompt <em>‘What item is missing in the second image?’</em></p>
+</li>
+<li>
+<p>The response is decoded — and is assumed to be a single word describing what item was in <em>image-1</em> and is not present in <em>image-2</em></p>
+</li>
+</ul>
+<p>Knowing the item, we can add to our shopping list</p>
+<ul>
+<li>The <a href="https://developer.todoist.com/guides/#developing-with-todoist">Todoist Sync API</a> is used to add the item to our shopping list</li>
+</ul>
+<h2 id="hardware">Hardware</h2>
+<p>The final form of this project runs on a <a href="https://www.raspberrypi.com/">RaspberryPi</a> with a live video processing stream within my fridge. In reality this was a little impractical as both power and ethernet cables needed to be routed past the fridge seal.</p>
+<p>To demonstrate the steps without the need for specific hardware (or a fridge) you can run this project on almost any machine. The setup steps below use a demonstration video file.</p>
+<h2 id="overview">Overview</h2>
+<p><img src="./00000000.png" alt="FridgeBot — fridge monitoring with GPT-4o"><em>FridgeBot — fridge monitoring with GPT-4o</em></p>
+<h2 id="setup-virtual-python-environment">Setup virtual python environment</h2>
+<p>Create a <a href="https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/">virtual python</a> environment to keep dependencies separate. The <em>venv</em> module is the preferred way to create and manage virtual environments.</p>
+<pre><code>python3 -m venv .venv
+</code></pre>
+<p>Before you can start installing or using packages in your virtual environment you’ll need to activate it.</p>
+<pre><code>source .venv/bin/activate
+pip install --upgrade pip
+pip install -r requirements.txt
+</code></pre>
+<h2 id="api-setup">API setup</h2>
+<p>Now it’s time to set up the local API secrets.</p>
+<pre><code>cp -i config_secrets_example.py config_secrets.py
+</code></pre>
+<p>Edit config_secrets.py with <em>OpenAPI</em> tokens along with the <em>Todoist</em> API secret tokens</p>
+<ul>
+<li>
+<p><a href="https://platform.openai.com/api-keys">OpenAI API keys</a></p>
+</li>
+<li>
+<p><a href="https://app.todoist.com/app/settings/integrations/developer">Todoist API keys</a></p>
+</li>
+</ul>
+<h2 id="fridgebot--video-process-only">FridgeBot — video process only</h2>
+<p>To run FridgeBot with example video file without calling OpenAI run the following</p>
+<pre><code>python fridgebot.py --video media/pikelets.mov
+</code></pre>
+<p>This should generate two files representing the first lit image and the last lit image within the video media/pikelets.1.jpg and media/pikelets.2.jpg</p>
+<h2 id="fridgebot--video-process-and-openai">FridgeBot — video process and OpenAI</h2>
+<p>To run FridgeBot with example video file, calling OpenAI run the following</p>
+<pre><code>python fridgebot.py --video media/pikelets.mov --openai
+</code></pre>
+<p>This should generate two files, and query the OpenAI API to identify the item removed — Pikelets</p>
+<h2 id="fridgebot--video-process-openai-and-todoist">FridgeBot — video process, OpenAI and Todoist</h2>
+<p>To run FridgeBot with example video file, calling OpenAI and adding item to Todoist</p>
+<pre><code>python fridgebot.py --video media/pikelets.mov --openai --todoist
+</code></pre>
+<p>This should generate two files, and query the OpenAI API and add Pikelets to the Todoist shopping list</p>
+<h2 id="fridgebot-code">FridgeBot Code</h2>
+<p>FridgeBot code — <a href="https://github.com/saubury/fridgebot_openai">https://github.com/saubury/fridgebot_openai</a></p>
+
+      </article>
+      
+    </main>
+    <nav class="end-nav side-padding">
+      
+      <a ontouchstart="cardPressed.call(this)" ontouchend="cardReleased.call(this)" ontouchmove="cardReleased.call(this)" 
+  href="https://simonaubury.com/posts/202310_ginai/" class="card blog-card bc-next" rel="bookmark" >
+  
+  <div class="card-img-container">
+    <p class="card-img-overlay">Next Article</p>
+    <picture>
+      
+      
+      
+      <source srcset="https://simonaubury.com/posts/202310_ginai/00000000_hu6c7b6bd2da020e68922bd20bf9233b9f_321817_400x0_resize_lanczos_3.png 1x, https://simonaubury.com/posts/202310_ginai/00000000_hu6c7b6bd2da020e68922bd20bf9233b9f_321817_800x0_resize_lanczos_3.png 2x, https://simonaubury.com/posts/202310_ginai/00000000_hu6c7b6bd2da020e68922bd20bf9233b9f_321817_1200x0_resize_lanczos_3.png 3x">
+      <img src="https://simonaubury.com/posts/202310_ginai/00000000_hu6c7b6bd2da020e68922bd20bf9233b9f_321817_400x0_resize_lanczos_3.png" class="card-img" >
+    </picture>
+  </div>
+  
+  <article class="card-body">
+    <h2 class="card-title">🍹GinAI - Cocktails mixed with generative AI</h2>
+    <p class="card-text">Cocktails mixed with generative AI</p>
+    <div class="card-subtext muted-text">
+      <p>Posted <time datetime="2023-10-18">Oct 18, 2023</time></p>
+      <p>#GenerativeAI #duckdb </p>
+    </div>
+  </article>
+</a>
+      
+    </nav>
+    <footer class="side-padding" style="background-image: url('https://simonaubury.com/img/home-blob-flip.svg');">
+    <a href="https://simonaubury.com/" class="footer-link">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/home.svg" alt="Home">
+    
+    </a>
+    
+    
+    
+    <a href="https://github.com/saubury" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/github.svg" alt="GitHub"/>
+    
+    </a>
+    
+    
+    
+    <a href="https://www.linkedin.com/in/simonaubury" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/linkedin.svg" alt="LinkedIn"/>
+    
+    </a>
+    
+    
+    <a href="https://simonaubury.com/index.xml" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/rss.svg" alt="RSS"/>
+    
+    </a>
+    
+    
+    
+    
+    
+    
+    
+    
+</footer>
+    
+  <script defer src="https://simonaubury.com/js/katex.min.js"></script>
+
+
+  <script defer src="https://simonaubury.com/js/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+
+<script src="https://simonaubury.com/js/core.min.js"></script>
+
+  </body>
+</html>

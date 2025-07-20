@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en-au" dir="ltr">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Pi Peripheral - Controlling computer actions with a $10 Raspberry Pi Zero &middot; Simon Aubury</title>
+  <meta name="description" content="Time to fly ..." />
+  <link rel="apple-touch-icon" sizes="180x180" href="https://simonaubury.com/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://simonaubury.com/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://simonaubury.com/favicon-16x16.png">
+  <link href="https://simonaubury.com/css/katex.min.css" rel="stylesheet">
+  
+  
+  
+  
+  <link href="https://simonaubury.com/css/concated.min.css" rel="stylesheet">
+  
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7N67PMRZ6N"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-7N67PMRZ6N', { 'anonymize_ip': false });
+}
+</script>
+
+  
+</head>
+
+  <body class="single-body">
+    <nav class="nav-bar side-padding">
+  <h1 class="nav-header"><a href="https://simonaubury.com/" class="nav-text">simon aubury</a></h1>
+  <div class="hamburger-menu">
+    <input class="hamburger-menu-button" type="checkbox"
+      onclick="hamburgerMenuPressed.call(this)"
+      aria-label="Hamburger Menu Button"
+    >
+    <div class="hamburger-menu-icon">
+      <span></span>
+      <span></span>
+    </div>
+    <ul id="menu" class="hamburger-menu-overlay">
+      <li><a href="https://simonaubury.com/" class="hamburger-menu-overlay-link">Home</a></li>
+      <li><a href="https://simonaubury.com/slides/" class="hamburger-menu-overlay-link">Presentation slides</a></li>
+      <li><a href="https://simonaubury.com/about-me/" class="hamburger-menu-overlay-link">About Simon</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/cat/" class="hamburger-menu-overlay-link">Cat</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/cdc/" class="hamburger-menu-overlay-link">CDC</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/duckdb/" class="hamburger-menu-overlay-link">duckdb</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/flink/" class="hamburger-menu-overlay-link">flink</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/generativeai/" class="hamburger-menu-overlay-link">GenerativeAI</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/gpt/" class="hamburger-menu-overlay-link">GPT</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/homeassistant/" class="hamburger-menu-overlay-link">homeassistant</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/kafka/" class="hamburger-menu-overlay-link">Kafka</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/ml/" class="hamburger-menu-overlay-link">ML</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/raspberry-pi/" class="hamburger-menu-overlay-link">Raspberry Pi</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/snowflake/" class="hamburger-menu-overlay-link">snowflake</a></li>
+      
+      <li><a href="https://simonaubury.com/index.xml" class="hamburger-menu-overlay-link">rss</a></li>
+    </ul>
+  </div>
+</nav>
+
+    <main class="content side-text-padding">
+      <article class="post dropcase">
+        <header class="post-header">
+          <h1 class="post-title">Pi Peripheral - Controlling computer actions with a $10 Raspberry Pi Zero</h1>
+          <p class="post-date">Posted <time datetime="2020-09-21">Sep 21, 2020</time></p>
+        </header>
+        <picture class="post-figure">
+          
+          
+          
+          <source srcset="https://simonaubury.com/posts/202009_piperipheral/00000003_hub172df024d4c2b46d39d419ad5309163_117146_711x0_resize_q75_lanczos.jpeg 1x, https://simonaubury.com/posts/202009_piperipheral/00000003_hub172df024d4c2b46d39d419ad5309163_117146_1422x0_resize_q75_lanczos.jpeg 2x, https://simonaubury.com/posts/202009_piperipheral/00000003_hub172df024d4c2b46d39d419ad5309163_117146_2133x0_resize_q75_lanczos.jpeg 3x">
+          <img src="https://simonaubury.com/posts/202009_piperipheral/00000003_hub172df024d4c2b46d39d419ad5309163_117146_711x0_resize_q75_lanczos.jpeg" >
+        </picture>
+        
+        
+        <h1 id="pi-peripheral">Pi Peripheral</h1>
+<p>Landing gear down and strobe lights active. How to add physical buttons, switches and dials to control computer actions with a $10 Raspberry Pi Zero.</p>
+<p>Why would you want to do this? Well you might want to add some additional buttons or switches to your favorite game. Or maybe you can streamline your video production but switching cameras with a foot pedal. For me, I wanted to add tactile controls to <em>Microsoft Flight Simulator 2020</em>. Switches for the landing gear, beacons and lights.</p>
+<p>Project code at — <a href="https://github.com/saubury/pi-peripheral/">https://github.com/saubury/pi-peripheral/</a></p>
+<p><img src="00000000.gif" alt="Animated GIF showing box in usage"><em>Animated GIF showing box in usage</em></p>
+<p>In short, <em>Pi Peripheral</em> can be used to control close to any keyboard activated activity — anywhere where physical controls are preferable to using a keyboard.</p>
+<h2 id="pi-peripheral--hardware">Pi Peripheral — Hardware</h2>
+<p>A Raspberry Pi Zero board acts as a HID (Human Interface Device) device — pretending to be a USB keyboard. Python code generates key-presses when GPIO events are triggered. With basic wiring, the Raspberry Pi has 28 GPIO pins suitable for controlling actions.</p>
+<h2 id="wiring">Wiring</h2>
+<p>The Raspberry Pi is very easy to wire up to switches and push buttons. Each only requires a single connection to a spare GPIO pin, and a common ground. Software will configure the GPIO pin as an input. There is no need to a physical pull up resistor — this can be configured in software.</p>
+<p><img src="00000001.png" alt="Wiring of GPIO"><em>Wiring of GPIO</em></p>
+<h2 id="power">Power</h2>
+<p>Both power and USB host (USB OTG) are provided by a single micro-USB port. Use the port labeled “USB” (<em>not</em> the one labeled “Power”).</p>
+<p><img src="00000002.jpeg" alt="Wiring of GPIO"><em>Wiring of GPIO</em></p>
+<h2 id="box-enclosure">Box Enclosure</h2>
+<p>You can be creative here — I just picked a generic project box which was easy mount the switches and push buttons.</p>
+<p><img src="00000003.jpeg" alt="Outside view of box"><em>Outside view of box</em></p>
+<h2 id="pi-peripheral--software">Pi Peripheral — Software</h2>
+<h2 id="configure-raspberry-pi-zero-as-a-usb-keyboard">Configure Raspberry Pi Zero as a USB Keyboard</h2>
+<p>The first software task is configure the Raspberry Pi Zero to act as a USB Keyboard (HID input device.) These steps have largely been inspired from <a href="https://randomnerdtutorials.com/raspberry-pi-zero-usb-keyboard-hid/">randomnerdtutorials</a> which has more detailed steps should you run into problems.</p>
+<pre><code>echo &quot;dtoverlay=dwc2&quot; | sudo tee -a /boot/config.txt
+echo &quot;dwc2&quot; | sudo tee -a /etc/modules
+echo &quot;libcomposite&quot; | sudo tee -a /etc/modules
+
+sudo cp scripts/isticktoit_usb /usr/bin
+sudo chmod +x /usr/bin/isticktoit_usb 
+</code></pre>
+<p>Add this line to the second-last line of /etc/rc.local (just before the line containing exit 0)</p>
+<pre><code>/usr/bin/isticktoit_usb # This line new
+exit 0
+</code></pre>
+<h2 id="installing-the-pi-peripheral-on-your-pc">Installing the Pi Peripheral on your PC</h2>
+<p>All going well, you can not connect the <em>Pi Peripheral</em> and it should be identified as a keyboard. This will work for Windows, Mac or Linux. Here’s what it looks like in Windows 10.</p>
+<p><img src="00000004.png" alt="Windows 10 Pop up message"><em>Windows 10 Pop up message</em></p>
+<h2 id="configuring-key-presses">Configuring Key Presses</h2>
+<p>The piperipheral.py Python code places events against each GPIO input. An event is fired when either the circuit is completed (button is pressed or the switch is flicked on) or when the circuit is disconnected (button is released or the switch is off).</p>
+<p>A keypress is composed of a keyboard code (which represents a key on a keyboard) and a modifier (such as the Shift or control key). To produce a capital <em>B</em>, we would need to send the key code of 5 (for the letter <em>b</em>) and a modifier value of 00000010 (left Shift).</p>
+<p><img src="00000005.png" alt="USB HID keyboard codes"><em>USB HID keyboard codes</em></p>
+<p>For the entire mapping look at <a href="https://www.usb.org/sites/default/files/documents/hut1_12v2.pdf">usb.org</a></p>
+<h2 id="keyboard-modifiers">Keyboard Modifiers</h2>
+<p><img src="00000006.png" alt="Keyboard Modifiers"><em>Keyboard Modifiers</em></p>
+<h2 id="gpio-to-key-mappings">GPIO to key mappings</h2>
+<p>The GPIO line to key mapping is held in a Python collection</p>
+<pre><code>*# Key mapping in the form*
+*# GPIO_ID, (press-key,press-key-modifier, release-key,release-key-modifier) *
+
+GPIO_BUTTON_1 = 6
+KEY_B = 5
+
+gpio_button_map = dict([
+    (GPIO_BUTTON_1, (KEY_B,MOD_ALT, KEY_B,MOD_L_CNTR))  
+  ])
+</code></pre>
+<h2 id="installing-the-pi-peripheral-service">Installing the Pi Peripheral Service</h2>
+<p>Now the Raspberry Pi is acting like a USB Keyboard, we need to send some key commands. The <em>Pi Peripheral</em> is a Python programmed installed as a service</p>
+<pre><code>sudo cp piperipheral.service /lib/systemd/system
+
+sudo systemctl daemon-reload
+sudo systemctl enable piperipheral.service
+sudo systemctl start piperipheral.service
+</code></pre>
+<h2 id="game-control-binding">Game control binding</h2>
+<p>This will be specific to your game or program. In <em>Microsoft Flight Simulator 2020</em> you can customize controls with this setup window.</p>
+<p><img src="00000007.png" alt="Game keyboard mapping"><em>Game keyboard mapping</em></p>
+<h2 id="code">Code</h2>
+<p>Get the code at — <a href="https://github.com/saubury/pi-peripheral/">https://github.com/saubury/pi-peripheral/</a></p>
+<h2 id="closing">Closing</h2>
+<p>A few dollars and a bit of configuration and you can have your own Pi Peripheral</p>
+
+      </article>
+      
+    </main>
+    <nav class="end-nav side-padding">
+      
+      <a ontouchstart="cardPressed.call(this)" ontouchend="cardReleased.call(this)" ontouchmove="cardReleased.call(this)" 
+  href="https://simonaubury.com/posts/202006_homeofficeergonomicswithtensorflow/" class="card blog-card bc-next" rel="bookmark" >
+  
+  <div class="card-img-container">
+    <p class="card-img-overlay">Next Article</p>
+    <picture>
+      
+      
+      
+      <source srcset="https://simonaubury.com/posts/202006_homeofficeergonomicswithtensorflow/00000002_hu3bd94160c16f7d88a2163de7a9dc7384_89184_400x0_resize_q75_lanczos.jpeg 1x, https://simonaubury.com/posts/202006_homeofficeergonomicswithtensorflow/00000002_hu3bd94160c16f7d88a2163de7a9dc7384_89184_800x0_resize_q75_lanczos.jpeg 2x, https://simonaubury.com/posts/202006_homeofficeergonomicswithtensorflow/00000002_hu3bd94160c16f7d88a2163de7a9dc7384_89184_1200x0_resize_q75_lanczos.jpeg 3x">
+      <img src="https://simonaubury.com/posts/202006_homeofficeergonomicswithtensorflow/00000002_hu3bd94160c16f7d88a2163de7a9dc7384_89184_400x0_resize_q75_lanczos.jpeg" class="card-img" >
+    </picture>
+  </div>
+  
+  <article class="card-body">
+    <h2 class="card-title">Home office ergonomics — with TensorFlow</h2>
+    <p class="card-text">Monitor good posture — with machine learning</p>
+    <div class="card-subtext muted-text">
+      <p>Posted <time datetime="2020-06-09">Jun 9, 2020</time></p>
+      <p>#ML </p>
+    </div>
+  </article>
+</a>
+      
+    </nav>
+    <footer class="side-padding" style="background-image: url('https://simonaubury.com/img/home-blob-flip.svg');">
+    <a href="https://simonaubury.com/" class="footer-link">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/home.svg" alt="Home">
+    
+    </a>
+    
+    
+    
+    <a href="https://github.com/saubury" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/github.svg" alt="GitHub"/>
+    
+    </a>
+    
+    
+    
+    <a href="https://www.linkedin.com/in/simonaubury" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/linkedin.svg" alt="LinkedIn"/>
+    
+    </a>
+    
+    
+    <a href="https://simonaubury.com/index.xml" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/rss.svg" alt="RSS"/>
+    
+    </a>
+    
+    
+    
+    
+    
+    
+    
+    
+</footer>
+    
+  <script defer src="https://simonaubury.com/js/katex.min.js"></script>
+
+
+  <script defer src="https://simonaubury.com/js/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+
+<script src="https://simonaubury.com/js/core.min.js"></script>
+
+  </body>
+</html>

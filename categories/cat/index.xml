@@ -1,0 +1,49 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Cat - Simon Aubury</title>
+    <link>https://simonaubury.com/categories/cat/</link>
+    <description>Recent content in Cat on Simon Aubury</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-au</language>
+    <lastBuildDate>Fri, 01 Jul 2022 10:22:20 +1100</lastBuildDate>
+    
+        <atom:link href="https://simonaubury.com/categories/cat/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Can ML predict where my cat is now — part 2</title>
+      <link>https://simonaubury.com/posts/202207_cat_predition2/</link>
+      <pubDate>Fri, 01 Jul 2022 10:22:20 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202207_cat_predition2/</guid>
+      <description>Where did I leave the cat?</description>
+    </item><item>
+      <title>Can ML predict where my cat is now — part 1</title>
+      <link>https://simonaubury.com/posts/202202_cat_predition1/</link>
+      <pubDate>Tue, 01 Feb 2022 10:22:20 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202202_cat_predition1/</guid>
+      <description>I know I have a cat somewhere ...</description>
+    </item><item>
+      <title>Snowy’s eating — tweeting my cats weight &amp; dining habits with a Raspberry Pi</title>
+      <link>https://simonaubury.com/posts/202107_cat_fit_part_1/</link>
+      <pubDate>Sat, 10 Jul 2021 12:00:00 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202107_cat_fit_part_1/</guid>
+      <description>Body shaming my cat</description>
+    </item><item>
+      <title>Cat tracking with Amazon Web Services— AWS IoT, DynamoDB and SageMaker</title>
+      <link>https://simonaubury.com/posts/202102_1cat3cloudspart2/</link>
+      <pubDate>Thu, 04 Feb 2021 12:00:00 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202102_1cat3cloudspart2/</guid>
+      <description>Cat tracking with AWS</description>
+    </item><item>
+      <title>1 Cat, 3 Clouds — Part 1 - Where is Snowy sleeping?</title>
+      <link>https://simonaubury.com/posts/202101_1cat3cloudspart1/</link>
+      <pubDate>Sun, 10 Jan 2021 12:00:00 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202101_1cat3cloudspart1/</guid>
+      <description>Compare the same IoT data project in AWS, Azure &amp; Google Cloud</description>
+    </item>
+  </channel>
+</rss>

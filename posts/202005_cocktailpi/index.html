@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en-au" dir="ltr">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>🍹 Cocktail Pi &middot; Simon Aubury</title>
+  <meta name="description" content="ML to make cocktails!" />
+  <link rel="apple-touch-icon" sizes="180x180" href="https://simonaubury.com/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://simonaubury.com/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://simonaubury.com/favicon-16x16.png">
+  <link href="https://simonaubury.com/css/katex.min.css" rel="stylesheet">
+  
+  
+  
+  
+  <link href="https://simonaubury.com/css/concated.min.css" rel="stylesheet">
+  
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7N67PMRZ6N"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-7N67PMRZ6N', { 'anonymize_ip': false });
+}
+</script>
+
+  
+</head>
+
+  <body class="single-body">
+    <nav class="nav-bar side-padding">
+  <h1 class="nav-header"><a href="https://simonaubury.com/" class="nav-text">simon aubury</a></h1>
+  <div class="hamburger-menu">
+    <input class="hamburger-menu-button" type="checkbox"
+      onclick="hamburgerMenuPressed.call(this)"
+      aria-label="Hamburger Menu Button"
+    >
+    <div class="hamburger-menu-icon">
+      <span></span>
+      <span></span>
+    </div>
+    <ul id="menu" class="hamburger-menu-overlay">
+      <li><a href="https://simonaubury.com/" class="hamburger-menu-overlay-link">Home</a></li>
+      <li><a href="https://simonaubury.com/slides/" class="hamburger-menu-overlay-link">Presentation slides</a></li>
+      <li><a href="https://simonaubury.com/about-me/" class="hamburger-menu-overlay-link">About Simon</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/cat/" class="hamburger-menu-overlay-link">Cat</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/cdc/" class="hamburger-menu-overlay-link">CDC</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/duckdb/" class="hamburger-menu-overlay-link">duckdb</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/flink/" class="hamburger-menu-overlay-link">flink</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/generativeai/" class="hamburger-menu-overlay-link">GenerativeAI</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/gpt/" class="hamburger-menu-overlay-link">GPT</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/homeassistant/" class="hamburger-menu-overlay-link">homeassistant</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/kafka/" class="hamburger-menu-overlay-link">Kafka</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/ml/" class="hamburger-menu-overlay-link">ML</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/raspberry-pi/" class="hamburger-menu-overlay-link">Raspberry Pi</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/snowflake/" class="hamburger-menu-overlay-link">snowflake</a></li>
+      
+      <li><a href="https://simonaubury.com/index.xml" class="hamburger-menu-overlay-link">rss</a></li>
+    </ul>
+  </div>
+</nav>
+
+    <main class="content side-text-padding">
+      <article class="post dropcase">
+        <header class="post-header">
+          <h1 class="post-title">🍹 Cocktail Pi</h1>
+          <p class="post-date">Posted <time datetime="2021-05-18">May 18, 2021</time></p>
+        </header>
+        <picture class="post-figure">
+          
+          
+          
+          <source srcset="https://simonaubury.com/posts/202005_cocktailpi/00000002_hu2bb221d16acc9989754653889554a609_74648_711x0_resize_q75_lanczos.jpeg 1x, https://simonaubury.com/posts/202005_cocktailpi/00000002_hu2bb221d16acc9989754653889554a609_74648_1422x0_resize_q75_lanczos.jpeg 2x, https://simonaubury.com/posts/202005_cocktailpi/00000002_hu2bb221d16acc9989754653889554a609_74648_2133x0_resize_q75_lanczos.jpeg 3x">
+          <img src="https://simonaubury.com/posts/202005_cocktailpi/00000002_hu2bb221d16acc9989754653889554a609_74648_711x0_resize_q75_lanczos.jpeg" >
+        </picture>
+        
+        
+        <h1 id="-cocktail-pi">🍹 Cocktail Pi</h1>
+<p>Cocktails based on your mood created by a Raspberry Pi bartender. Drinks are selected based on your emotion and multilingual voice prompts let you know when your drink is available.</p>
+
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+  <iframe src="https://www.youtube.com/embed/8q_5STFzJ6c" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video"></iframe>
+</div>
+
+<p>How to build a fully automated home build cocktail maker. Code available at <a href="https://github.com/saubury/cocktail-pi">**https://github.com/saubury/cocktail-pi</a>**🍸</p>
+<h2 id="pumps">Pumps</h2>
+<p>I used 4 <a href="https://en.wikipedia.org/wiki/Peristaltic_pump">peristaltic pumps</a> to provide a “food safe” way to pump the liquids from the drink bottles. These pumps provide a steady rate of flow of liquids when powered. By carefully timing the “on” time for the pump I can precisely deliver the ideal amount of spirits or mixers for the perfect 🍸</p>
+<p><img src="00000000.jpeg" alt="A quick search on AliExpress"><em>A quick search on AliExpress</em></p>
+<p><img src="00000001.jpeg" alt="Pumps — straight from the post"><em>Pumps — straight from the post</em></p>
+<p>The pumps are mounted on a basic wooden frame higher than the tallest bottle. My children helped to build the frame, labelling and installing the pumps.</p>
+<p><img src="00000002.jpeg" alt="The important task of adding labels to pumps"><em>The important task of adding labels to pumps</em></p>
+<p>A view from the rear show the placement of pumps and liquids. A manual electrical switch allow the pumps to be run independently from the Raspberry Pi (helpful for cleaning).</p>
+<p><img src="00000003.jpeg" alt="Rear view of Cocktail maker"><em>Rear view of Cocktail maker</em></p>
+<p>The pumps use 12 volt motors. To operate them via the Raspberry Pi I used a <a href="https://www.jaycar.com.au/arduino-compatible-4-channel-12v-relay-module/p/XC4440">4 Channel 12V Relay Module</a>. This allows the pumps to be switched on and off independently with the 5 volt signals from the <a href="https://www.raspberrypi.org/documentation/usage/gpio/">GPIO pins</a> of the Raspberry Pi.</p>
+<p><img src="00000004.jpeg" alt="Relay board"><em>Relay board</em></p>
+<p>The Raspberry Pi is mounted with the relay board. The relays switch 12 volt power on and off for the pump motors. The signals for the relay board are taken directly from the GPIO header of the Raspberry Pi.</p>
+<p><img src="00000005.jpeg" alt="Board placement"><em>Board placement</em></p>
+<h2 id="software--storing-recipes">Software — Storing Recipes</h2>
+<p><a href="./recipe.py">Recipes</a> are stored as a map of ingredients with the number of millilitres required for the perfect drink. My idea of a great <em>Vodka Lime Soda</em> is 20ml of Vodka, 70ml of Tonic and 30ml of Lime cordial. The code mapping for this is noted below.</p>
+<pre><code>pump_map = {&quot;PUMP_A&quot;: &quot;Vodka&quot;, &quot;PUMP_B&quot;: &quot;Cranberry&quot;, &quot;PUMP_C&quot;: &quot;Tonic&quot;, &quot;PUMP_D&quot;: &quot;Lime&quot;}
+
+recipe_vodkasoda = {&quot;Name&quot;: &quot;Vodka Soda&quot;, &quot;Vodka&quot;: 20, &quot;Tonic&quot;: 70}
+recipe_vodkasodacranburry = {&quot;Name&quot;: &quot;Vodka Soda Cranberry&quot;, &quot;Vodka&quot;: 20, &quot;Tonic&quot;: 70, &quot;Cranberry&quot;: 40}
+**recipe_vodkalimesoda = {&quot;Name&quot;: &quot;Vodka Lime Soda&quot;, &quot;Vodka&quot;: 20, &quot;Tonic&quot;: 70, &quot;Lime&quot;: 30}**
+recipe_limesoda = {&quot;Name&quot;: &quot;Lime Soda&quot;, &quot;Tonic&quot;: 70, &quot;Lime&quot;: 30}
+recipe_test = {&quot;Name&quot;: &quot;Test&quot;, &quot;Vodka&quot;: 10, &quot;Cranberry&quot;: 20, &quot;Tonic&quot;: 30, &quot;Lime&quot;:40}
+</code></pre>
+<h2 id="dispensing-the-perfect-amount">Dispensing the perfect amount</h2>
+<p>The pumps I’m using dispense 1.9mL of liquid per second. I can delegate each pump to a thread timer so it knows how long to operate for once the drink is selected. Have a look at <a href="./pump.py">pump.py</a> for complete code</p>
+<pre><code>*# Return the number of seconds to run*
+def lookup_time(drink_name, pump_name):
+    ML_per_second = 1.9 
+    num_ML = drink_name[pump_map[pump_name]]
+    return num_ML / ML_per_second
+
+*# Run a pump for given number of seconds*
+def pump_thread_runner(gpio_pump_name, run_seconds):
+    GPIO.output(gpio_pump_name, GPIO.HIGH)
+    time.sleep(run_seconds)
+    GPIO.output(gpio_pump_name, GPIO.LOW)
+
+*# Pick a drink*
+this_drink = recipe_vodkasoda
+
+*# How long to run each pump ...*
+duration_a = lookup_time(this_drink, &quot;PUMP_A&quot;)
+duration_b = lookup_time(this_drink, &quot;PUMP_B&quot;)
+
+*# these threads start in background*
+pump_thread_start(config.gpio_pump_a, duration_a)
+pump_thread_start(config.gpio_pump_b, duration_b)
+</code></pre>
+<h2 id="emotion-and-age">Emotion and Age</h2>
+<p>I use the <a href="https://aws.amazon.com/rekognition/">AWS Rekognition</a> service to determine likely emotion and approximate age. A photo is saved as a jpeg. Uploaded to the AWS Rekognition service I get a JSON string describing the emotion, gender and ago. Have a look at <a href="./cloud.py">cloud.py</a> for complete code</p>
+<pre><code>*# Save camera image to file file_jpg*
+with picamera.PiCamera() as camera:
+    camera.capture(file_jpg)
+
+*# Process file_jpg using AWS rekognition to extract emotion and age*
+with open(file_jpg, 'rb') as f_file_jpg:
+    b_a_jpg = bytearray(f_file_jpg.read())
+    rclient = boto3.client('rekognition')
+    response = rclient.detect_faces(Image={'Bytes': b_a_jpg}, Attributes=['ALL'])
+</code></pre>
+<h2 id="spoken-words">Spoken words</h2>
+<p>For <em>text to speech</em> I used the <a href="https://aws.amazon.com/polly/">AWS Polly</a> service. A text string can be converted into with a spoken voice saved as an mp3 audio file. Selecting the appropriate “voice” is language specific (although it is fun to have the English works spoken with a French accent). Have a look at <a href="./cloud.py">cloud.py</a> for complete code</p>
+<pre><code>*# Using &quot;Emma&quot; as am English voice, generate text to voice*
+voice='Emma'
+client = boto3.client('polly')
+response = client.synthesize_speech(OutputFormat='mp3', Text=audiotext, VoiceId=voice)    
+thebytes = response['AudioStream'].read()
+thefile = open(file_mp3, 'wb')
+thefile.write(thebytes)
+thefile.close()
+
+*# Play mp3 file via speaker*
+os.system('mpg123 -q {}'.format(file_mp3))
+</code></pre>
+<h2 id="summary">Summary</h2>
+<p>A few hours and a bit of programming and you too can enjoy a 🍹 cocktail pi. Enjoy!</p>
+<p>Project code — <a href="https://github.com/saubury/cocktail-pi">**https://github.com/saubury/cocktail-pi</a>**</p>
+<p><img src="00000006.jpeg" alt="Drinks are ready"><em>Drinks are ready</em></p>
+
+      </article>
+      
+    </main>
+    <nav class="end-nav side-padding">
+      
+      <a ontouchstart="cardPressed.call(this)" ontouchend="cardReleased.call(this)" ontouchmove="cardReleased.call(this)" 
+  href="https://simonaubury.com/posts/202102_oracle_cdc_kafka/" class="card blog-card bc-next" rel="bookmark" >
+  
+  <div class="card-img-container">
+    <p class="card-img-overlay">Next Article</p>
+    <picture>
+      
+      
+      
+      <source srcset="https://simonaubury.com/posts/202102_oracle_cdc_kafka/00000000_hu0ea297088302243dbdf50bdfb2624cf8_84383_400x0_resize_lanczos_3.png 1x, https://simonaubury.com/posts/202102_oracle_cdc_kafka/00000000_hu0ea297088302243dbdf50bdfb2624cf8_84383_800x0_resize_lanczos_3.png 2x, https://simonaubury.com/posts/202102_oracle_cdc_kafka/00000000_hu0ea297088302243dbdf50bdfb2624cf8_84383_1200x0_resize_lanczos_3.png 3x">
+      <img src="https://simonaubury.com/posts/202102_oracle_cdc_kafka/00000000_hu0ea297088302243dbdf50bdfb2624cf8_84383_400x0_resize_lanczos_3.png" class="card-img" >
+    </picture>
+  </div>
+  
+  <article class="card-body">
+    <h2 class="card-title">Oracle to Kafka — Playing with Confluent’s new Oracle CDC Source Connector in Docker</h2>
+    <p class="card-text">Streaming Oracle data into Kafka</p>
+    <div class="card-subtext muted-text">
+      <p>Posted <time datetime="2021-02-18">Feb 18, 2021</time></p>
+      <p>#Kafka #CDC </p>
+    </div>
+  </article>
+</a>
+      
+    </nav>
+    <footer class="side-padding" style="background-image: url('https://simonaubury.com/img/home-blob-flip.svg');">
+    <a href="https://simonaubury.com/" class="footer-link">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/home.svg" alt="Home">
+    
+    </a>
+    
+    
+    
+    <a href="https://github.com/saubury" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/github.svg" alt="GitHub"/>
+    
+    </a>
+    
+    
+    
+    <a href="https://www.linkedin.com/in/simonaubury" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/linkedin.svg" alt="LinkedIn"/>
+    
+    </a>
+    
+    
+    <a href="https://simonaubury.com/index.xml" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/rss.svg" alt="RSS"/>
+    
+    </a>
+    
+    
+    
+    
+    
+    
+    
+    
+</footer>
+    
+  <script defer src="https://simonaubury.com/js/katex.min.js"></script>
+
+
+  <script defer src="https://simonaubury.com/js/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+
+<script src="https://simonaubury.com/js/core.min.js"></script>
+
+  </body>
+</html>

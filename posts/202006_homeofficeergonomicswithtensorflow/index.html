@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en-au" dir="ltr">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Home office ergonomics — with TensorFlow &middot; Simon Aubury</title>
+  <meta name="description" content="Monitor good posture — with machine learning" />
+  <link rel="apple-touch-icon" sizes="180x180" href="https://simonaubury.com/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://simonaubury.com/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://simonaubury.com/favicon-16x16.png">
+  <link href="https://simonaubury.com/css/katex.min.css" rel="stylesheet">
+  
+  
+  
+  
+  <link href="https://simonaubury.com/css/concated.min.css" rel="stylesheet">
+  
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7N67PMRZ6N"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-7N67PMRZ6N', { 'anonymize_ip': false });
+}
+</script>
+
+  
+</head>
+
+  <body class="single-body">
+    <nav class="nav-bar side-padding">
+  <h1 class="nav-header"><a href="https://simonaubury.com/" class="nav-text">simon aubury</a></h1>
+  <div class="hamburger-menu">
+    <input class="hamburger-menu-button" type="checkbox"
+      onclick="hamburgerMenuPressed.call(this)"
+      aria-label="Hamburger Menu Button"
+    >
+    <div class="hamburger-menu-icon">
+      <span></span>
+      <span></span>
+    </div>
+    <ul id="menu" class="hamburger-menu-overlay">
+      <li><a href="https://simonaubury.com/" class="hamburger-menu-overlay-link">Home</a></li>
+      <li><a href="https://simonaubury.com/slides/" class="hamburger-menu-overlay-link">Presentation slides</a></li>
+      <li><a href="https://simonaubury.com/about-me/" class="hamburger-menu-overlay-link">About Simon</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/cat/" class="hamburger-menu-overlay-link">Cat</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/cdc/" class="hamburger-menu-overlay-link">CDC</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/duckdb/" class="hamburger-menu-overlay-link">duckdb</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/flink/" class="hamburger-menu-overlay-link">flink</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/generativeai/" class="hamburger-menu-overlay-link">GenerativeAI</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/gpt/" class="hamburger-menu-overlay-link">GPT</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/homeassistant/" class="hamburger-menu-overlay-link">homeassistant</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/kafka/" class="hamburger-menu-overlay-link">Kafka</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/ml/" class="hamburger-menu-overlay-link">ML</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/raspberry-pi/" class="hamburger-menu-overlay-link">Raspberry Pi</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/snowflake/" class="hamburger-menu-overlay-link">snowflake</a></li>
+      
+      <li><a href="https://simonaubury.com/index.xml" class="hamburger-menu-overlay-link">rss</a></li>
+    </ul>
+  </div>
+</nav>
+
+    <main class="content side-text-padding">
+      <article class="post dropcase">
+        <header class="post-header">
+          <h1 class="post-title">Home office ergonomics — with TensorFlow</h1>
+          <p class="post-date">Posted <time datetime="2020-06-09">Jun 9, 2020</time></p>
+        </header>
+        <picture class="post-figure">
+          
+          
+          
+          <source srcset="https://simonaubury.com/posts/202006_homeofficeergonomicswithtensorflow/00000002_hu3bd94160c16f7d88a2163de7a9dc7384_89184_711x0_resize_q75_lanczos.jpeg 1x, https://simonaubury.com/posts/202006_homeofficeergonomicswithtensorflow/00000002_hu3bd94160c16f7d88a2163de7a9dc7384_89184_1422x0_resize_q75_lanczos.jpeg 2x, https://simonaubury.com/posts/202006_homeofficeergonomicswithtensorflow/00000002_hu3bd94160c16f7d88a2163de7a9dc7384_89184_2133x0_resize_q75_lanczos.jpeg 3x">
+          <img src="https://simonaubury.com/posts/202006_homeofficeergonomicswithtensorflow/00000002_hu3bd94160c16f7d88a2163de7a9dc7384_89184_711x0_resize_q75_lanczos.jpeg" >
+        </picture>
+        
+        
+        <h1 id="home-office-ergonomicswith-tensorflow">Home office ergonomics — with TensorFlow</h1>
+<p>Monitor good posture — with machine learning. Ensure proper office ergonomics with TensorFlow, a webcam and OpenCV Python real-time computer vision libraries. Code available at <a href="https://github.com/saubury/posture-watch">https://github.com/saubury/posture-watch</a></p>
+<p><img src="00000000.gif" alt="Real-time posture monitoring — as demonstrated with a teddy bear"><em>Real-time posture monitoring — as demonstrated with a teddy bear</em></p>
+<p>If you sit behind a desk for hours at a time, you’re possibly going to slump. This may result in neck and back pain. This can be avoided by teaching a machine to recognise “good” posture from “bad” posture. To encourage better posture, instant feedback with a quick sound every-time poor office ergonomics are observed. Model training and monitoring is handled locally on device.</p>
+<h2 id="live-posture-classification--how-does-this-work">Live Posture Classification — How does this work?</h2>
+<p>Machine learning packages available for Python 3</p>
+<ul>
+<li>
+<p><a href="https://scikit-learn.org/">Scikit-learn</a> — open source Python machine learning library supporting supervised learning &amp; weightings</p>
+</li>
+<li>
+<p><a href="https://www.tensorflow.org/guide/keras/overview">Tensorflow Keras</a> — high-level API to build and train models</p>
+</li>
+<li>
+<p><a href="https://opencv.org/">OpenCV</a> — library of programming functions for real-time computer vision</p>
+</li>
+</ul>
+<p><img src="00000001.jpeg" alt="Classified Image"><em>Classified Image</em></p>
+<h2 id="training">Training</h2>
+<p><img src="00000002.jpeg" alt="A sample of images representing “good” and “bad” posture"><em>A sample of images representing “good” and “bad” posture</em></p>
+<p>Firstly we need to capture photos of “good posture” and “slumped posture”. These images are required as input to train supervised learning algorithm. In capture mode a sample image is captured every second and saved in a training folder. Run the capture mode whilst moving a bit in space to give a variety amongst the images. Press the “space” bar (with the preview frame in focus) to stop capture after about 30 images (30 seconds) have been captured.</p>
+<p>Note: the first run may take a few minutes to start</p>
+<pre><code># Capture samples of &quot;good&quot; posture
+python posture-watch.py --capture-good
+
+# Capture samples of &quot;bad&quot; posture
+python posture-watch.py --capture-slump
+</code></pre>
+<h2 id="train">Train</h2>
+<p>Now we have a variety of images representing both “good” and “bad” postures let us train a model. This should only take a few minutes. The more images captured will take longer to train, but should be more accurate.</p>
+<pre><code>python posture-watch.py --train
+</code></pre>
+<h2 id="live-video">Live Video</h2>
+<p>With the model trained we can test the classification by running a live video feed from the webcam into the model. The classification and predication confidence is overlaid onto the image. Press the “space” bar (with the preview frame in focus) to stop.</p>
+<pre><code>python posture-watch.py --live
+</code></pre>
+<h2 id="live-video-with-sound">Live Video with Sound</h2>
+<p>If you are satisfied with the accuracy of the predictions, you can constantly run the model and issue a sound alert every-time poor posture is detected.</p>
+<pre><code>python posture-watch.py --live --sound
+</code></pre>
+<h2 id="cleanup">Cleanup</h2>
+<pre><code>rm -fr train/
+</code></pre>
+<h2 id="setup">Setup</h2>
+<p>Ensure Python 3, virtualenv and pip are installed.</p>
+<pre><code>which python3
+
+virtualenv -p `which python3` venv
+source venv/bin/activate
+python --version
+pip --version
+pip install -r requirements.txt
+</code></pre>
+<h2 id="code">Code</h2>
+<p>Code available at <a href="https://github.com/saubury/posture-watch">https://github.com/saubury/posture-watch</a></p>
+
+      </article>
+      
+    </main>
+    <nav class="end-nav side-padding">
+      
+      <a ontouchstart="cardPressed.call(this)" ontouchend="cardReleased.call(this)" ontouchmove="cardReleased.call(this)" 
+  href="https://simonaubury.com/posts/202004_kafkawithavrovskafkawithprotobuf/" class="card blog-card bc-next" rel="bookmark" >
+  
+  <div class="card-img-container">
+    <p class="card-img-overlay">Next Article</p>
+    <picture>
+      
+      
+      
+      <source srcset="https://simonaubury.com/posts/202004_kafkawithavrovskafkawithprotobuf/00000000_hue4a5b87045399449d309d22ffea57b53_79605_400x0_resize_lanczos_3.png 1x, https://simonaubury.com/posts/202004_kafkawithavrovskafkawithprotobuf/00000000_hue4a5b87045399449d309d22ffea57b53_79605_800x0_resize_lanczos_3.png 2x, https://simonaubury.com/posts/202004_kafkawithavrovskafkawithprotobuf/00000000_hue4a5b87045399449d309d22ffea57b53_79605_1200x0_resize_lanczos_3.png 3x">
+      <img src="https://simonaubury.com/posts/202004_kafkawithavrovskafkawithprotobuf/00000000_hue4a5b87045399449d309d22ffea57b53_79605_400x0_resize_lanczos_3.png" class="card-img" >
+    </picture>
+  </div>
+  
+  <article class="card-body">
+    <h2 class="card-title">Kafka with AVRO vs., Kafka with Protobuf vs., Kafka with JSON Schema</h2>
+    <p class="card-text">Kafka serialisation schemes</p>
+    <div class="card-subtext muted-text">
+      <p>Posted <time datetime="2020-05-02">May 2, 2020</time></p>
+      <p>#Kafka </p>
+    </div>
+  </article>
+</a>
+      
+    </nav>
+    <footer class="side-padding" style="background-image: url('https://simonaubury.com/img/home-blob-flip.svg');">
+    <a href="https://simonaubury.com/" class="footer-link">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/home.svg" alt="Home">
+    
+    </a>
+    
+    
+    
+    <a href="https://github.com/saubury" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/github.svg" alt="GitHub"/>
+    
+    </a>
+    
+    
+    
+    <a href="https://www.linkedin.com/in/simonaubury" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/linkedin.svg" alt="LinkedIn"/>
+    
+    </a>
+    
+    
+    <a href="https://simonaubury.com/index.xml" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/rss.svg" alt="RSS"/>
+    
+    </a>
+    
+    
+    
+    
+    
+    
+    
+    
+</footer>
+    
+  <script defer src="https://simonaubury.com/js/katex.min.js"></script>
+
+
+  <script defer src="https://simonaubury.com/js/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+
+<script src="https://simonaubury.com/js/core.min.js"></script>
+
+  </body>
+</html>

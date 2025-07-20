@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en-au" dir="ltr">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Did I beat Ben? Race tracking with Kafka KSQL, MQTT &amp; Kibana &middot; Simon Aubury</title>
+  <meta name="description" content="Race tracking with Kafka KSQL, MQTT &amp; Kibana" />
+  <link rel="apple-touch-icon" sizes="180x180" href="https://simonaubury.com/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://simonaubury.com/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://simonaubury.com/favicon-16x16.png">
+  <link href="https://simonaubury.com/css/katex.min.css" rel="stylesheet">
+  
+  
+  
+  
+  <link href="https://simonaubury.com/css/concated.min.css" rel="stylesheet">
+  
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7N67PMRZ6N"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-7N67PMRZ6N', { 'anonymize_ip': false });
+}
+</script>
+
+  
+</head>
+
+  <body class="single-body">
+    <nav class="nav-bar side-padding">
+  <h1 class="nav-header"><a href="https://simonaubury.com/" class="nav-text">simon aubury</a></h1>
+  <div class="hamburger-menu">
+    <input class="hamburger-menu-button" type="checkbox"
+      onclick="hamburgerMenuPressed.call(this)"
+      aria-label="Hamburger Menu Button"
+    >
+    <div class="hamburger-menu-icon">
+      <span></span>
+      <span></span>
+    </div>
+    <ul id="menu" class="hamburger-menu-overlay">
+      <li><a href="https://simonaubury.com/" class="hamburger-menu-overlay-link">Home</a></li>
+      <li><a href="https://simonaubury.com/slides/" class="hamburger-menu-overlay-link">Presentation slides</a></li>
+      <li><a href="https://simonaubury.com/about-me/" class="hamburger-menu-overlay-link">About Simon</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/cat/" class="hamburger-menu-overlay-link">Cat</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/cdc/" class="hamburger-menu-overlay-link">CDC</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/duckdb/" class="hamburger-menu-overlay-link">duckdb</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/flink/" class="hamburger-menu-overlay-link">flink</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/generativeai/" class="hamburger-menu-overlay-link">GenerativeAI</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/gpt/" class="hamburger-menu-overlay-link">GPT</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/homeassistant/" class="hamburger-menu-overlay-link">homeassistant</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/kafka/" class="hamburger-menu-overlay-link">Kafka</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/ml/" class="hamburger-menu-overlay-link">ML</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/raspberry-pi/" class="hamburger-menu-overlay-link">Raspberry Pi</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/snowflake/" class="hamburger-menu-overlay-link">snowflake</a></li>
+      
+      <li><a href="https://simonaubury.com/index.xml" class="hamburger-menu-overlay-link">rss</a></li>
+    </ul>
+  </div>
+</nav>
+
+    <main class="content side-text-padding">
+      <article class="post dropcase">
+        <header class="post-header">
+          <h1 class="post-title">Did I beat Ben? Race tracking with Kafka KSQL, MQTT &amp; Kibana</h1>
+          <p class="post-date">Posted <time datetime="2019-05-28">May 28, 2019</time></p>
+        </header>
+        <picture class="post-figure">
+          
+          
+          
+          <source srcset="https://simonaubury.com/posts/201905_didibeatbenracetrackingwithkafka/00000000_hu449e7382b39be8b559e26b49614d7644_977510_711x0_resize_lanczos_1.gif 1x, https://simonaubury.com/posts/201905_didibeatbenracetrackingwithkafka/00000000_hu449e7382b39be8b559e26b49614d7644_977510_1422x0_resize_lanczos_1.gif 2x, https://simonaubury.com/posts/201905_didibeatbenracetrackingwithkafka/00000000_hu449e7382b39be8b559e26b49614d7644_977510_2133x0_resize_lanczos_1.gif 3x">
+          <img src="https://simonaubury.com/posts/201905_didibeatbenracetrackingwithkafka/00000000_hu449e7382b39be8b559e26b49614d7644_977510_711x0_resize_lanczos_1.gif" >
+        </picture>
+        
+        
+        <h1 id="did-i-beat-ben-race-tracking-with-kafka-ksql-mqtt--kibana">Did I beat Ben? Race tracking with Kafka KSQL, MQTT &amp; Kibana</h1>
+<p>Live race tracking with MQTT and Kafka streaming. Race statistics using KSQL and visualisations with Kibana. Can I run a half marathon faster than Ben?</p>
+<h2 id="design-overview">Design Overview</h2>
+<p><img src="00000001.png" alt=""></p>
+<p>Runners are tracked with GPS based apps installed on their phones. Location updates are sent (via MQTT) to a central server. Kafka acts as a streaming platform with KSQL performing the live race computations (speed, rank, distance to finish line). The web-based mapping dashboard is generated using Kibana.</p>
+<h2 id="owntracks-open-source-phone-app">OwnTracks open-source phone app</h2>
+<p>Each runner has <a href="https://owntracks.org/">OwnTracks </a>on their phone. OwnTracks is an open-source app (<a href="https://itunes.apple.com/au/app/owntracks/id692424691?mt=8">iOS</a> and <a href="https://play.google.com/store/apps/details?id=org.owntracks.android&amp;hl=en">Android</a>) for communicating phone location to an MQTT server. Phone location is a great proxy for runner location!</p>
+<p>So why MQTT and not directly into Kafka? Well, MQTT is lightweight TCP/IP messaging protocol perfect for power constrained devices. It allows for short efficient messages to be constantly sent from the runners phone to a central server. It’s closer to a notice board than a queue, and allows for lightweight messages like “I’ve just moved to location x,y”.</p>
+<p><img src="00000002.png" alt="CloudMQTT and OwnTracks app setup"><em>CloudMQTT and OwnTracks app setup</em></p>
+<p>I chose <a href="https://www.cloudmqtt.com/">CloudMQTT</a> to act as a hosted MQTT server, and the free-tier was super easy to configure. Each device has a unique login (eg., <em>simonuser</em>) and device ID (eg., <em>simonphone</em>). This allowed each runner to be individually tracked with a shared server.</p>
+<h2 id="mqtt-to-kafka-with-kafka-connect">MQTT to Kafka with Kafka Connect</h2>
+<p><a href="https://dzone.com/articles/apache-kafka-mqtt-end-to-end-iot-integration-githu">Kafka and MQTT are two complementary technologies</a>. MQTT acts more like a key/value store, whereas Kafka is a complete streaming platform. I used the <a href="https://docs.confluent.io/current/connect/kafka-connect-mqtt/index.html">Kafka Connect MQTT Connector</a> to poll MQTT updates and bring the location updates down to a Kafka cluster.</p>
+<!-- raw HTML omitted -->
+<p>To check this is actually collection location data into the “<em>data_mqtt</em>” topic I can query like this</p>
+<!-- raw HTML omitted -->
+<p>Looks like a valid stream of location updates. Now let’s process it to see who is winning.</p>
+<h2 id="kafka-streaming-transformation-with-ksql">Kafka Streaming Transformation with KSQL</h2>
+<p>I wanted to know where each runner was — along with their average speed and distance to the finish line. <a href="https://www.confluent.io/product/ksql/">KSQL</a> allowed me to determine each runners speed (over a 5 minute window) and distance to finish line.</p>
+<p>By concatenating the latitude and longitude fields together I could also form a “<em>geo_point</em>” data type suitable for mapping in Kibana.</p>
+<!-- raw HTML omitted -->
+<h2 id="kafka-to-elastic--kibana">Kafka To Elastic &amp; Kibana</h2>
+<p>Now I have 2 derived topics</p>
+<ul>
+<li>
+<p><em>runner-location</em> — a stream of runner’s and their location</p>
+</li>
+<li>
+<p><em>runner-status</em> — a table of runner’s speed and remaining distance</p>
+</li>
+</ul>
+<p>I can write these topics into Kibana using the Elastic <a href="https://docs.confluent.io/current/connect/kafka-connect-elasticsearch/index.html">Kafka Connect Sink</a> Connector.</p>
+<!-- raw HTML omitted -->
+<h2 id="kibana-visualisations">Kibana Visualisations</h2>
+<p><img src="00000003.png" alt="A picture tells 10³ words"><em>A picture tells 10³ words</em></p>
+<p>A Kibana dashboard is a great way to display a real-time display of</p>
+<ul>
+<li>
+<p>Runner location platted on a map</p>
+</li>
+<li>
+<p>Speed graph per runner</p>
+</li>
+<li>
+<p>Altitude plot per runner</p>
+</li>
+<li>
+<p>A league table — who is closest to the finish line!</p>
+</li>
+</ul>
+<p>A nice trick for Kibana mapping when you want to zoom further to street-level data is to use Open Street Map as a <a href="https://www.objectrocket.com/blog/how-to/elasticsearch-tile-service/">third party map and tile services</a>. Allows for much richer maps when zoomed in.</p>
+<h2 id="did-i-beat-ben">Did I beat Ben?</h2>
+<p>No. <a href="https://www.linkedin.com/in/benjamin-widdup-a8a2175/">Ben </a>beat me by a sizeable margin. Perhaps I should spend more time training than coding?</p>
+<p><img src="00000004.jpeg" alt="Me (left) who lost to Ben (right)"><em>Me (left) who lost to Ben (right)</em></p>
+<h2 id="want-to-try-it">Want To Try It?</h2>
+<p>Want to build your own race mapper for displaying participant progress and location? You can build an entire Kafka, KSQL, Kibana dashboard with demonstration run data by cloning</p>
+<ul>
+<li>
+<p><a href="https://github.com/saubury/race-mapper/">https://github.com/saubury/race-mapper/</a></p>
+</li>
+<li>
+<p><a href="https://www.udemy.com/kafka-ksql/?couponCode=MEDIUM">***KSQL — my course on Udemy</a>. ***(unashamed plug!)</p>
+</li>
+</ul>
+<h2 id="credits--references">Credits &amp; References</h2>
+<ul>
+<li>
+<p><a href="https://owntracks.org/">https://owntracks.org/</a></p>
+</li>
+<li>
+<p><a href="https://www.cloudmqtt.com/">https://www.cloudmqtt.com/</a></p>
+</li>
+<li>
+<p><a href="https://dzone.com/articles/apache-kafka-mqtt-end-to-end-iot-integration-githu">https://dzone.com/articles/apache-kafka-mqtt-end-to-end-iot-integration-githu</a> — by <a href="https://dzone.com/users/758579/megachucky.html">Kai Wähner</a></p>
+</li>
+<li>
+<p>And of course — thanks <a href="https://www.linkedin.com/in/benjamin-widdup-a8a2175/">Ben</a>!</p>
+</li>
+</ul>
+
+      </article>
+      
+    </main>
+    <nav class="end-nav side-padding">
+      
+      <a ontouchstart="cardPressed.call(this)" ontouchend="cardReleased.call(this)" ontouchmove="cardReleased.call(this)" 
+  href="https://simonaubury.com/posts/201810_machinelearningbugmewhenivelefttheheateron/" class="card blog-card bc-next" rel="bookmark" >
+  
+  <div class="card-img-container">
+    <p class="card-img-overlay">Next Article</p>
+    <picture>
+      
+      
+      
+      <source srcset="https://simonaubury.com/posts/201810_machinelearningbugmewhenivelefttheheateron/00000000_hue391978f60f2f84b9f39c955c804d55e_70998_400x0_resize_lanczos_3.png 1x, https://simonaubury.com/posts/201810_machinelearningbugmewhenivelefttheheateron/00000000_hue391978f60f2f84b9f39c955c804d55e_70998_800x0_resize_lanczos_3.png 2x, https://simonaubury.com/posts/201810_machinelearningbugmewhenivelefttheheateron/00000000_hue391978f60f2f84b9f39c955c804d55e_70998_1200x0_resize_lanczos_3.png 3x">
+      <img src="https://simonaubury.com/posts/201810_machinelearningbugmewhenivelefttheheateron/00000000_hue391978f60f2f84b9f39c955c804d55e_70998_400x0_resize_lanczos_3.png" class="card-img" >
+    </picture>
+  </div>
+  
+  <article class="card-body">
+    <h2 class="card-title">Machine learning &amp; Kafka KSQL stream processing — bug me when I’ve left the heater on</h2>
+    <p class="card-text">Bug me when I’ve left the heater on</p>
+    <div class="card-subtext muted-text">
+      <p>Posted <time datetime="2018-09-08">Sep 8, 2018</time></p>
+      <p>#Kafka </p>
+    </div>
+  </article>
+</a>
+      
+    </nav>
+    <footer class="side-padding" style="background-image: url('https://simonaubury.com/img/home-blob-flip.svg');">
+    <a href="https://simonaubury.com/" class="footer-link">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/home.svg" alt="Home">
+    
+    </a>
+    
+    
+    
+    <a href="https://github.com/saubury" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/github.svg" alt="GitHub"/>
+    
+    </a>
+    
+    
+    
+    <a href="https://www.linkedin.com/in/simonaubury" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/linkedin.svg" alt="LinkedIn"/>
+    
+    </a>
+    
+    
+    <a href="https://simonaubury.com/index.xml" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/rss.svg" alt="RSS"/>
+    
+    </a>
+    
+    
+    
+    
+    
+    
+    
+    
+</footer>
+    
+  <script defer src="https://simonaubury.com/js/katex.min.js"></script>
+
+
+  <script defer src="https://simonaubury.com/js/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+
+<script src="https://simonaubury.com/js/core.min.js"></script>
+
+  </body>
+</html>

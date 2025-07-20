@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en-au" dir="ltr">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Kafka Summit 2019 San Francisco: a review &middot; Simon Aubury</title>
+  <meta name="description" content="Kafka Summit 2019 San Francisco" />
+  <link rel="apple-touch-icon" sizes="180x180" href="https://simonaubury.com/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://simonaubury.com/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://simonaubury.com/favicon-16x16.png">
+  <link href="https://simonaubury.com/css/katex.min.css" rel="stylesheet">
+  
+  
+  
+  
+  <link href="https://simonaubury.com/css/concated.min.css" rel="stylesheet">
+  
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7N67PMRZ6N"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-7N67PMRZ6N', { 'anonymize_ip': false });
+}
+</script>
+
+  
+</head>
+
+  <body class="single-body">
+    <nav class="nav-bar side-padding">
+  <h1 class="nav-header"><a href="https://simonaubury.com/" class="nav-text">simon aubury</a></h1>
+  <div class="hamburger-menu">
+    <input class="hamburger-menu-button" type="checkbox"
+      onclick="hamburgerMenuPressed.call(this)"
+      aria-label="Hamburger Menu Button"
+    >
+    <div class="hamburger-menu-icon">
+      <span></span>
+      <span></span>
+    </div>
+    <ul id="menu" class="hamburger-menu-overlay">
+      <li><a href="https://simonaubury.com/" class="hamburger-menu-overlay-link">Home</a></li>
+      <li><a href="https://simonaubury.com/slides/" class="hamburger-menu-overlay-link">Presentation slides</a></li>
+      <li><a href="https://simonaubury.com/about-me/" class="hamburger-menu-overlay-link">About Simon</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/cat/" class="hamburger-menu-overlay-link">Cat</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/cdc/" class="hamburger-menu-overlay-link">CDC</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/duckdb/" class="hamburger-menu-overlay-link">duckdb</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/flink/" class="hamburger-menu-overlay-link">flink</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/generativeai/" class="hamburger-menu-overlay-link">GenerativeAI</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/gpt/" class="hamburger-menu-overlay-link">GPT</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/homeassistant/" class="hamburger-menu-overlay-link">homeassistant</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/kafka/" class="hamburger-menu-overlay-link">Kafka</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/ml/" class="hamburger-menu-overlay-link">ML</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/raspberry-pi/" class="hamburger-menu-overlay-link">Raspberry Pi</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/snowflake/" class="hamburger-menu-overlay-link">snowflake</a></li>
+      
+      <li><a href="https://simonaubury.com/index.xml" class="hamburger-menu-overlay-link">rss</a></li>
+    </ul>
+  </div>
+</nav>
+
+    <main class="content side-text-padding">
+      <article class="post dropcase">
+        <header class="post-header">
+          <h1 class="post-title">Kafka Summit 2019 San Francisco: a review</h1>
+          <p class="post-date">Posted <time datetime="2019-10-12">Oct 12, 2019</time></p>
+        </header>
+        <picture class="post-figure">
+          
+          
+          
+          <source srcset="https://simonaubury.com/posts/201910_kafkasummit_2019sanfranciscoareview/00000000_huf0f87906e2fc274c7762b48267ef15a0_183620_711x0_resize_lanczos_3.png 1x, https://simonaubury.com/posts/201910_kafkasummit_2019sanfranciscoareview/00000000_huf0f87906e2fc274c7762b48267ef15a0_183620_1422x0_resize_lanczos_3.png 2x, https://simonaubury.com/posts/201910_kafkasummit_2019sanfranciscoareview/00000000_huf0f87906e2fc274c7762b48267ef15a0_183620_2133x0_resize_lanczos_3.png 3x">
+          <img src="https://simonaubury.com/posts/201910_kafkasummit_2019sanfranciscoareview/00000000_huf0f87906e2fc274c7762b48267ef15a0_183620_711x0_resize_lanczos_3.png" >
+        </picture>
+        
+        
+        <h1 id="kafka-summit-2019-san-francisco-a-review">Kafka Summit 2019 San Francisco: a review</h1>
+<p>2 day summit review : welcome to the world of streaming data!</p>
+<p>Kafka Summit San Francisco (October 2019) was a two day conference aimed at data architects, engineers and developers who are keen to learn about streaming data and appreciate the real-world use cases of others. The event is organised by Confluent, the commercial company founded by the original creators of Apache Kafka.</p>
+<p>The summit was held in a single location, the Hilton hotel Union Square, San Francisco. This was a central location, and was easily accessed (well, once you actually made it to San Francisco). This was the third &amp; largest Kafka event of 2019, following on from the recent London and New York summits.</p>
+<p>The presentations were split amongst 4 tracks for both days (Core Kafka, Event Driven Development, Stream Processing and Use Cases). It was difficult choosing the 14 talks to attend with the realisation I’d be missing out on 42 session. Luckily, all are recorded (links below). The big draw cards were hearing from the engineering teams of NASA JPL, Tesla, Apple, Walmart &amp; Netflix and how they each manage trillions of events every day.</p>
+<p>I was also keen to attend and understand the lessons from less high profile institutions, and there was a large variety of sessions to choose from. There were over 250 submissions for 56 sessions so the calibre of the presentations was super high.</p>
+<h3 id="day-0"><strong>Day-0</strong></h3>
+<p>The Sunday before the summit was a mini “pre” event — an opportunity to meet the Kafka community contributors , conference speakers and Confluent developer advocates. I was really thrilled to be invited; and it gave me the opportunity to personally thank some amazingly talented distributed system engineers.</p>
+<p><img src="00000001.png" alt="Me and the very talented Gwen Shapira"><em>Me and the very talented <strong>Gwen Shapira</strong></em></p>
+<p><strong>Day-1</strong></p>
+<p>The summit opened with a warm welcome from Tim Berglund, welcoming the crowd and framing what was in store for the next two days. Following Tim was the keynote presentations from Jun Rao sharing the origin-story of Kafka. Jun covered the history of the Apache Kafka project, and made a nice call of appreciation to the over 600 contributors. The biggest “whoop” from the audience was the road-map discussion around the planned removal of zookeeper.</p>
+<p>Following Jun was an entertaining fireside chat with Chris Kasten of Walmart. Chris discussed Walmart’s real time platform managing inventory, analysing fraud and processing every click on their digital channels. Walmart sees 11 billion events a day on their 85 node cluster.</p>
+<p>I’d summarise the day-1 keynote as good, but not great. It was entertaining, but we didn’t learn anything new. However, the day was just getting going … and the sessions following the keynote were fabulous!</p>
+<p>My favourite sessions of the day included</p>
+<ul>
+<li>
+<p><a href="https://www.confluent.io/kafka-summit-san-francisco-2019/kafka-on-kubernetes-keeping-it-simple">Kafka on Kubernetes: Keeping It Simple</a> by Nikki Thean of Etsy. A wonderful and honest recount of the on-prem to cloud journey from Nikki and her team at Etsy. What they learnt and how others can avoid similar pitfalls</p>
+</li>
+<li>
+<p><a href="https://www.confluent.io/kafka-summit-san-francisco-2019/using-kafka-to-discover-events-hidden-in-your-database">Using Kafka to Discover Events Hidden in Your Database</a> by Anna McDonald of SAS Institute — a fascinating &amp; entertaining explanation of the styles of streaming. Anna shared a great overview of derivative event processing and event storming. Some great advice, including the need to bring the business on board and focus on what’s important</p>
+</li>
+<li>
+<p>The best technical sessions I attended covered the many concepts of time in <a href="https://www.confluent.io/kafka-summit-san-francisco-2019/whats-the-time-and-why">What’s the Time? …and Why?</a> With Matthias J. Sax of Confluent. A great dive into the strict offset ordering and rich timestamp semantics available from Kafka</p>
+</li>
+</ul>
+<p>Although last of the day I loved the session from Jesse Yates of Tesla describing the incredible edge cases with <a href="https://www.confluent.io/kafka-summit-san-francisco-2019/0-60-teslas-streaming-data-platform">Tesla’s Streaming Data Platform</a>. Cars emit a lot of data, and parking them in a faraday cage (ie., a garage) for a few months means dealing with a variety of different versions of IoT payloads at high velocity.</p>
+<p><img src="00000002.io/kafka-summit-san-francisco-2019/observability-for-everyone" alt="Observability for Everyone from Inny and Andrew"> from <strong>Inny and Andrew</strong>*</p>
+<p>And the <a href="https://www.confluent.io/kafka-summit-san-francisco-2019/observability-for-everyone">Observability for Everyone</a> from my ThoughtWorks colleagues <strong>Inny and Andrew</strong> was well attended (standing room only!)</p>
+<p>Day-1 concluded with a fun Kafka Summit Party. A great opportunity to talk to attendees, contributors, engineers and presenters (and find a beer or n).</p>
+<p><img src="00000003.png" alt="Kafka Summit Party"><em>Kafka Summit Party</em></p>
+<h3 id="day-2"><strong>Day-2</strong></h3>
+<p>The day-2 keynote was again opened by the marvellous Tim Berglund. Tim applauded the work of contributors and community involvement. Following Tim, Jay Kreps (co-founder and CEO of Confluent) provided an interesting position on where streaming was going (data in motion, and queries are static). The take-away was classic relational databases aren’t going away, but data warehousing is definitely changing with the advent of event streaming platforms.</p>
+<p>KSQL is being enhanced and provides additional integration for the Confluent platform (allows you to deploy and configure Kafka Connect framework for sources and sinks). Have a look at <a href="http://cnfl.io/ksql-klip-7">http://cnfl.io/ksql-klip-7</a> (Kafka Connect Integration) and <a href="http://cnfl.io/ksql-klip-8">http://cnfl.io/ksql-klip-8</a> (Queryable State Stores) for a bit more detail.</p>
+<p>Dav Tagare from Lyft described their streaming platforms (160 billion writes / day over 11 clusters) — wow!</p>
+<p><img src="00000004.png" alt="Jay Kreps provided an insight into new KSQL capabilities"><em><strong>Jay Kreps</strong> provided an insight into new KSQL capabilities</em></p>
+<p>All the day-2 sessions I attended were great, but the highlights for me were</p>
+<p>· <a href="https://www.confluent.io/kafka-summit-san-francisco-2019/building-a-newsfeed-from-the-universe-data-streams-in-astronomy">Data Streams in Astronomy</a> with Maria Patterson. Building a news feed from the Universe and understanding Data Streams in Astronomy. A fascinating explanation of the challenges when finding significant astronomy events within 20 PB of data and using new computational methods for observing the sky.</p>
+<p>· <a href="https://www.confluent.io/kafka-summit-san-francisco-2019/event-sourcing-stream-processing-and-serverless">Event Sourcing, Stream Processing and Serverless</a> with Ben Stopford. Ben shared a succinct review of the styles of event sourcing architecture, CQRS patterns and the evolution of micro-services</p>
+<p>· <a href="https://www.confluent.io/kafka-summit-san-francisco-2019/building-an-enterprise-eventing-framework">Building an Enterprise Eventing Framework</a> with Bryan Zelle, &amp; Neil Buesing</p>
+<p>· <a href="https://www.confluent.io/kafka-summit-san-francisco-2019/building-stream-processing-applications-with-apache-kafka-using-ksql">Building Stream Processing Applications with Apache Kafka Using KSQL</a> by Robin Moffatt — the highest rated session of the conference.</p>
+<p><img src="00000005.png" alt="Me stalking Ben Stopford"><em>Me stalking <strong>Ben Stopford</strong></em></p>
+<h3 id="audience--vibe"><strong>Audience &amp; Vibe</strong></h3>
+<p>The audience ranged from Kafka beginners to Apache contributors, product owners, engineers and service providers. There were around 2,200 attendees (significantly more than last year where 1,200 attended). Overall, there was a nice focus in community (big call out to committers), sharing, engagement &amp; well-being (including a lovely morning run across the Golden Gate Bridge). Also liked that t-shirts were printed on demand if you wanted one.</p>
+<p><img src="00000006.png" alt="A great start to day-2 — a run over Golden Gate Bridge"><em>A great start to day-2 — a run over Golden Gate Bridge</em></p>
+<p>Girl Geek Dinner with Neha Narkhede (Co-founder of Confluent), was a nice community event and offered 200 attendees a supported and supportive way to participate in the conference &amp; community.</p>
+<p>Outside the main conference was the partner event and a meetup at the new Confluent campus.</p>
+<h3 id="wrap-up">Wrap up</h3>
+<p>The Kafka Summit 2019 summit was simply fantastic. The openness and access to such a talented community was wonderful; and it’s exhilarating to be surrounded by such talent, enthusiasm and community spirit. As a rapidly growing community it’s refreshing to see the energy, openness and technical strength continue amongst the Apache Kafka community.</p>
+<p><img src="00000007.png" alt="Friendly faces — a #streamingselfie Tim Berglund, Neil Buesing &amp; Viktor Gamov"><em>Friendly faces — a #streamingselfie Tim Berglund, Neil Buesing &amp; Viktor Gamov</em></p>
+<p>The Videos &amp; Slides of Kafka Summit 2019 San Francisco are available at <a href="https://www.confluent.io/resources/kafka-summit-san-francisco-2019/">https://www.confluent.io/resources/kafka-summit-san-francisco-2019/</a> . If you don’t have 56 hours to watch them all, you should at least watch <a href="https://www.confluent.io/kafka-summit-san-francisco-2019/event-sourcing-stream-processing-and-serverless">Ben Stopford’s</a></p>
+
+      </article>
+      
+    </main>
+    <nav class="end-nav side-padding">
+      
+      <a ontouchstart="cardPressed.call(this)" ontouchend="cardReleased.call(this)" ontouchmove="cardReleased.call(this)" 
+  href="https://simonaubury.com/posts/201908_confluentkafkakubernetesoperatorsetupandplaying/" class="card blog-card bc-next" rel="bookmark" >
+  
+  <div class="card-img-container">
+    <p class="card-img-overlay">Next Article</p>
+    <picture>
+      
+      
+      
+      <source srcset="https://simonaubury.com/posts/201908_confluentkafkakubernetesoperatorsetupandplaying/00000001_huc291e71361dd306f7b9656d60104c718_24368_400x0_resize_lanczos_3.png 1x, https://simonaubury.com/posts/201908_confluentkafkakubernetesoperatorsetupandplaying/00000001_huc291e71361dd306f7b9656d60104c718_24368_800x0_resize_lanczos_3.png 2x, https://simonaubury.com/posts/201908_confluentkafkakubernetesoperatorsetupandplaying/00000001_huc291e71361dd306f7b9656d60104c718_24368_1200x0_resize_lanczos_3.png 3x">
+      <img src="https://simonaubury.com/posts/201908_confluentkafkakubernetesoperatorsetupandplaying/00000001_huc291e71361dd306f7b9656d60104c718_24368_400x0_resize_lanczos_3.png" class="card-img" >
+    </picture>
+  </div>
+  
+  <article class="card-body">
+    <h2 class="card-title">Confluent Kafka Kubernetes Operator — Setup and Playing!</h2>
+    <p class="card-text">Kafka Kubernetes Operator</p>
+    <div class="card-subtext muted-text">
+      <p>Posted <time datetime="2019-08-03">Aug 3, 2019</time></p>
+      <p>#Kafka </p>
+    </div>
+  </article>
+</a>
+      
+    </nav>
+    <footer class="side-padding" style="background-image: url('https://simonaubury.com/img/home-blob-flip.svg');">
+    <a href="https://simonaubury.com/" class="footer-link">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/home.svg" alt="Home">
+    
+    </a>
+    
+    
+    
+    <a href="https://github.com/saubury" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/github.svg" alt="GitHub"/>
+    
+    </a>
+    
+    
+    
+    <a href="https://www.linkedin.com/in/simonaubury" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/linkedin.svg" alt="LinkedIn"/>
+    
+    </a>
+    
+    
+    <a href="https://simonaubury.com/index.xml" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/rss.svg" alt="RSS"/>
+    
+    </a>
+    
+    
+    
+    
+    
+    
+    
+    
+</footer>
+    
+  <script defer src="https://simonaubury.com/js/katex.min.js"></script>
+
+
+  <script defer src="https://simonaubury.com/js/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+
+<script src="https://simonaubury.com/js/core.min.js"></script>
+
+  </body>
+</html>

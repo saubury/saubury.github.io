@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en-au" dir="ltr">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Snowy’s eating — tweeting my cats weight &amp; dining habits with a Raspberry Pi &middot; Simon Aubury</title>
+  <meta name="description" content="Body shaming my cat" />
+  <link rel="apple-touch-icon" sizes="180x180" href="https://simonaubury.com/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://simonaubury.com/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://simonaubury.com/favicon-16x16.png">
+  <link href="https://simonaubury.com/css/katex.min.css" rel="stylesheet">
+  
+  
+  
+  
+  <link href="https://simonaubury.com/css/concated.min.css" rel="stylesheet">
+  
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7N67PMRZ6N"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-7N67PMRZ6N', { 'anonymize_ip': false });
+}
+</script>
+
+  
+</head>
+
+  <body class="single-body">
+    <nav class="nav-bar side-padding">
+  <h1 class="nav-header"><a href="https://simonaubury.com/" class="nav-text">simon aubury</a></h1>
+  <div class="hamburger-menu">
+    <input class="hamburger-menu-button" type="checkbox"
+      onclick="hamburgerMenuPressed.call(this)"
+      aria-label="Hamburger Menu Button"
+    >
+    <div class="hamburger-menu-icon">
+      <span></span>
+      <span></span>
+    </div>
+    <ul id="menu" class="hamburger-menu-overlay">
+      <li><a href="https://simonaubury.com/" class="hamburger-menu-overlay-link">Home</a></li>
+      <li><a href="https://simonaubury.com/slides/" class="hamburger-menu-overlay-link">Presentation slides</a></li>
+      <li><a href="https://simonaubury.com/about-me/" class="hamburger-menu-overlay-link">About Simon</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/cat/" class="hamburger-menu-overlay-link">Cat</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/cdc/" class="hamburger-menu-overlay-link">CDC</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/duckdb/" class="hamburger-menu-overlay-link">duckdb</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/flink/" class="hamburger-menu-overlay-link">flink</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/generativeai/" class="hamburger-menu-overlay-link">GenerativeAI</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/gpt/" class="hamburger-menu-overlay-link">GPT</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/homeassistant/" class="hamburger-menu-overlay-link">homeassistant</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/kafka/" class="hamburger-menu-overlay-link">Kafka</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/ml/" class="hamburger-menu-overlay-link">ML</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/raspberry-pi/" class="hamburger-menu-overlay-link">Raspberry Pi</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/snowflake/" class="hamburger-menu-overlay-link">snowflake</a></li>
+      
+      <li><a href="https://simonaubury.com/index.xml" class="hamburger-menu-overlay-link">rss</a></li>
+    </ul>
+  </div>
+</nav>
+
+    <main class="content side-text-padding">
+      <article class="post dropcase">
+        <header class="post-header">
+          <h1 class="post-title">Snowy’s eating — tweeting my cats weight &amp; dining habits with a Raspberry Pi</h1>
+          <p class="post-date">Posted <time datetime="2021-07-10">Jul 10, 2021</time></p>
+        </header>
+        <picture class="post-figure">
+          
+          
+          
+          <source srcset="https://simonaubury.com/posts/202107_cat_fit_part_1/00000001_hu40c335454f8c94ffd101b676980e2c00_161017_711x0_resize_lanczos_3.png 1x, https://simonaubury.com/posts/202107_cat_fit_part_1/00000001_hu40c335454f8c94ffd101b676980e2c00_161017_1422x0_resize_lanczos_3.png 2x, https://simonaubury.com/posts/202107_cat_fit_part_1/00000001_hu40c335454f8c94ffd101b676980e2c00_161017_2133x0_resize_lanczos_3.png 3x">
+          <img src="https://simonaubury.com/posts/202107_cat_fit_part_1/00000001_hu40c335454f8c94ffd101b676980e2c00_161017_711x0_resize_lanczos_3.png" >
+        </picture>
+        
+        
+        <h1 id="snowys-eatingtweeting-my-cats-weight--dining-habits-with-a-raspberry-pi">Snowy’s eating — tweeting my cats weight &amp; dining habits with a Raspberry Pi</h1>
+<p>Our cat Snowy 😸 has been enjoying her meals over winter. I wanted to start collecting data on her eating habits, and analyse her weight over time. This data is collected with food and cat weight measurements; alongside phots taken by two cameras. Data is collected and images processed locally using a Raspberry Pi. At the risk of body-shaming our cat, updates are posted regularly to <a href="https://twitter.com/SnowyBlackCat">Twitter</a> #snowydata.</p>
+<p><img src="00000000.png" alt="Snowy enjoying her food while being measured"><em>Snowy enjoying her food while being measured</em></p>
+<h2 id="project-overview">Project Overview</h2>
+<p>There are two scales — one for weighing the cat; and an independent weight measure for her food. As Snowy enters the cat scale, an initial measurement is taken for her current weight along with an starting weight for her food. An overhead and lateral camera takes a photo every 5 seconds.</p>
+<p><img src="00000001.png" alt="Diagram indicting two scales and camera placement"><em>Diagram indicting two scales and camera placement</em></p>
+<p>When Snowy leaves the cat scale, a calculation is made between the initial and current cat and food weight measurements to determine how much food has been eaten and her current weight. Two camera images are selected, text is overlaid the photos — and a Tweet is sent to announce her latest meal.</p>
+<!-- raw HTML omitted -->
+<h2 id="hardware--how-much-food">Hardware — how much food?</h2>
+<p>I needed to build two scales — one for the food and one for the cat. So another excuse for online <a href="https://www.aliexpress.com/w/wholesale-10kg-load-cell.html">shopping</a> for a collection of load cells and load cell amplifiers.</p>
+<p>Load cells are pretty neat. They measure weight (or, more accurately, directional force). Each load cell is able to measure the electrical resistance that changes in response to (and is proportional to) the force applied.</p>
+<p><img src="00000002.png" alt="A “straight bar” load cell"><em>A “straight bar” load cell</em></p>
+<p>For weighting the food; I used a single “straight bar” load cell which can translate up to 1kg of pressure (force) into an electrical signal. To weigh the food I had the load cell mounted between two wooden boards. The weight of the food is measured by the strain resistance measured across the load cell.</p>
+<p><img src="00000003.png" alt="Load cell mounted between boards"><em>Load cell mounted between boards</em></p>
+<p>A load cell amplifier is used to get measurable data out from a load cell. I used an <a href="https://learn.sparkfun.com/tutorials/load-cell-amplifier-hx711-breakout-hookup-guide/all">HX711</a> — which is an analogue-to-digital converter (ADC) designed to act as interface between the analogue world of weigh sensors to a digital input for the Raspberry Pi.</p>
+<h2 id="hardware--cat-weight">Hardware — cat weight</h2>
+<p>To accurately weigh Snowy I needed a larger scale. I wanted a surface large enough for her body and tail so she could be weighted whist she was eating. The first step required measuring the length of a cat</p>
+<p><img src="00000004.png" alt="Snowy was not helpful when I tried to measure her length"><em>Snowy was not helpful when I tried to measure her length</em></p>
+<p>I used four load cell weighing sensors — one for each corner of the cat weighing station. The <a href="https://www.aliexpress.com/item/32968926628.html">50kg load cells and another HX711</a> amplifier module was around $5. The peculiar thing about these sensors is they don’t sit flush to a surface, and the centre of each sensor needs a gap for it to flex when a load is applied. You can 3D print <a href="https://www.thingiverse.com/thing:2274593">a bracket</a> — but I found I could build 4 brackets with some scrap wood cut with a Dremel.</p>
+<p><img src="00000005.png" alt="Offset bracket for load cell"><em>Offset bracket for load cell</em></p>
+<p>The wooden brackets provided sufficient clearance for the foot of the load cell to flex, while still holding the perimeter of the sensor.</p>
+<p><img src="00000006.png" alt="Closeup of wooden mounting bracket"><em>Closeup of wooden mounting bracket</em></p>
+<p>The four load cells are wired into a single circuit with the HX711 amplifier module in a <a href="https://en.wikipedia.org/wiki/Wheatstone_bridge">wheatstone bridge</a> configuration — have a look at <a href="https://circuitjournal.com/50kg-load-cells-with-HX711">this helpful blog</a> for the detailed steps.</p>
+<p><img src="00000007.png" alt="The four load cells are mounted to each corner and wired together"><em>The four load cells are mounted to each corner and wired together</em></p>
+<p>Finally I was ready to connect the five load cells to the two HX711 amplifier modules — and in turn to the <a href="https://www.raspberrypi.org/">Raspberry Pi</a>; a tiny and very cheap computer. I found <a href="https://tutorials-raspberrypi.com/digital-raspberry-pi-scale-weight-sensor-hx711/">this guide</a> very helpful for providing wiring details to build a digital Raspberry Pi scale.</p>
+<p><img src="00000008.png" alt="Two HX711 amplifier modules connected to the Raspberry Pi"><em>Two HX711 amplifier modules connected to the Raspberry Pi</em></p>
+<h2 id="real-world-testing">Real world testing</h2>
+<p>My first experiment was a dismal failure. After waiting an eternity for Snowy to approach the weigh station, she quickly discovered a flaw in my design.</p>
+<p><img src="00000009.png" alt="Snowy avoiding the scale in version 1"><em>Snowy avoiding the scale in version 1</em></p>
+<p>To encourage Snowy to step onto the scale when eating, I placed small triangular walls on the side of her feed station. This worked well, and Snowy appreciated the additional privacy while eating</p>
+<p><img src="00000010.png" alt="Small walls around her food encouraged Snowy to stand on the scale"><em>Small walls around her food encouraged Snowy to stand on the scale</em></p>
+<p>A camera was mounted above and next to the feed station — and the entire contraption was painted.</p>
+<p><img src="00000011.png" alt="Final cat weigh station — now painted"><em>Final cat weigh station — now painted</em></p>
+<h2 id="whats-next">What’s next</h2>
+<p>This blog covers the initial hardware steps for the ongoing <a href="https://github.com/saubury/catfit">catfit data project</a>. Further blogs will describe data processing, trend analytics and data visualisation.</p>
+<h2 id="links">Links</h2>
+<ul>
+<li>
+<p>Project files: <a href="https://github.com/saubury/catfit">https://github.com/saubury/catfit</a></p>
+</li>
+<li>
+<p>Follow <a href="https://twitter.com/SnowyBlackCat">Snowy The Cat (@SnowyBlackCat) / Twitter</a></p>
+</li>
+<li>
+<p><a href="https://tutorials-raspberrypi.com/digital-raspberry-pi-scale-weight-sensor-hx711/">Build a digital Raspberry Pi Scale</a></p>
+</li>
+</ul>
+
+      </article>
+      
+    </main>
+    <nav class="end-nav side-padding">
+      
+      <a ontouchstart="cardPressed.call(this)" ontouchend="cardReleased.call(this)" ontouchmove="cardReleased.call(this)" 
+  href="https://simonaubury.com/posts/202005_cocktailpi/" class="card blog-card bc-next" rel="bookmark" >
+  
+  <div class="card-img-container">
+    <p class="card-img-overlay">Next Article</p>
+    <picture>
+      
+      
+      
+      <source srcset="https://simonaubury.com/posts/202005_cocktailpi/00000002_hu2bb221d16acc9989754653889554a609_74648_400x0_resize_q75_lanczos.jpeg 1x, https://simonaubury.com/posts/202005_cocktailpi/00000002_hu2bb221d16acc9989754653889554a609_74648_800x0_resize_q75_lanczos.jpeg 2x, https://simonaubury.com/posts/202005_cocktailpi/00000002_hu2bb221d16acc9989754653889554a609_74648_1200x0_resize_q75_lanczos.jpeg 3x">
+      <img src="https://simonaubury.com/posts/202005_cocktailpi/00000002_hu2bb221d16acc9989754653889554a609_74648_400x0_resize_q75_lanczos.jpeg" class="card-img" >
+    </picture>
+  </div>
+  
+  <article class="card-body">
+    <h2 class="card-title">🍹 Cocktail Pi</h2>
+    <p class="card-text">ML to make cocktails!</p>
+    <div class="card-subtext muted-text">
+      <p>Posted <time datetime="2021-05-18">May 18, 2021</time></p>
+      <p>#Raspberry Pi </p>
+    </div>
+  </article>
+</a>
+      
+    </nav>
+    <footer class="side-padding" style="background-image: url('https://simonaubury.com/img/home-blob-flip.svg');">
+    <a href="https://simonaubury.com/" class="footer-link">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/home.svg" alt="Home">
+    
+    </a>
+    
+    
+    
+    <a href="https://github.com/saubury" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/github.svg" alt="GitHub"/>
+    
+    </a>
+    
+    
+    
+    <a href="https://www.linkedin.com/in/simonaubury" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/linkedin.svg" alt="LinkedIn"/>
+    
+    </a>
+    
+    
+    <a href="https://simonaubury.com/index.xml" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/rss.svg" alt="RSS"/>
+    
+    </a>
+    
+    
+    
+    
+    
+    
+    
+    
+</footer>
+    
+  <script defer src="https://simonaubury.com/js/katex.min.js"></script>
+
+
+  <script defer src="https://simonaubury.com/js/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+
+<script src="https://simonaubury.com/js/core.min.js"></script>
+
+  </body>
+</html>

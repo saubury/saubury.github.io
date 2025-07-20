@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en-au" dir="ltr">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Real-Time Wildlife Monitoring with Apache Kafka &middot; Simon Aubury</title>
+  <meta name="description" content="Where did I leave the zebra?" />
+  <link rel="apple-touch-icon" sizes="180x180" href="https://simonaubury.com/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://simonaubury.com/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://simonaubury.com/favicon-16x16.png">
+  <link href="https://simonaubury.com/css/katex.min.css" rel="stylesheet">
+  
+  
+  
+  
+  <link href="https://simonaubury.com/css/concated.min.css" rel="stylesheet">
+  
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7N67PMRZ6N"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-7N67PMRZ6N', { 'anonymize_ip': false });
+}
+</script>
+
+  
+</head>
+
+  <body class="single-body">
+    <nav class="nav-bar side-padding">
+  <h1 class="nav-header"><a href="https://simonaubury.com/" class="nav-text">simon aubury</a></h1>
+  <div class="hamburger-menu">
+    <input class="hamburger-menu-button" type="checkbox"
+      onclick="hamburgerMenuPressed.call(this)"
+      aria-label="Hamburger Menu Button"
+    >
+    <div class="hamburger-menu-icon">
+      <span></span>
+      <span></span>
+    </div>
+    <ul id="menu" class="hamburger-menu-overlay">
+      <li><a href="https://simonaubury.com/" class="hamburger-menu-overlay-link">Home</a></li>
+      <li><a href="https://simonaubury.com/slides/" class="hamburger-menu-overlay-link">Presentation slides</a></li>
+      <li><a href="https://simonaubury.com/about-me/" class="hamburger-menu-overlay-link">About Simon</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/cat/" class="hamburger-menu-overlay-link">Cat</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/cdc/" class="hamburger-menu-overlay-link">CDC</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/duckdb/" class="hamburger-menu-overlay-link">duckdb</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/flink/" class="hamburger-menu-overlay-link">flink</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/generativeai/" class="hamburger-menu-overlay-link">GenerativeAI</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/gpt/" class="hamburger-menu-overlay-link">GPT</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/homeassistant/" class="hamburger-menu-overlay-link">homeassistant</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/kafka/" class="hamburger-menu-overlay-link">Kafka</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/ml/" class="hamburger-menu-overlay-link">ML</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/raspberry-pi/" class="hamburger-menu-overlay-link">Raspberry Pi</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/snowflake/" class="hamburger-menu-overlay-link">snowflake</a></li>
+      
+      <li><a href="https://simonaubury.com/index.xml" class="hamburger-menu-overlay-link">rss</a></li>
+    </ul>
+  </div>
+</nav>
+
+    <main class="content side-text-padding">
+      <article class="post dropcase">
+        <header class="post-header">
+          <h1 class="post-title">Real-Time Wildlife Monitoring with Apache Kafka</h1>
+          <p class="post-date">Posted <time datetime="2023-01-19">Jan 19, 2023</time></p>
+        </header>
+        <picture class="post-figure">
+          
+          
+          
+          <source srcset="https://simonaubury.com/posts/202301_wildlife_monitoring/00000002_hude9b391c17d31f38a10d22707f9d3fab_142649_711x0_resize_q75_lanczos.jpg 1x, https://simonaubury.com/posts/202301_wildlife_monitoring/00000002_hude9b391c17d31f38a10d22707f9d3fab_142649_1422x0_resize_q75_lanczos.jpg 2x, https://simonaubury.com/posts/202301_wildlife_monitoring/00000002_hude9b391c17d31f38a10d22707f9d3fab_142649_2133x0_resize_q75_lanczos.jpg 3x">
+          <img src="https://simonaubury.com/posts/202301_wildlife_monitoring/00000002_hude9b391c17d31f38a10d22707f9d3fab_142649_711x0_resize_q75_lanczos.jpg" >
+        </picture>
+        
+        
+        <p>Wildlife monitoring is critical for keeping track of population changes of vulnerable animals. As part of the Confluent Hackathon ʼ22, I was inspired to investigate if a streaming platform could help with tracking animal movement patterns. The challenge was to examine trends in identified species and demonstrate how animal movement patterns can be observed in the wild using Apache Kafka® and open source dashboarding.</p>
+<p>Note : This article was originally written and published for the <a href="https://www.confluent.io/blog/real-time-detection-monitoring-with-apache-kafka/">Confluent blog</a>.</p>
+<p><img src="00000000.gif" alt="Dashbaord with upding animal counts"><em>Dashbaord with upding animal counts</em></p>
+<p>I’ve been using Kafka in my “day job” for many years, building streaming solutions in retail, telemetrics, finance, and energy — but this hackathon challenged me to build something new and novel. The goal was ambitious. Before scaling up to monitor and alert on more exotic creatures, I initially chose to test the viability at a smaller scale by tracking wildlife in my own back garden.</p>
+<p><img src="00000001.jpg" alt="Simplified archiecture diagram"><em>Simplified archiecture diagram</em></p>
+<h2 id="backyard-animal-detection">Backyard animal detection</h2>
+<p>To test the viability of the project, I built a “backyard monitoring” experiment using a Raspberry Pi along with an attached camera. The images were processed locally to identify and classify animals, with the observation events published to <a href="https://www.confluent.io/confluent-cloud/tryfree/">Confluent Cloud</a> for stream processing.</p>
+<p>This project used TensorFlow Lite with Python on a Raspberry Pi 4 to perform real-time object classification using images streamed from the attached Raspberry Pi camera. TensorFlow is an open source platform for machine learning, and TensorFlow Lite is a slimmed-down library suitable for deploying models on low-powered, battery-operated edge devices such as a Raspberry Pi. TensorFlow also has a great number of community resources, so I was able to make use of a detection model already pre-trained to detect numerous animals, including zebras, elephants, cats, dogs and more importantly, teddy bears.</p>
+<p>I deployed a small Python application to run on the Raspberry Pi. The application continuously captures images from the camera — and each detected animal is given an object detection score. To connect the Raspberry Pi to the Kafka cluster, I used confluent_kafka API, which is a powerful Python client library for interacting with Kafka. With some basic setup (and some secret tokens for connecting) my Python application acts as a Kafka producer. Whenever an animal is detected, be it an elephant, zebra, kangaroo, or household cat, it is sent as a new record to the objects topic.</p>
+<p>Once tested, I deployed the Raspberry Pi, camera, and battery into the “field” ( aka my backyard) to monitor the local wildlife. This worked surprisingly well, capturing the cats, dogs, and several birds that appeared during the week of testing.</p>
+<h2 id="peeking-into-zoo-wildlife">Peeking into zoo wildlife</h2>
+<p>I was happy with the minimal viable product (MVP), but was disappointed I hadn’t spotted any exotic animals in my local garden. To increase the variety of animal encounters, I deployed a second Kafka producer, but this time connected to a webcam at a local zoo. Live animal webcams provide a great source of video feeds with an increased likelihood of spotting giraffes, elephants, and zebras over what may be roaming in my back garden. Similar to the Python application described earlier, a stream of webcam images provided a great source of interesting animal encounters that could be detected with the TensorFlow object classification. Regardless of the source, animal detection events were sent to a shared Kafka cluster with a payload describing the image source and animals detected.</p>
+<pre><code>{
+  &quot;camera_name&quot;: &quot;zoo-webcam&quot;,
+  &quot;objects_count&quot;: {
+    &quot;elephant&quot;: 1,
+    &quot;zebra&quot;: 2
+  }
+}
+</code></pre>
+<p><img src="00000002.jpg" alt="Elephants and zebras with identifed JSON stream"><em>Elephants and zebras with identifed JSON stream</em></p>
+<h2 id="animal-crossing--the-stream-processing-edition">Animal crossing — the stream processing edition</h2>
+<p>So I now had two Kafka producers sending animal detection events into a Kafka cluster, and my next challenge was to intercept the animals detection payloads. The goal was to understand the population observations over short time periods (such as animals seen this hour) and longer-term trends (such as population changes day on the day). I elected to use <a href="https://ksqldb.io/">ksqlDB</a> to help transform the raw objects topic into some meaningful observations.</p>
+<p>The first task was to declare an objects stream in ksqlDB—allowing me to author SQL statements against the underlying Kafka objects topic.</p>
+<pre><code>create stream objects (camera_name VARCHAR, objects_found VARCHAR, objects_count VARCHAR) 
+WITH (KAFKA_TOPIC='objects', VALUE_FORMAT='json');
+</code></pre>
+<p>The objects identified by the Raspberry Pi and webcam were transported as JSON records. Understanding the number and variety of animals identified in each Kafka record required digging into the JSON. Fortunately, ksqlDB has a handy EXTRACTJSONFIELD function to retrieve nested field values from a string of JSON. It returns the number of each animal if the field key exists in that message; otherwise, it returns NULL. The following is an example of extracting counts of each animal into appropriately named fields:</p>
+<pre><code>create stream animals as
+select camera_name
+, objects_count
+, cast(extractjsonfield(objects_count, '$.elephant') as bigint) as elephant
+, cast(extractjsonfield(objects_count, '$.bear') as bigint) as bear
+, cast(extractjsonfield(objects_count, '$.zebra') as bigint) as zebra
+, cast(extractjsonfield(objects_count, '$.giraffe') as bigint) as giraffe
+, cast(extractjsonfield(objects_count, '$.teddybear') as bigint) as teddybear
+from objects;
+</code></pre>
+<p>Something I noticed during testing was that the TensorFlow detection didn’t always detect all the animals in each frame. Two animals in the frame were often only detected as a single animal. I discovered I could “smooth” out the observations from the detection model by finding the highest count of each animal type within a sliding 30-second window. This was achieved by defining a tumbling window to count the number of each animal that had been observed in the time window. I figured it was appropriate to call this the zoo table.</p>
+<pre><code>create table zoo as
+select camera_name
+, max(elephant) as max_elephant
+, max(bear) as max_bear
+, max(zebra) as max_zebra
+, max(giraffe) as max_giraffe
+, max(teddybear) as max_teddybear
+from animals
+window tumbling (size 30 seconds)
+group by camera_name
+emit changes;
+</code></pre>
+<p>Due to the limited processing on the Kafka producer, it was common to undercount the number of animals seen in consecutive frames of the video. By adding the max ksqlDB function I could create a table to project the highest occurrence count of each animal seen in the time window.</p>
+<h2 id="visualizing">Visualizing</h2>
+<p>With animal observations running and stream transformations deployed I moved on to building the analytics system. To complete the project I wanted to create a live dashboard, with animal counts and a visual image of population trends over time. A Kibana dashboard was ideal, so I just needed to populate the underlying Elasticsearch indexes to create a visual analytics dashboard.</p>
+<p>I wanted a simple way to send the Kafka data onwards to my analytics dashboard. Kafka Connect is a framework for connecting Kafka with external systems such as relational databases, document databases, and key-value stores. I used the Kafka Connect Elasticsearch connector to send both the animals and zoo Kafka topics to Elasticsearch indexes. Once configured, the connector consumes records from the two Kafka topics and writes to a corresponding index in Elasticsearch. With the Elasticsearch index created and populated, a Kibana dashboard provides a great way to visualize the mix of animals, and the trending population of the zoo.</p>
+<p><img src="00000003.jpg" alt=""></p>
+<h2 id="alerting-for-the-ultra-rare-teddy-bear-sighting">Alerting for the ultra-rare teddy bear sighting</h2>
+<p>With the detection, transformation, and visualization complete for the wildlife monitoring system, there was still an opportunity for one last feature: rare animal alerting!</p>
+<p>In addition to the more traditional animals, I noticed the detection model I was using had the ability to identify teddy bears. This provided an ideal situation to demonstrate exceptional processing conditions — after all, what’s more rare than the arrival of a teddy bear in the back garden?</p>
+<p>Inspired by <a href="https://dev.to/rmoff/building-a-telegram-bot-with-apache-kafka-go-and-ksqldb-4and">Building a Telegram Bot with Apache Kafka</a>, I set up a Telegram bot to alert me when a rare animal is sighted — or at least send a phone push notification to my phone if a teddy bear is seen in the garden.</p>
+<p>To create the special notification simply required a new ksqlDB stream. The teddytopic stream contains a recording signifying the arrival of a teddy bear.</p>
+<pre><code>create stream teddytopic as 
+select '📢 Just saw a 🧸 TEDDY BEAR in the garden' as message 
+from animals 
+where teddybear &gt; 0
+</code></pre>
+<p>Next, I wanted to build the alerting mechanism when the accompanying teddytopic Kafka topic acquired a record when an “endangered” teddy bear was sighted.</p>
+<p>The <a href="https://core.telegram.org/bots/api">Telegram Bot API</a> allows me to create managed bots for interacting with Telegram — a popular messaging service. To call Telegram I needed to create a Kafka wildlife bot, which provides an HTTP-based interface to let me know instantly when something novel had been observed. With the bot created, I used the Kafka Connect HTTP Sink Connector to make an HTTPS API call for each record in the teddytopic topic. Once configured, the connector consumes records from Kafka topic, sending the record value in the request body to the configured http.api.url. In this case, the endpoint was a preconfigured api.telegram.org.</p>
+<p>With these steps completed, I get instant notification on my phone whenever a rare teddy bear is observed.</p>
+<p><img src="00000004.jpg" alt=""></p>
+<h2 id="takeaways">Takeaways</h2>
+<p>Building this project as part of the Confluent Hackathon ʼ22 was both a great learning experience and a fun way to mix together some impressive technologies. Combining cheap computing devices and open source machine learning libraries along with the Kafka streaming platform provides a new tool to examine trends in animal population and movement observations.</p>
+<p>Although wildlife watcher is a simple proof of concept, I hope a project like this demonstrates how incredible components can be incorporated quickly. Stream processing with ksqlDB, the flexibility of Confluent Cloud, and the integration of data systems with Kafka Connect allowed me to build a fun project with less than 200 lines of code and perhaps contribute a small part in helping to solve real-world wildlife challenges.</p>
+<h2 id="links-to-code">Links to code</h2>
+<ul>
+<li><a href="https://github.com/saubury/wildlife-watch">GitHub project</a></li>
+</ul>
+
+      </article>
+      
+    </main>
+    <nav class="end-nav side-padding">
+      
+      <a ontouchstart="cardPressed.call(this)" ontouchend="cardReleased.call(this)" ontouchmove="cardReleased.call(this)" 
+  href="https://simonaubury.com/posts/202207_cat_predition2/" class="card blog-card bc-next" rel="bookmark" >
+  
+  <div class="card-img-container">
+    <p class="card-img-overlay">Next Article</p>
+    <picture>
+      
+      
+      
+      <source srcset="https://simonaubury.com/posts/202207_cat_predition2/00000007_hu7760b875ba46f0126be19016db5f23a3_243568_400x0_resize_lanczos_3.png 1x, https://simonaubury.com/posts/202207_cat_predition2/00000007_hu7760b875ba46f0126be19016db5f23a3_243568_800x0_resize_lanczos_3.png 2x, https://simonaubury.com/posts/202207_cat_predition2/00000007_hu7760b875ba46f0126be19016db5f23a3_243568_1200x0_resize_lanczos_3.png 3x">
+      <img src="https://simonaubury.com/posts/202207_cat_predition2/00000007_hu7760b875ba46f0126be19016db5f23a3_243568_400x0_resize_lanczos_3.png" class="card-img" >
+    </picture>
+  </div>
+  
+  <article class="card-body">
+    <h2 class="card-title">Can ML predict where my cat is now — part 2</h2>
+    <p class="card-text">Where did I leave the cat?</p>
+    <div class="card-subtext muted-text">
+      <p>Posted <time datetime="2022-07-01">Jul 1, 2022</time></p>
+      <p>#Raspberry Pi #Cat </p>
+    </div>
+  </article>
+</a>
+      
+    </nav>
+    <footer class="side-padding" style="background-image: url('https://simonaubury.com/img/home-blob-flip.svg');">
+    <a href="https://simonaubury.com/" class="footer-link">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/home.svg" alt="Home">
+    
+    </a>
+    
+    
+    
+    <a href="https://github.com/saubury" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/github.svg" alt="GitHub"/>
+    
+    </a>
+    
+    
+    
+    <a href="https://www.linkedin.com/in/simonaubury" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/linkedin.svg" alt="LinkedIn"/>
+    
+    </a>
+    
+    
+    <a href="https://simonaubury.com/index.xml" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/rss.svg" alt="RSS"/>
+    
+    </a>
+    
+    
+    
+    
+    
+    
+    
+    
+</footer>
+    
+  <script defer src="https://simonaubury.com/js/katex.min.js"></script>
+
+
+  <script defer src="https://simonaubury.com/js/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+
+<script src="https://simonaubury.com/js/core.min.js"></script>
+
+  </body>
+</html>

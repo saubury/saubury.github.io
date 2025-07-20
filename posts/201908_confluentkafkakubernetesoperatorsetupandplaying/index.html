@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en-au" dir="ltr">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Confluent Kafka Kubernetes Operator — Setup and Playing! &middot; Simon Aubury</title>
+  <meta name="description" content="Kafka Kubernetes Operator" />
+  <link rel="apple-touch-icon" sizes="180x180" href="https://simonaubury.com/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://simonaubury.com/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://simonaubury.com/favicon-16x16.png">
+  <link href="https://simonaubury.com/css/katex.min.css" rel="stylesheet">
+  
+  
+  
+  
+  <link href="https://simonaubury.com/css/concated.min.css" rel="stylesheet">
+  
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7N67PMRZ6N"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-7N67PMRZ6N', { 'anonymize_ip': false });
+}
+</script>
+
+  
+</head>
+
+  <body class="single-body">
+    <nav class="nav-bar side-padding">
+  <h1 class="nav-header"><a href="https://simonaubury.com/" class="nav-text">simon aubury</a></h1>
+  <div class="hamburger-menu">
+    <input class="hamburger-menu-button" type="checkbox"
+      onclick="hamburgerMenuPressed.call(this)"
+      aria-label="Hamburger Menu Button"
+    >
+    <div class="hamburger-menu-icon">
+      <span></span>
+      <span></span>
+    </div>
+    <ul id="menu" class="hamburger-menu-overlay">
+      <li><a href="https://simonaubury.com/" class="hamburger-menu-overlay-link">Home</a></li>
+      <li><a href="https://simonaubury.com/slides/" class="hamburger-menu-overlay-link">Presentation slides</a></li>
+      <li><a href="https://simonaubury.com/about-me/" class="hamburger-menu-overlay-link">About Simon</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/cat/" class="hamburger-menu-overlay-link">Cat</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/cdc/" class="hamburger-menu-overlay-link">CDC</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/duckdb/" class="hamburger-menu-overlay-link">duckdb</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/flink/" class="hamburger-menu-overlay-link">flink</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/generativeai/" class="hamburger-menu-overlay-link">GenerativeAI</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/gpt/" class="hamburger-menu-overlay-link">GPT</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/homeassistant/" class="hamburger-menu-overlay-link">homeassistant</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/kafka/" class="hamburger-menu-overlay-link">Kafka</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/ml/" class="hamburger-menu-overlay-link">ML</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/raspberry-pi/" class="hamburger-menu-overlay-link">Raspberry Pi</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/snowflake/" class="hamburger-menu-overlay-link">snowflake</a></li>
+      
+      <li><a href="https://simonaubury.com/index.xml" class="hamburger-menu-overlay-link">rss</a></li>
+    </ul>
+  </div>
+</nav>
+
+    <main class="content side-text-padding">
+      <article class="post dropcase">
+        <header class="post-header">
+          <h1 class="post-title">Confluent Kafka Kubernetes Operator — Setup and Playing!</h1>
+          <p class="post-date">Posted <time datetime="2019-08-03">Aug 3, 2019</time></p>
+        </header>
+        <picture class="post-figure">
+          
+          
+          
+          <source srcset="https://simonaubury.com/posts/201908_confluentkafkakubernetesoperatorsetupandplaying/00000001_huc291e71361dd306f7b9656d60104c718_24368_711x0_resize_lanczos_3.png 1x, https://simonaubury.com/posts/201908_confluentkafkakubernetesoperatorsetupandplaying/00000001_huc291e71361dd306f7b9656d60104c718_24368_1422x0_resize_lanczos_3.png 2x, https://simonaubury.com/posts/201908_confluentkafkakubernetesoperatorsetupandplaying/00000001_huc291e71361dd306f7b9656d60104c718_24368_2133x0_resize_lanczos_3.png 3x">
+          <img src="https://simonaubury.com/posts/201908_confluentkafkakubernetesoperatorsetupandplaying/00000001_huc291e71361dd306f7b9656d60104c718_24368_711x0_resize_lanczos_3.png" >
+        </picture>
+        
+        
+        <h1 id="confluent-kafka-kubernetes-operatorsetup-and-playing">Confluent Kafka Kubernetes Operator — Setup and Playing!</h1>
+<p>Confluent released their Kafka Kubernetes Operator this week (as part of their CP 5.3 release). The TL;DR summary is this gives you a straight forward way to deploy your own clustered &amp; secured Apache Kafka on Kubernetes (ZooKeeper, Apache Kafka) along with the cool bits (Kafka Connect, KSQL, Schema Registry, REST Proxy, Control Center).</p>
+<p>This is pretty cool as it opens the way for Kafka deployments to on premises (eg., OpenShift or Rancher) and eases the way for clouds deploys (EKS, AKS, GKE). It also automates security configuration setup (setting up kerberos authentication in Kafka is a job for the <em>patient</em>!).</p>
+<p>So, let’s see how to see this up.</p>
+<h2 id="machine-setup">Machine Setup</h2>
+<p>I recently got a new Mac — so this was a good opportunity to document the steps necessary to start from a clean machine. This demonstration uses the Google (GCP) Kubernetes Engine</p>
+<h2 id="kubernetes-helm-cli">Kubernetes Helm CLI</h2>
+<p>First — let’s install the kubernetes command line tools (assuming <a href="https://brew.sh/">*brew</a>* is already installed)</p>
+<pre><code>brew install kubernetes-helmbrew 
+
+install kubernetes-cli
+</code></pre>
+<h2 id="google-cloud-sdk">Google Cloud SDK</h2>
+<p>I’ll be using the Google (GCP) Kubernetes Engine. You’ll need to install the <em>google-cloud-sdk</em> . Google has great <a href="https://cloud.google.com/sdk/docs/quickstarts">quick-start</a> instructions . In short, download, extract and add to your PATH</p>
+<h2 id="confluent-kubernetes-operator-helm-bundle">Confluent Kubernetes Operator Helm bundle</h2>
+<p>Next, we actually need to download the Confluent Helm bundle. This Confluent bundle comprises Helm charts, templates, and scripts used to deploy Confluent Operator and Confluent Platform components for your Kubernetes cluster. Remember this is an Enterprise feature (ie., paid for if used in production).</p>
+<p>Download and extract the bundle from Confluent Platform Operations from <a href="https://docs.confluent.io/current/installation/operator/co-deployment.html">https://docs.confluent.io/current/installation/operator/co-deployment.html</a></p>
+<pre><code>tar xvfz confluent-operator-20190726-v0.65.0.tar.gz
+
+cd confluent-operator-20190726-v0.65.0/helm
+</code></pre>
+<h2 id="gcp-kubernetes-engine-provision">GCP Kubernetes Engine Provision</h2>
+<h3 id="adding-a-kubernetes-clusters">Adding a Kubernetes clusters</h3>
+<p>Navigating to GCP Kubernetes Engine ; click “create cluster”</p>
+<p><img src="00000000.png" alt="Adding a Kubernetes clusters"><em>Adding a Kubernetes clusters</em></p>
+<h3 id="add-a-node-pool">Add a node pool</h3>
+<p>For the new cluster; add a lot of capacity. I found 16 nodes of 2 vCPU’s was enough to get going</p>
+<p><img src="00000001.png" alt="Add a node pool"><em>Add a node pool</em></p>
+<h2 id="adding-resource-quota">Adding resource quota</h2>
+<p>Initially I hit a problem where I could not provision enough resource due to a quota on CPUs.</p>
+<p><img src="00000002.png" alt="Be sure to increase the CPU quota"><em>Be sure to increase the CPU quota</em></p>
+<p>If this happens to you navigate to IAM Admin Quotas (<a href="https://console.cloud.google.com/iam-admin/quotas">https://console.cloud.google.com/iam-admin/quotas</a>) and increase to something like 32 for the Compute Engine API CPUs maximum</p>
+<p><img src="00000003.png" alt="Update quota"><em>Update quota</em></p>
+<h2 id="setup-gcp-client">Setup GCP Client</h2>
+<p>Now you’ll need to initialises and authenticate your setup</p>
+<pre><code>gcloud init
+
+gcloud auth list
+
+gcloud config set compute/region us-central1
+
+gcloud config set compute/zone us-central1-a
+
+gcloud container clusters get-credentials my-kafka-cluster
+</code></pre>
+<p>Next, setup a Service Account</p>
+<pre><code>kubectl create serviceaccount tiller -n kube-system
+
+kubectl create clusterrolebinding tiller --clusterrole=cluster-admin --serviceaccount kube-system:tiller
+
+helm init --service-account tiller
+</code></pre>
+<h2 id="install-confluent-operator">Install Confluent Operator</h2>
+<p>Good — now my laptop can communicate with a remote GCP Kubernetes Engine. Now to install the Confluent Operator. These steps are pretty much verbatim from <a href="https://docs.confluent.io/current/installation/operator/co-deployment.html">https://docs.confluent.io/current/installation/operator/co-deployment.html</a></p>
+<pre><code>helm install -f ./providers/gcp.yaml --name operator --namespace operator --set operator.enabled=true ./confluent-operator
+
+kubectl -n operator patch serviceaccount default -p '{&quot;imagePullSecrets&quot;: [{&quot;name&quot;: &quot;confluent-docker-registry&quot; }]}'
+
+kubectl get pods -n operator | grep &quot;manager&quot;
+</code></pre>
+<h2 id="install-zookeeper">Install ZooKeeper</h2>
+<p>First — let’s install 3 zookeeper nodes</p>
+<pre><code>helm install -f ./providers/gcp.yaml --name zookeeper --namespace operator --set zookeeper.enabled=true ./confluent-operator
+
+kubectl get zookeeper zookeeper -ojsonpath='{.status.phase}' -n operator
+</code></pre>
+<h2 id="setup-dns-optional">Setup DNS (Optional)</h2>
+<p>Not strictly necessary — but if you want to have direct (external) access to your Kafka cluster, you’ll need to provide an accessible DNS that can be pushed into your LISTENER config. The settings are in <em>helm/providers/gcp.yaml</em></p>
+<p>![Changes to helm/providers/gcp.yaml](00000004.yaml*</p>
+<h2 id="install-kafka-brokers">Install Kafka brokers</h2>
+<p>A very similar approach to setting up 3 kafka brokers</p>
+<pre><code>helm install -f ./providers/gcp.yaml --name kafka --namespace operator --set kafka.enabled=true ./confluent-operator
+
+kubectl get pods -n operator | grep kafka
+</code></pre>
+<h2 id="install-schema-registry">Install Schema Registry</h2>
+<p>Now to install a 2 node schema registry</p>
+<pre><code>helm install -f ./providers/gcp.yaml --name schemaregistry --namespace operator --set schemaregistry.enabled=true ./confluent-operator
+
+kubectl get pods -n operator | grep schemaregistry
+</code></pre>
+<h2 id="install-kafka-connect">Install Kafka Connect</h2>
+<p>Now for Kafka connect</p>
+<pre><code>helm install -f ./providers/gcp.yaml --name connect --namespace operator --set connect.enabled=true ./confluent-operator
+
+kubectl get pods -n operator | grep connectors
+</code></pre>
+<h2 id="install-confluent-control-center">Install Confluent Control Center</h2>
+<pre><code>helm install -f ./providers/gcp.yaml --name controlcenter --namespace operator --set controlcenter.enabled=true ./confluent-operator
+
+kubectl get pods -n operator | grep controlcenter
+</code></pre>
+<h2 id="install-confluent-ksql">Install Confluent KSQL</h2>
+<pre><code>helm install -f ./providers/gcp.yaml --name ksql --namespace operator --set ksql.enabled=true ./confluent-operator
+
+kubectl get pods -n operator | grep ksql
+</code></pre>
+<h2 id="running-workload">Running Workload</h2>
+<p>After the deployments have completed, the running workloads should look like this</p>
+<p><img src="00000005.png" alt="Kubernetes Workloads on GCP"><em>Kubernetes Workloads on GCP</em></p>
+<h2 id="does-it-work--lets-test-it-">Does it work — let’s test it …</h2>
+<h3 id="test-kafka-from-within-the-cluster">Test Kafka from within the cluster</h3>
+<p>Launch a bash session on a kafka broker</p>
+<p>kubectl -n operator exec -it kafka-0 bash</p>
+<p>Create a local <em>kafka.properties</em> file</p>
+<pre><code>cat &lt;&lt; EOF &gt; kafka.properties
+bootstrap.servers=kafka:9071
+sasl.jaas.config=org.apache.kafka.common.security.plain.PlainLoginModule required username=&quot;test&quot; password=&quot;test123&quot;;
+sasl.mechanism=PLAIN
+security.protocol=SASL_PLAINTEXT
+EOF
+</code></pre>
+<p>And then run a test</p>
+<pre><code>kafka-topics --command-config kafka.properties --bootstrap-server kafka:9092 --list
+
+exit
+</code></pre>
+<h2 id="test-local-ksql-client-against-remote-ksql-server">Test local KSQL client against remote KSQL server</h2>
+<p>Establish a port mapping tunnel</p>
+<pre><code>kubectl port-forward svc/ksql 8088:8088 -n operator
+</code></pre>
+<p>And start a ksql session (locally) connecting to a remote server</p>
+<pre><code>ksql
+list topics;
+exit
+</code></pre>
+<h2 id="test-confluent-control-center">Test Confluent Control Center</h2>
+<p>Now let’s test access to Confluent Control Center. Establish a port mapping tunnel for port 9021</p>
+<pre><code>kubectl port-forward svc/controlcenter 9021:9021 -n operator
+</code></pre>
+<p>And navigate to <a href="http://localhost:9021/">http://localhost:9021</a></p>
+<p>The initial login is <em>admin</em> and the default password is <em>Developer1</em>.</p>
+<p><img src="00000006.png" alt="Behold — Confluent Control Center"><em>Behold — Confluent Control Center</em></p>
+<h2 id="teardown-and-cleanup">Teardown and Cleanup</h2>
+<p>Be sure to remove the deployment once you’ve finished testing. For GCP Kubernetes Engine it’s pretty much down to deleting the cluster</p>
+<p><img src="00000007.png" alt="Things not to do to production"><em>Things not to do to production</em></p>
+<h2 id="final-thoughts">Final Thoughts</h2>
+<p>A managed service <em>anything</em> is preferable to rolling things yourself. However, the Kafka Kubernetes Operator made a complex deployment pretty seem-less. This is pretty battle tested too as Confluent run their own public cloud offering (Confluent Cloud) on Kubernetes.</p>
+<p>I had a fully clustered, secured and highly available streaming platform of my own with a few <em>yaml</em> files and some cli magic.</p>
+<p>This is an amazing outcome — built in minutes (not days or weeks). This was <em>so much easier</em> than the last time I did this!</p>
+
+      </article>
+      
+    </main>
+    <nav class="end-nav side-padding">
+      
+      <a ontouchstart="cardPressed.call(this)" ontouchend="cardReleased.call(this)" ontouchmove="cardReleased.call(this)" 
+  href="https://simonaubury.com/posts/201905_didibeatbenracetrackingwithkafka/" class="card blog-card bc-next" rel="bookmark" >
+  
+  <div class="card-img-container">
+    <p class="card-img-overlay">Next Article</p>
+    <picture>
+      
+      
+      
+      <source srcset="https://simonaubury.com/posts/201905_didibeatbenracetrackingwithkafka/00000000_hu449e7382b39be8b559e26b49614d7644_977510_400x0_resize_lanczos_1.gif 1x, https://simonaubury.com/posts/201905_didibeatbenracetrackingwithkafka/00000000_hu449e7382b39be8b559e26b49614d7644_977510_800x0_resize_lanczos_1.gif 2x, https://simonaubury.com/posts/201905_didibeatbenracetrackingwithkafka/00000000_hu449e7382b39be8b559e26b49614d7644_977510_1200x0_resize_lanczos_1.gif 3x">
+      <img src="https://simonaubury.com/posts/201905_didibeatbenracetrackingwithkafka/00000000_hu449e7382b39be8b559e26b49614d7644_977510_400x0_resize_lanczos_1.gif" class="card-img" >
+    </picture>
+  </div>
+  
+  <article class="card-body">
+    <h2 class="card-title">Did I beat Ben? Race tracking with Kafka KSQL, MQTT &amp; Kibana</h2>
+    <p class="card-text">Race tracking with Kafka KSQL, MQTT &amp; Kibana</p>
+    <div class="card-subtext muted-text">
+      <p>Posted <time datetime="2019-05-28">May 28, 2019</time></p>
+      <p>#Kafka </p>
+    </div>
+  </article>
+</a>
+      
+    </nav>
+    <footer class="side-padding" style="background-image: url('https://simonaubury.com/img/home-blob-flip.svg');">
+    <a href="https://simonaubury.com/" class="footer-link">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/home.svg" alt="Home">
+    
+    </a>
+    
+    
+    
+    <a href="https://github.com/saubury" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/github.svg" alt="GitHub"/>
+    
+    </a>
+    
+    
+    
+    <a href="https://www.linkedin.com/in/simonaubury" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/linkedin.svg" alt="LinkedIn"/>
+    
+    </a>
+    
+    
+    <a href="https://simonaubury.com/index.xml" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/rss.svg" alt="RSS"/>
+    
+    </a>
+    
+    
+    
+    
+    
+    
+    
+    
+</footer>
+    
+  <script defer src="https://simonaubury.com/js/katex.min.js"></script>
+
+
+  <script defer src="https://simonaubury.com/js/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+
+<script src="https://simonaubury.com/js/core.min.js"></script>
+
+  </body>
+</html>

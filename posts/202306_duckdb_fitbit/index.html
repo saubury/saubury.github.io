@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en-au" dir="ltr">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Fitbit activity analysis with DuckDB &middot; Simon Aubury</title>
+  <meta name="description" content="My (very) personal data warehouse — Fitbit activity analysis with DuckDB" />
+  <link rel="apple-touch-icon" sizes="180x180" href="https://simonaubury.com/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://simonaubury.com/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://simonaubury.com/favicon-16x16.png">
+  <link href="https://simonaubury.com/css/katex.min.css" rel="stylesheet">
+  
+  
+  
+  
+  <link href="https://simonaubury.com/css/concated.min.css" rel="stylesheet">
+  
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7N67PMRZ6N"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-7N67PMRZ6N', { 'anonymize_ip': false });
+}
+</script>
+
+  
+</head>
+
+  <body class="single-body">
+    <nav class="nav-bar side-padding">
+  <h1 class="nav-header"><a href="https://simonaubury.com/" class="nav-text">simon aubury</a></h1>
+  <div class="hamburger-menu">
+    <input class="hamburger-menu-button" type="checkbox"
+      onclick="hamburgerMenuPressed.call(this)"
+      aria-label="Hamburger Menu Button"
+    >
+    <div class="hamburger-menu-icon">
+      <span></span>
+      <span></span>
+    </div>
+    <ul id="menu" class="hamburger-menu-overlay">
+      <li><a href="https://simonaubury.com/" class="hamburger-menu-overlay-link">Home</a></li>
+      <li><a href="https://simonaubury.com/slides/" class="hamburger-menu-overlay-link">Presentation slides</a></li>
+      <li><a href="https://simonaubury.com/about-me/" class="hamburger-menu-overlay-link">About Simon</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/cat/" class="hamburger-menu-overlay-link">Cat</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/cdc/" class="hamburger-menu-overlay-link">CDC</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/duckdb/" class="hamburger-menu-overlay-link">duckdb</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/flink/" class="hamburger-menu-overlay-link">flink</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/generativeai/" class="hamburger-menu-overlay-link">GenerativeAI</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/gpt/" class="hamburger-menu-overlay-link">GPT</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/homeassistant/" class="hamburger-menu-overlay-link">homeassistant</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/kafka/" class="hamburger-menu-overlay-link">Kafka</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/ml/" class="hamburger-menu-overlay-link">ML</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/raspberry-pi/" class="hamburger-menu-overlay-link">Raspberry Pi</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/snowflake/" class="hamburger-menu-overlay-link">snowflake</a></li>
+      
+      <li><a href="https://simonaubury.com/index.xml" class="hamburger-menu-overlay-link">rss</a></li>
+    </ul>
+  </div>
+</nav>
+
+    <main class="content side-text-padding">
+      <article class="post dropcase">
+        <header class="post-header">
+          <h1 class="post-title">Fitbit activity analysis with DuckDB</h1>
+          <p class="post-date">Posted <time datetime="2023-06-01">Jun 1, 2023</time></p>
+        </header>
+        <picture class="post-figure">
+          
+          
+          
+          <source srcset="https://simonaubury.com/posts/202306_duckdb_fitbit/banner_hue3f9d6df4ebcddb832b8d8cec227f90c_450691_711x0_resize_lanczos_3.png 1x, https://simonaubury.com/posts/202306_duckdb_fitbit/banner_hue3f9d6df4ebcddb832b8d8cec227f90c_450691_1422x0_resize_lanczos_3.png 2x, https://simonaubury.com/posts/202306_duckdb_fitbit/banner_hue3f9d6df4ebcddb832b8d8cec227f90c_450691_2133x0_resize_lanczos_3.png 3x">
+          <img src="https://simonaubury.com/posts/202306_duckdb_fitbit/banner_hue3f9d6df4ebcddb832b8d8cec227f90c_450691_711x0_resize_lanczos_3.png" >
+        </picture>
+        
+        
+        <h1 id="my-very-personal-data-warehouse--fitbit-activity-analysis-with-duckdb">My (very) personal data warehouse — Fitbit activity analysis with DuckDB</h1>
+<blockquote>
+<p>Wearable fitness trackers have become an integral part of our lives, collecting and tracking data about our daily activities, sleep patterns, location, heart rate, and much more. I’ve been using a Fitbit device for 6 years to monitor my health. However, I have always found the data analysis capabilities lacking — especially when I wanted to track my progress against long term fitness goals. What insights are buried within my archive of personal fitness activity data? To start exploring I needed a good approach for performing data analysis over thousands of poorly documented JSON and CSV files … extra points for analysis that doesn’t require my data to leave my laptop.</p>
+</blockquote>
+<p>Enter <a href="https://duckdb.org/why_duckdb">DuckDB</a> — a lightweight, free yet powerful analytical database designed to streamline data analysis workflows — that runs locally. In this blog post, I want to use DuckDB to explore my Fitbit data achieve and share the approach for analysing a variety of data formats and charting my health and fitness goals with the help of <a href="https://seaborn.pydata.org/">Seaborn</a> data visualisations.</p>
+<h1 id="export-fitbit-data-archive">Export Fitbit data archive</h1>
+<p>Firstly, I needed to get hold of all of my historic fitness data. Fitbit make it fairly easy to export your Fitbit data for the lifetime of your account by following the instructions at <a href="https://www.fitbit.com/settings/data/export">export your account archive</a>.</p>
+<p><img src="./00000000.png" alt="">
+Instructions for using the export Fitbit data archive — Screenshot by the author.</p>
+<p>You’ll need to confirm your request … and be patient. My archive took over three days to create — but I finally received an email with instructions to download a ZIP file containing my Fitbit data. This file should contain all my personal fitness activity recorded by my Fitbit or associated service. Unzipping the archive reveals a huge collection of files — mine for example had 7,921 files once I unzipped the 79MB file.</p>
+<p><img src="./00000001.png" alt="">
+A small sample of the thousands of nested files — Screenshot by the author.</p>
+<p>Let’s start looking at the variety of data available in the archive.</p>
+<h1 id="why-duckdb">Why DuckDB?</h1>
+<p>There are many great blogs (<a href="https://betterprogramming.pub/duckdb-whats-the-hype-about-5d46aaa73196">1</a>,<a href="https://mattpalmer.io/posts/whats-the-hype-duckdb/">2</a>,<a href="https://towardsdatascience.com/a-serverless-query-engine-from-spare-parts-bd6320f10353">3</a>) describing DuckDB — the <a href="https://www.dictionary.com/browse/tl-dr">TL;DR</a> summary is DuckDB is an open-source in-process OLAP database built specifically for analytical queries. It runs locally, has extensive SQL support and can run queries directly on Pandas data, Parquet, JSON data. Extra points for its seamless integration with Python and R. The fact it’s insanely fast and does (mostly) all processing in memory make it a good choice for building my personal data warehouse.</p>
+<h1 id="fitbit-activity-data">Fitbit activity data</h1>
+<p>The first collection of files I looked at was activity data. Physical Activity and broad exercise information appears to be stored in numbered files such as <code>Physical Activity/exercise-1700.json</code></p>
+<p>I couldn’t work out what the file numbering actually meant, my guess is they are just increasing integers for a collection of exercise files. In my data export the earliest files started at 0 and went to file number 1700 over a 6 year period. Inside is an array of records, each with a description of an activity. The record seems to change depending on the activity — here is an example of a “walk”</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span><span style="color:#009c00">&#34;activityName&#34;</span> : <span style="color:#009c00">&#34;Walk&#34;</span>,  
+</span></span><span style="display:flex;"><span>  <span style="color:#009c00">&#34;averageHeartRate&#34;</span> : 79,  
+</span></span><span style="display:flex;"><span>  <span style="color:#009c00">&#34;calories&#34;</span> : 122,  
+</span></span><span style="display:flex;"><span>  <span style="color:#009c00">&#34;duration&#34;</span> : 1280000,  
+</span></span><span style="display:flex;"><span>  <span style="color:#009c00">&#34;steps&#34;</span> : 1548,  
+</span></span><span style="display:flex;"><span>  <span style="color:#009c00">&#34;startTime&#34;</span> : <span style="color:#009c00">&#34;01/06/23 01:08:57&#34;</span>,  
+</span></span><span style="display:flex;"><span>  <span style="color:#009c00">&#34;elevationGain&#34;</span> : 67.056,  
+</span></span><span style="display:flex;"><span>  <span style="color:#009c00">&#34;hasGps&#34;</span> : <span style="color:#00f">false</span>,  
+</span></span><span style="display:flex;"><span>  : : : :  
+</span></span><span style="display:flex;"><span>  <span style="color:#009c00">&#34;activityLevel&#34;</span> : [  
+</span></span><span style="display:flex;"><span>    { &#34;minutes&#34; : 1, &#34;name&#34; : <span style="color:#009c00">&#34;sedentary&#34;</span>},  
+</span></span><span style="display:flex;"><span>    { &#34;minutes&#34; : 2, &#34;name&#34; : <span style="color:#009c00">&#34;lightly&#34;</span>},  
+</span></span><span style="display:flex;"><span>    { &#34;minutes&#34; : 6, &#34;name&#34; : <span style="color:#009c00">&#34;fairly&#34;</span>},  
+</span></span><span style="display:flex;"><span>    { &#34;minutes&#34; : 6, &#34;name&#34; : <span style="color:#009c00">&#34;very&#34;</span>  
+</span></span><span style="display:flex;"><span>  }]
+</span></span></code></pre></div><p>This physical activity data is one file of the 7,921 files now on my laptop. Fortunately, DuckDB can read (and auto-detect the schema) from JSON files using <a href="https://duckdb.org/docs/data/json/overview.html#read_json_auto-function">read_json</a> function, allowing me to load all of the exercise files into the <code>physical_activity</code> table using a single SQL statement. It’s worth noting I needed to specify the date format mask as the Fitbit export has a very <a href="https://en.wikipedia.org/wiki/Date_and_time_notation_in_the_United_States">American style date</a> format 😕.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#00f">CREATE</span> <span style="color:#00f">OR</span> <span style="color:#00f">REPLACE</span> <span style="color:#00f">TABLE</span> physical_activity  
+</span></span><span style="display:flex;"><span><span style="color:#00f">as</span>  
+</span></span><span style="display:flex;"><span><span style="color:#00f">SELECT</span>   
+</span></span><span style="display:flex;"><span>  startTime + INTERVAL 11 hours <span style="color:#00f">as</span> activityTime  
+</span></span><span style="display:flex;"><span>, activityName  
+</span></span><span style="display:flex;"><span>, activityLevel  
+</span></span><span style="display:flex;"><span>, averageHeartRate  
+</span></span><span style="display:flex;"><span>, calories  
+</span></span><span style="display:flex;"><span>, duration / 60000 <span style="color:#00f">as</span> duration_minutes  
+</span></span><span style="display:flex;"><span>, steps  
+</span></span><span style="display:flex;"><span>, distance  
+</span></span><span style="display:flex;"><span>, distanceUnit  
+</span></span><span style="display:flex;"><span>, tcxLink  
+</span></span><span style="display:flex;"><span>, <span style="color:#00f">source</span>  
+</span></span><span style="display:flex;"><span><span style="color:#00f">FROM</span> read_json(<span style="color:#009c00">&#39;./Physical Activity/exercise-*.json&#39;</span>  
+</span></span><span style="display:flex;"><span>, format=<span style="color:#009c00">&#39;array&#39;</span>  
+</span></span><span style="display:flex;"><span>, timestampformat=<span style="color:#009c00">&#39;%m/%d/%y %H:%M:%S&#39;</span>);
+</span></span></code></pre></div><p>This SQL command reads the physical activity data from disk, converts the activity and duration and loads into a DuckDB table in memory.</p>
+<h1 id="load-physical-activity-data-into-data-frame">Load Physical Activity data into data frame</h1>
+<p>I wanted to understand how I was spending my time with each month. As the activity data is stored at a very granular level I used the DuckDB SQL <a href="https://duckdb.org/docs/sql/functions/timestamp.html">time_bucket</a> function to truncate the <em>activityTime</em> timestamp into monthly buckets. Loading the grouped physical activity data into data frame can be accomplished with this aggregate SQL and the query results can be directed into a Pandas dataframe with the <code>&lt;&lt;</code> operator.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>activity_df &lt;&lt;  
+</span></span><span style="display:flex;"><span>  <span style="color:#00f">select</span> time_bucket(interval <span style="color:#009c00">&#39;1 month&#39;</span>, activityTime) <span style="color:#00f">as</span> activity_day  
+</span></span><span style="display:flex;"><span>  , activityName  
+</span></span><span style="display:flex;"><span>  , <span style="color:#00f">sum</span>(duration_minutes) <span style="color:#00f">as</span> duration  
+</span></span><span style="display:flex;"><span>  <span style="color:#00f">from</span> physical_activity  
+</span></span><span style="display:flex;"><span>  <span style="color:#00f">where</span> activityTime <span style="color:#00f">between</span> <span style="color:#009c00">&#39;2022-09-01&#39;</span> <span style="color:#00f">and</span> <span style="color:#009c00">&#39;2023-05-01&#39;</span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#00f">group</span> <span style="color:#00f">by</span> 1, 2  
+</span></span><span style="display:flex;"><span>  <span style="color:#00f">order</span> <span style="color:#00f">by</span> 1;
+</span></span></code></pre></div><p>This single SQL query groups my activity data (bike, walk, run etc.,) into monthly buckets and allows me to honestly reflect on how much time I was devoting to physical activity.</p>
+<h1 id="plot-monthly-activity-minutes">Plot Monthly Activity Minutes</h1>
+<p>I want to now explore my activity data visually — so let’s get the Fitbit data and produce some statistical graphics. I’m going to use the Python <a href="https://seaborn.pydata.org/">Seaborn</a> data visualisation library to create a bar plot of the monthly activity minutes directly from the <em>activity_df</em> dataframe.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#00f">import</span> matplotlib.pyplot <span style="color:#00f">as</span> plt  
+</span></span><span style="display:flex;"><span><span style="color:#00f">import</span> seaborn <span style="color:#00f">as</span> sns  
+</span></span><span style="display:flex;"><span><span style="color:#00f">from</span> matplotlib.dates <span style="color:#00f">import</span> DateFormatter  
+</span></span><span style="display:flex;"><span>plt.figure(figsize=(15, 6))  
+</span></span><span style="display:flex;"><span>plt.xticks(rotation=45)  
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>myplot =sns.barplot(data=activity_df, x=<span style="color:#009c00">&#34;activity_day&#34;</span>, y=<span style="color:#009c00">&#34;duration&#34;</span>, hue=<span style="color:#009c00">&#34;activityName&#34;</span>)  
+</span></span><span style="display:flex;"><span>myplot.set(xlabel=<span style="color:#009c00">&#39;Month of&#39;</span>, ylabel=<span style="color:#009c00">&#39;Duration (min)&#39;</span>, title=<span style="color:#009c00">&#39;Monthly Activity Minutes&#39;</span>)  
+</span></span><span style="display:flex;"><span>plt.legend(loc=<span style="color:#009c00">&#34;upper right&#34;</span>, title=<span style="color:#009c00">&#39;Activity&#39;</span>)   
+</span></span><span style="display:flex;"><span>plt.show()
+</span></span></code></pre></div><p>Executing this against the loaded activity data creates this bar plot.</p>
+<p><img src="./00000002.png" alt="">
+Workout activity breakdown — Screenshot by the author.</p>
+<p>It looks like my primary activity continues to be walking, and my New Years resolution to run more often in 2023 hasn’t actually happened (yet?)</p>
+<h1 id="sleep">Sleep</h1>
+<p>About <a href="https://www.health.harvard.edu/heart-health/are-you-getting-enough-sleep">one in three adults doesn’t get enough sleep</a>, so I wanted to explore my long term sleeping patterns. In my Fitbit archive sleep data appears to be recorded in dated files such as <code>Sleep/sleep-2022-12-28.json</code>. Each file holds a months worth of data, but confusingly is dated for the month before the event. For example, the file <code>sleep-2022-12-28.json</code> appears to have data for January spanning the dates 2023-01-02 to 2023-01-27. Anyway — file naming weirdness aside we can explore the contents of the file. Within the record is an extended “levels” block with a breakdown of sleep type (wake, light, REM, deep)</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span><span style="color:#009c00">&#34;logId&#34;</span> : 39958970367,  
+</span></span><span style="display:flex;"><span>  <span style="color:#009c00">&#34;startTime&#34;</span> : <span style="color:#009c00">&#34;2023-01-26T22:47:30.000&#34;</span>,  
+</span></span><span style="display:flex;"><span>  <span style="color:#009c00">&#34;duration&#34;</span> : 26040000,  
+</span></span><span style="display:flex;"><span>  :: :: ::  
+</span></span><span style="display:flex;"><span>  <span style="color:#009c00">&#34;levels&#34;</span>:   
+</span></span><span style="display:flex;"><span>    <span style="color:#009c00">&#34;summary&#34;</span> : {  
+</span></span><span style="display:flex;"><span>      {  
+</span></span><span style="display:flex;"><span>      &#34;light&#34;: { &#34;count&#34;: 30, &#34;minutes&#34;: 275},  
+</span></span><span style="display:flex;"><span>      &#34;rem&#34;: { &#34;count&#34;: 4, &#34;minutes&#34;: 48 },  
+</span></span><span style="display:flex;"><span>      &#34;wake&#34;: { &#34;count&#34; : 29, &#34;minutes&#34; : 42 },  
+</span></span><span style="display:flex;"><span>      &#34;deep&#34; : { &#34;count&#34; : 12, &#34;minutes&#34; : 75}  
+</span></span><span style="display:flex;"><span>      }  
+</span></span><span style="display:flex;"><span>    }
+</span></span></code></pre></div><p>If I look at some of the older files (possibly created with my older Fitbit surge device) there is a different breakdown of sleep type (restless, awake, asleep).</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span><span style="color:#009c00">&#34;logId&#34;</span> : 18841054316,  
+</span></span><span style="display:flex;"><span>  <span style="color:#009c00">&#34;startTime&#34;</span> : <span style="color:#009c00">&#34;2018-07-12T22:42:00.000&#34;</span>,  
+</span></span><span style="display:flex;"><span>  <span style="color:#009c00">&#34;duration&#34;</span> : 25440000,  
+</span></span><span style="display:flex;"><span>  :: :: ::  
+</span></span><span style="display:flex;"><span>  <span style="color:#009c00">&#34;levels&#34;</span> : {  
+</span></span><span style="display:flex;"><span>    &#34;summary&#34; : {  
+</span></span><span style="display:flex;"><span>      &#34;restless&#34; : {&#34;count&#34; : 9, &#34;minutes&#34; : 20 },  
+</span></span><span style="display:flex;"><span>      &#34;awake&#34; : { &#34;count&#34; : 2, &#34;minutes&#34; : 5 },  
+</span></span><span style="display:flex;"><span>      &#34;asleep&#34; : { &#34;count&#34; : 0,   &#34;minutes&#34; : 399}  
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>  }
+</span></span></code></pre></div><p>Regardless of the schema, we can use the <a href="https://duckdb.org/docs/extensions/json.html">DuckDB JSON</a> reader to read the records into a single table.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#00f">CREATE</span> <span style="color:#00f">OR</span> <span style="color:#00f">REPLACE</span> <span style="color:#00f">TABLE</span> sleep_log  
+</span></span><span style="display:flex;"><span><span style="color:#00f">as</span>  
+</span></span><span style="display:flex;"><span><span style="color:#00f">select</span> dateOfSleep   
+</span></span><span style="display:flex;"><span>, levels  
+</span></span><span style="display:flex;"><span><span style="color:#00f">from</span> read_json(<span style="color:#009c00">&#39;./Sleep/sleep*.json&#39;</span>  
+</span></span><span style="display:flex;"><span>, columns={dateOfSleep: <span style="color:#009c00">&#39;DATE&#39;</span>, levels: <span style="color:#009c00">&#39;JSON&#39;</span>}  
+</span></span><span style="display:flex;"><span>, format=<span style="color:#009c00">&#39;array&#39;</span>) ;
+</span></span></code></pre></div><h1 id="schema-changes-for-sleep-data">Schema changes for sleep data</h1>
+<p>I wanted to process all of my sleep data, and handle the apparent schema change in the way sleep is recorded (most likely as I changed models of Fitbit devices). Some of the records have time recorded against <code>$.awake</code> which is similar (but not identical to) <code>$.wake</code></p>
+<p>I used the SQL <a href="https://duckdb.org/docs/sql/functions/utility.html">coalesce</a> function — which return the first expression that evaluates to a non-NULL value to combine similar types of sleep stage.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>sleep_log_df &lt;&lt;  
+</span></span><span style="display:flex;"><span>  <span style="color:#00f">select</span> dateOfSleep  
+</span></span><span style="display:flex;"><span>  , <span style="color:#00f">cast</span>(coalesce(json_extract(levels, <span style="color:#009c00">&#39;$.summary.awake.minutes&#39;</span>), json_extract(levels, <span style="color:#009c00">&#39;$.summary.wake.minutes&#39;</span>)) <span style="color:#00f">as</span> int) <span style="color:#00f">as</span> min_wake  
+</span></span><span style="display:flex;"><span>  , <span style="color:#00f">cast</span>(coalesce(json_extract(levels, <span style="color:#009c00">&#39;$.summary.deep.minutes&#39;</span>), json_extract(levels, <span style="color:#009c00">&#39;$.summary.asleep.minutes&#39;</span>)) <span style="color:#00f">as</span> int) <span style="color:#00f">as</span> min_deep  
+</span></span><span style="display:flex;"><span>  , <span style="color:#00f">cast</span>(coalesce(json_extract(levels, <span style="color:#009c00">&#39;$.summary.light.minutes&#39;</span>), json_extract(levels, <span style="color:#009c00">&#39;$.summary.restless.minutes&#39;</span>)) <span style="color:#00f">as</span> int) <span style="color:#00f">as</span> min_light  
+</span></span><span style="display:flex;"><span>  , <span style="color:#00f">cast</span>(coalesce(json_extract(levels, <span style="color:#009c00">&#39;$.summary.rem.minutes&#39;</span>), 0) <span style="color:#00f">as</span> int) <span style="color:#00f">as</span> min_rem  
+</span></span><span style="display:flex;"><span>  <span style="color:#00f">from</span> sleep_log  
+</span></span><span style="display:flex;"><span>  <span style="color:#00f">where</span> dateOfSleep <span style="color:#00f">between</span> <span style="color:#009c00">&#39;2023-04-01&#39;</span> <span style="color:#00f">and</span> <span style="color:#009c00">&#39;2023-04-30&#39;</span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#00f">order</span> <span style="color:#00f">by</span> 1;
+</span></span></code></pre></div><p>With DuckDB I can query with <a href="https://duckdb.org/docs/extensions/json.html#json-extraction-functions">json_extract</a> to extract the duration stages from the nested JSON to generate a <em>sleep_log_df</em> dataframe with all of the historic sleep stages grouped.</p>
+<h1 id="plot-sleep-activity">Plot sleep activity</h1>
+<p>We can not take the daily sleep logs and produce a stacked bar plot showing the breakdown each night of being awake and in light, deep and <a href="https://en.wikipedia.org/wiki/Rapid_eye_movement_sleep">REM</a> sleep.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#00f">import</span> matplotlib.pyplot <span style="color:#00f">as</span> plt  
+</span></span><span style="display:flex;"><span><span style="color:#00f">import</span> seaborn <span style="color:#00f">as</span> sns  
+</span></span><span style="display:flex;"><span><span style="color:#00f">import</span> matplotlib.dates <span style="color:#00f">as</span> mdates  
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span><span style="color:#f00;font-style:italic">#create stacked bar chart  </span>
+</span></span><span style="display:flex;"><span>fig, axes = plt.subplots(figsize=(15,6))  
+</span></span><span style="display:flex;"><span>myplot = sleep_log_df.set_index(<span style="color:#009c00">&#39;dateOfSleep&#39;</span>).plot(ax=axes, kind=<span style="color:#009c00">&#39;bar&#39;</span>, stacked=<span style="color:#00f">True</span>, color=[<span style="color:#009c00">&#39;chocolate&#39;</span>, <span style="color:#009c00">&#39;palegreen&#39;</span>, <span style="color:#009c00">&#39;green&#39;</span>, <span style="color:#009c00">&#39;darkblue&#39;</span>])  
+</span></span><span style="display:flex;"><span>myplot.set(xlabel=<span style="color:#009c00">&#39;Date&#39;</span>, ylabel=<span style="color:#009c00">&#39;Duration (min)&#39;</span>, title=<span style="color:#009c00">&#39;Sleep&#39;</span>)  
+</span></span><span style="display:flex;"><span>axes.xaxis.set_major_locator(mdates.DayLocator(interval=7))  
+</span></span><span style="display:flex;"><span>plt.legend(loc=<span style="color:#009c00">&#34;upper right&#34;</span>, labels = [<span style="color:#009c00">&#39;Awake&#39;</span>, <span style="color:#009c00">&#39;Deep&#39;</span>, <span style="color:#009c00">&#39;Light&#39;</span>, <span style="color:#009c00">&#39;REM&#39;</span>])   
+</span></span><span style="display:flex;"><span>plt.xticks(rotation=45)  
+</span></span><span style="display:flex;"><span>plt.show()
+</span></span></code></pre></div><p>Loading a month of sleep data allows me to create a broader analysis of sleep duration.</p>
+<p><img src="./00000003.png" alt="">
+Sleep cycle duration each night — Screenshot by the author.</p>
+<p>The ability to graph multiple nights of sleep together on a single plot allows me to start understanding how days of the week and cyclic events affects the duration and quality of my sleep.</p>
+<h1 id="heart-rate">Heart rate</h1>
+<p>Heart rate is captured very frequently (every 10–15 seconds) in files stored daily named like <code>Physical Activity/heart_rate-2023-01-26.json</code>. These files are really big — each day has around 70,000 lines — all wrapped in a single array.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>[{{&#34;dateTime&#34;: <span style="color:#009c00">&#34;01/25/25 13:00:07&#34;</span>, &#34;value&#34;: {&#34;bpm&#34;: 54, &#34;confidence&#34;: 2}},  
+</span></span><span style="display:flex;"><span>  {&#34;dateTime&#34;: <span style="color:#009c00">&#34;01/25/25 13:00:22&#34;</span>, &#34;value&#34;: {&#34;bpm&#34;: 54, &#34;confidence&#34;: 2}},  
+</span></span><span style="display:flex;"><span>  {&#34;dateTime&#34;: <span style="color:#009c00">&#34;01/25/25 13:00:37&#34;</span>, &#34;value&#34;: {&#34;bpm&#34;: 55, &#34;confidence&#34;: 2}},  
+</span></span><span style="display:flex;"><span>  : : : : : :  
+</span></span><span style="display:flex;"><span>  {&#34;dateTime&#34;: <span style="color:#009c00">&#34;01/26/26 12:59:57&#34;</span>, &#34;value&#34;: {&#34;bpm&#34;: 55, &#34;confidence&#34;: 3}  
+</span></span><span style="display:flex;"><span>}]
+</span></span></code></pre></div><p>My theory here is the file name represents the locale of the user. For example, in my timezone (GMT+11) named <code>heart_rate-2023-01-26.json</code> the data covers the day 26 00:00 (AEST) to 23:59 (AEST) - and it makes logical sense if the dates within the files are in GMT.</p>
+<h1 id="transform-json-files">Transform JSON files</h1>
+<p>Up to now I’ve managed to process my Fitbit data as-is with included DuckDB functions. However, I hit a problem when trying to process these enormous heart rate files. DuckDB gave me this error when trying to process a large array of records in a JSON files</p>
+<p><strong>(duckdb.InvalidInputException) “INTERNAL Error: Unexpected yyjson tag in ValTypeToString”</strong></p>
+<p>I think this error message is an abrupt way of telling me it’s unreasonable to expect a JSON array to have so many elements. The fix was to pre-process the file so it wasn’t an array of JSON records, instead converted to newline-delimited JSON, or <a href="http://ndjson.org/">ndjson</a>.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{&#34;dateTime&#34;: <span style="color:#009c00">&#34;01/25/23 13:00:07&#34;</span>, &#34;value&#34;: {&#34;bpm&#34;: 54, &#34;confidence&#34;: 2}  
+</span></span><span style="display:flex;"><span>{&#34;dateTime&#34;: <span style="color:#009c00">&#34;01/25/23 13:00:22&#34;</span>, &#34;value&#34;: {&#34;bpm&#34;: 54, &#34;confidence&#34;: 2}  
+</span></span><span style="display:flex;"><span>{&#34;dateTime&#34;: <span style="color:#009c00">&#34;01/25/23 13:00:37&#34;</span>, &#34;value&#34;: {&#34;bpm&#34;: 55, &#34;confidence&#34;: 2}  
+</span></span><span style="display:flex;"><span>  : : : : : :  
+</span></span><span style="display:flex;"><span>{&#34;dateTime&#34;: <span style="color:#009c00">&#34;01/26/23 12:59:57&#34;</span>, &#34;value&#34;: {&#34;bpm&#34;: 55, &#34;confidence&#34;: 3}
+</span></span></code></pre></div><p>To transform heart rate <em>array_of_records</em> into newline-delimited JSON I used a sneaky bit of Python to convert each file.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#00f">import</span> glob
+</span></span><span style="display:flex;"><span><span style="color:#00f">import</span> json
+</span></span><span style="display:flex;"><span><span style="color:#00f">import</span> ndjson
+</span></span><span style="display:flex;"><span><span style="color:#00f">import</span> re
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#00f">for</span> json_src_file in sorted(glob.glob(<span style="color:#009c00">&#39;MyFitbitData/SimonAubury/Physical Activity/steps-*.json&#39;</span>) + glob.glob(<span style="color:#009c00">&#39;MyFitbitData/SimonAubury/Physical Activity/heart_rate-*.json&#39;</span>)):
+</span></span><span style="display:flex;"><span>  json_dst_file = re.sub(<span style="color:#009c00">&#39;\.[a-z]*$&#39;</span>, <span style="color:#009c00">&#39;.ndjson&#39;</span>, json_src_file)
+</span></span><span style="display:flex;"><span>  print(<span style="color:#009c00">f</span><span style="color:#009c00">&#39;</span><span style="color:#009c00">{</span>json_src_file<span style="color:#009c00">}</span><span style="color:#009c00"> --&gt;  </span><span style="color:#009c00">{</span>json_dst_file<span style="color:#009c00">}</span><span style="color:#009c00">&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#00f">with</span> open(json_src_file) <span style="color:#00f">as</span> f_json_src_file:
+</span></span><span style="display:flex;"><span>    json_dict =json.load(f_json_src_file) 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#00f">with</span> open(json_dst_file, <span style="color:#009c00">&#39;w&#39;</span>) <span style="color:#00f">as</span> outfile:
+</span></span><span style="display:flex;"><span>      ndjson.dump(json_dict, outfile)
+</span></span></code></pre></div><p>This will find each <em>.json</em> file, read converting the contents into newline-delimited JSON with a new file created with the file extension <em>.ndjson</em>. This converts an array with 70,000 records to a file with 70,000 lines — with each JSON record now stored on a new line.</p>
+<h1 id="load-heart-rate-data-into-table">Load heart rate data into table</h1>
+<p>With the newly converted <em>ndjson</em> files, I’m now ready to load heart rate data into a DuckDB table. Note the use of <code>timestampformat='%m/%d/%y %H:%M:%S');</code> to describe the leading month in the dates (for example <em>&ldquo;01/25/23 13:00:07&rdquo;</em>)</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#00f">CREATE</span> <span style="color:#00f">OR</span> <span style="color:#00f">REPLACE</span> <span style="color:#00f">TABLE</span> heart_rate  
+</span></span><span style="display:flex;"><span><span style="color:#00f">as</span>  
+</span></span><span style="display:flex;"><span><span style="color:#00f">SELECT</span> dateTime + INTERVAL 11 hours <span style="color:#00f">as</span> hr_date_time  
+</span></span><span style="display:flex;"><span>, <span style="color:#00f">cast</span>(value-&gt;<span style="color:#009c00">&#39;$.bpm&#39;</span> <span style="color:#00f">as</span> integer) <span style="color:#00f">as</span> bpm  
+</span></span><span style="display:flex;"><span><span style="color:#00f">FROM</span> read_json(<span style="color:#009c00">&#39;./Physical Activity/*.ndjson&#39;</span>  
+</span></span><span style="display:flex;"><span>, columns={dateTime: <span style="color:#009c00">&#39;TIMESTAMP&#39;</span>, value: <span style="color:#009c00">&#39;JSON&#39;</span>}  
+</span></span><span style="display:flex;"><span>, format=<span style="color:#009c00">&#39;newline_delimited&#39;</span>  
+</span></span><span style="display:flex;"><span>, timestampformat=<span style="color:#009c00">&#39;%m/%d/%y %H:%M:%S&#39;</span>);
+</span></span></code></pre></div><p>We can load all the .ndjson files by setting the format to ’newline_delimited’. Note we can extract the BPM (beats per minute) with the JSON extraction and cast into an integer.</p>
+<p><img src="./00000004.png" alt=""></p>
+<p>DuckDB is blazing fast at processing JSON- Screenshot by the author.</p>
+<p>It’s worth highlighting here how insanely fast DuckDB is — it took only 2.8 seconds to load 12 million records!</p>
+<h1 id="load-heart-rate-into-data-frame">Load heart rate into data frame</h1>
+<p>With 12 million hear rate measurements loaded, let’s load a single days worth of data into a data frame for the 21st of May.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>hr_df &lt;&lt;   
+</span></span><span style="display:flex;"><span>  <span style="color:#00f">SELECT</span> time_bucket(interval <span style="color:#009c00">&#39;1 minutes&#39;</span>, hr_date_time) <span style="color:#00f">as</span> created_day  
+</span></span><span style="display:flex;"><span>  ,  <span style="color:#00f">min</span>(bpm) <span style="color:#00f">as</span> bpm_min  
+</span></span><span style="display:flex;"><span>  ,  <span style="color:#00f">avg</span>(bpm) <span style="color:#00f">as</span> bpm_avg  
+</span></span><span style="display:flex;"><span>  ,  <span style="color:#00f">max</span>(bpm) <span style="color:#00f">as</span> bpm_max  
+</span></span><span style="display:flex;"><span>  <span style="color:#00f">FROM</span> heart_rate  
+</span></span><span style="display:flex;"><span>  <span style="color:#00f">where</span> hr_date_time <span style="color:#00f">between</span> <span style="color:#009c00">&#39;2023-05-21 00:00&#39;</span> <span style="color:#00f">and</span> <span style="color:#009c00">&#39;2023-05-21 23:59&#39;</span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#00f">group</span> <span style="color:#00f">by</span> 1;
+</span></span></code></pre></div><p>This DuckDB query aggregates the variability of heart rate into time bucks of 1 minute; banding into min, average and maximum within each period.</p>
+<h1 id="plot-heart-rate">Plot Heart rate</h1>
+<p>I can plat the heart rate using a plot like this (and also to show off I actually did go for a run at 6am)</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#00f">import</span> matplotlib.pyplot <span style="color:#00f">as</span> plt
+</span></span><span style="display:flex;"><span><span style="color:#00f">from</span> matplotlib.dates <span style="color:#00f">import</span> DateFormatter
+</span></span><span style="display:flex;"><span>plt.figure(figsize=(15, 6))
+</span></span><span style="display:flex;"><span>plt.xticks(rotation=45)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>myplot = sns.lineplot(data=hr_df, x=<span style="color:#009c00">&#34;created_day&#34;</span>, y=<span style="color:#009c00">&#34;bpm_min&#34;</span>)
+</span></span><span style="display:flex;"><span>myplot = sns.lineplot(data=hr_df, x=<span style="color:#009c00">&#34;created_day&#34;</span>, y=<span style="color:#009c00">&#34;bpm_avg&#34;</span>)
+</span></span><span style="display:flex;"><span>myplot = sns.lineplot(data=hr_df, x=<span style="color:#009c00">&#34;created_day&#34;</span>, y=<span style="color:#009c00">&#34;bpm_max&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>myFmt = DateFormatter(<span style="color:#009c00">&#34;%H:%M&#34;</span>)
+</span></span><span style="display:flex;"><span>myplot.xaxis.set_major_formatter(myFmt)
+</span></span><span style="display:flex;"><span>myplot.set(xlabel=<span style="color:#009c00">&#39;Time of day&#39;</span>, ylabel=<span style="color:#009c00">&#39;Heart BPM&#39;</span>, title=<span style="color:#009c00">&#39;Heart rate&#39;</span>)
+</span></span><span style="display:flex;"><span>plt.show()
+</span></span></code></pre></div><p><img src="./00000005.png" alt=""></p>
+<p>Heart rate over a day — Screenshot by the author.</p>
+<p>Exploring heart rate with fine granularity allows me to track my fitness goals — especially if I stick with my regular running routine.</p>
+<h2 id="steps">Steps</h2>
+<p>Steps are recorded in daily files named <code>Physical Activity/steps-2023-02-26.json</code>. This appears to be a fine grain count of steps during period blocks (every 5 to 10 minutes) throughout the day</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>[{  
+</span></span><span style="display:flex;"><span>  &#34;dateTime&#34; : <span style="color:#009c00">&#34;02/25/23 13:17:00&#34;</span>,  
+</span></span><span style="display:flex;"><span>  &#34;value&#34; : <span style="color:#009c00">&#34;0&#34;</span>  
+</span></span><span style="display:flex;"><span>},{  
+</span></span><span style="display:flex;"><span>  &#34;dateTime&#34; : <span style="color:#009c00">&#34;02/25/23 13:52:00&#34;</span>,  
+</span></span><span style="display:flex;"><span>  &#34;value&#34; : <span style="color:#009c00">&#34;5&#34;</span>  
+</span></span><span style="display:flex;"><span>},{  
+</span></span><span style="display:flex;"><span>  &#34;dateTime&#34; : <span style="color:#009c00">&#34;02/25/23 14:00:00&#34;</span>,  
+</span></span><span style="display:flex;"><span>  &#34;value&#34; : <span style="color:#009c00">&#34;0&#34;</span>  
+</span></span><span style="display:flex;"><span>},{  
+</span></span><span style="display:flex;"><span>:: :: ::  
+</span></span><span style="display:flex;"><span>},{  
+</span></span><span style="display:flex;"><span>  &#34;dateTime&#34; : <span style="color:#009c00">&#34;03/24/23 08:45:00&#34;</span>,  
+</span></span><span style="display:flex;"><span>  &#34;value&#34; : <span style="color:#009c00">&#34;15&#34;</span>  
+</span></span><span style="display:flex;"><span>}]
+</span></span></code></pre></div><p>To aggregate the steps into daily counts I needed to convert GMT into my local timezone (GMT+11)</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>steps_df &lt;&lt;
+</span></span><span style="display:flex;"><span><span style="color:#00f">select</span> <span style="color:#00f">cast</span>(time_bucket(interval <span style="color:#009c00">&#39;1 day&#39;</span>, dateTime + INTERVAL 11 hours	) <span style="color:#00f">as</span> DATE) <span style="color:#00f">as</span> activity_day
+</span></span><span style="display:flex;"><span>, <span style="color:#00f">sum</span>(value) <span style="color:#00f">as</span> steps
+</span></span><span style="display:flex;"><span><span style="color:#00f">from</span> read_json(<span style="color:#009c00">&#39;MyFitbitData/SimonAubury/Physical Activity/steps-2023-02-26.ndjson&#39;</span>
+</span></span><span style="display:flex;"><span>, auto_detect=<span style="color:#00f">True</span>
+</span></span><span style="display:flex;"><span>, format=<span style="color:#009c00">&#39;newline_delimited&#39;</span>
+</span></span><span style="display:flex;"><span>, timestampformat=<span style="color:#009c00">&#39;%m/%d/%y %H:%M:%S&#39;</span>) 
+</span></span><span style="display:flex;"><span><span style="color:#00f">group</span> <span style="color:#00f">by</span> 1;
+</span></span></code></pre></div><p>Aggregating the number of daily steps into the <em>steps_df</em> dataframe allows me to explore the longer term activity trends as I attempt to exceed 10,000 steps to realise the <a href="https://www.10000steps.org.au/articles/healthy-lifestyles/health-check-do-we-really-need-take-10000-steps-day/">increased health benefits</a>.</p>
+<h1 id="plot-daily-steps">Plot daily steps</h1>
+<p>We can now take dataframe and plot a daily step count</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#00f">import</span> matplotlib.pyplot <span style="color:#00f">as</span> plt  
+</span></span><span style="display:flex;"><span><span style="color:#00f">from</span> matplotlib.dates <span style="color:#00f">import</span> DateFormatter  
+</span></span><span style="display:flex;"><span>plt.figure(figsize=(15, 6))  
+</span></span><span style="display:flex;"><span>plt.xticks(rotation=45)  
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>myplot = sns.barplot(data=steps_df, x=<span style="color:#009c00">&#34;activity_day&#34;</span>, y=<span style="color:#009c00">&#34;steps&#34;</span>)  
+</span></span><span style="display:flex;"><span>myplot.set(xlabel=<span style="color:#009c00">&#39;Day&#39;</span>, ylabel=<span style="color:#009c00">&#39;Steps&#39;</span>, title=<span style="color:#009c00">&#39;Daily steps&#39;</span>)  
+</span></span><span style="display:flex;"><span>plt.show()
+</span></span></code></pre></div><p><img src="./00000006.png" alt=""></p>
+<p>Daily step count — Screenshot by the author.</p>
+<p>Which shows I’ve still got to work at my daily step goal — another strike against my new years fitness resolution.</p>
+<h1 id="gps-mapping">GPS Mapping</h1>
+<p>Fitbit stores GPS logged activities as <a href="https://en.wikipedia.org/wiki/GPS_Exchange_Format">TCX (Training Center XML)</a> files. These XML files are <em>not</em> in the downloaded ZIP, but we have a reference to their location in the Physical Activity files, which I can query like this.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#00f">select</span> tcxLink   
+</span></span><span style="display:flex;"><span><span style="color:#00f">from</span> physical_activity  
+</span></span><span style="display:flex;"><span><span style="color:#00f">where</span> tcxLink <span style="color:#00f">is</span> <span style="color:#00f">not</span> <span style="color:#00f">null</span>;
+</span></span></code></pre></div><p>The tcxLink field is a URL reference to their location in the Physical Activity files.</p>
+<p><img src="./00000007.png" alt=""></p>
+<p>The URL for each TCX file — Screenshot by the author.</p>
+<p>We can use this URL directly in a browser (once logged onto the Fitbit website) to do download the GPS XML file. Looking inside the TCX file, we find low level GPS locations every few seconds.</p>
+<p><img src="./00000008.png" alt=""></p>
+<p>TCX GPS XML file sample contentents - Screenshot by the author.</p>
+<p>The good news is this has some obvious fields like latitude, longitude and time. The not so good news is this is XML, so we need to pre-process these files prior to loading into DuckDB as presently XML isn’t supported by the file reader. We can convert XML files into JSON files with another bit of Python code, looping over each <em>.tcx</em> file.</p>
+<p>There is a bit of nasty XML nesting going on here, with the location data found under <em>TrainingCenterDatabase/Activities/Activity/Lap</em>.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#00f">import</span> glob
+</span></span><span style="display:flex;"><span><span style="color:#00f">import</span> json
+</span></span><span style="display:flex;"><span><span style="color:#00f">import</span> ndjson
+</span></span><span style="display:flex;"><span><span style="color:#00f">import</span> xmltodict
+</span></span><span style="display:flex;"><span><span style="color:#00f">import</span> re
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#00f">for</span> xml_src_file in sorted(glob.glob(<span style="color:#009c00">&#39;MyFitbitData/tcx/*.tcx&#39;</span>)):
+</span></span><span style="display:flex;"><span>    json_dst_file = re.sub(<span style="color:#009c00">&#39;\.[a-z]*$&#39;</span>, <span style="color:#009c00">&#39;.ndjson&#39;</span>, xml_src_file)
+</span></span><span style="display:flex;"><span>    print(<span style="color:#009c00">f</span><span style="color:#009c00">&#39;</span><span style="color:#009c00">{</span>xml_src_file<span style="color:#009c00">}</span><span style="color:#009c00"> --&gt;  </span><span style="color:#009c00">{</span>json_dst_file<span style="color:#009c00">}</span><span style="color:#009c00">&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#00f">with</span> open(xml_src_file) <span style="color:#00f">as</span> f_xml_src_file:
+</span></span><span style="display:flex;"><span>        <span style="color:#f00;font-style:italic"># erase file if it exists</span>
+</span></span><span style="display:flex;"><span>        open(json_dst_file, <span style="color:#009c00">&#39;w&#39;</span>) 
+</span></span><span style="display:flex;"><span>        data_dict = xmltodict.parse(f_xml_src_file.read())
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f00;font-style:italic"># Loop over the &#34;laps&#34; in the file; roughly every 1km</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#00f">for</span> lap in data_dict[<span style="color:#009c00">&#39;TrainingCenterDatabase&#39;</span>][<span style="color:#009c00">&#39;Activities&#39;</span>][<span style="color:#009c00">&#39;Activity&#39;</span>][<span style="color:#009c00">&#39;Lap&#39;</span>]:
+</span></span><span style="display:flex;"><span>            data_dict_inner = lap[<span style="color:#009c00">&#39;Track&#39;</span>][<span style="color:#009c00">&#39;Trackpoint&#39;</span>]
+</span></span><span style="display:flex;"><span>            <span style="color:#f00;font-style:italic"># append file</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#00f">with</span> open(json_dst_file, <span style="color:#009c00">&#39;a&#39;</span>) <span style="color:#00f">as</span> outfile:
+</span></span><span style="display:flex;"><span>                ndjson.dump(data_dict_inner, outfile)
+</span></span><span style="display:flex;"><span>                outfile.write(<span style="color:#009c00">&#39;</span><span style="color:#009c00">\n</span><span style="color:#009c00">&#39;</span>)
+</span></span></code></pre></div><h2 id="loading-gps-geospatial-data">Loading GPS Geospatial data</h2>
+<p>We can load the Geospatial data like this</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>route_df &lt;&lt;
+</span></span><span style="display:flex;"><span>    <span style="color:#00f">SELECT</span> time
+</span></span><span style="display:flex;"><span>    , <span style="color:#00f">position</span>
+</span></span><span style="display:flex;"><span>    , <span style="color:#00f">cast</span>(json_extract_string(<span style="color:#00f">position</span>, <span style="color:#009c00">&#39;$.LatitudeDegrees&#39;</span>) <span style="color:#00f">as</span> float) <span style="color:#00f">as</span> latitude
+</span></span><span style="display:flex;"><span>    , <span style="color:#00f">cast</span>(json_extract_string(<span style="color:#00f">position</span>, <span style="color:#009c00">&#39;$.LongitudeDegrees&#39;</span>) <span style="color:#00f">as</span> float) <span style="color:#00f">as</span> longitude
+</span></span><span style="display:flex;"><span>    <span style="color:#00f">FROM</span> read_json(<span style="color:#009c00">&#39;MyFitbitData/tcx/54939192717.ndjson&#39;</span>
+</span></span><span style="display:flex;"><span>    , columns={Time: <span style="color:#009c00">&#39;TIMESTAMP&#39;</span>, <span style="color:#00f">Position</span>: <span style="color:#009c00">&#39;JSON&#39;</span>, AltitudeMeters: <span style="color:#009c00">&#39;FLOAT&#39;</span>, DistanceMeters: <span style="color:#009c00">&#39;FLOAT&#39;</span>, HeartRateBpm: <span style="color:#009c00">&#39;JSON&#39;</span>}
+</span></span><span style="display:flex;"><span>    , format=<span style="color:#009c00">&#39;newline_delimited&#39;</span>
+</span></span><span style="display:flex;"><span>    , timestampformat=<span style="color:#009c00">&#39;%Y-%m-%dT%H:%M:%S.%f%z&#39;</span>);
+</span></span></code></pre></div><p>This DuckDB query flattens the JSON, converts the latitude, longitude and time into the correct data types and loads into the <em>route_df</em> dataframe.</p>
+<h1 id="visualize-gps-routes-with-folium">Visualize GPS Routes with Folium</h1>
+<p>Having a table of location information isn’t very descriptive, so I wanted to start plotting my running routes on an interactive map. I used this blog to help <a href="https://betterdatascience.com/data-science-for-cycling-how-to-visualize-gpx-strava-routes-with-python-and-folium/">Visualize routes with Folium</a>. Modify the code helped me plot my own runs, for example this is a plot of a recent run while on holiday in <a href="https://en.wikipedia.org/wiki/Canberra">Canberra</a>.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#00f">import</span> folium
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>route_map = folium.Map(
+</span></span><span style="display:flex;"><span>    location=[-35.275, 149.129],
+</span></span><span style="display:flex;"><span>    zoom_start=13,
+</span></span><span style="display:flex;"><span>    tiles=<span style="color:#009c00">&#39;openstreetmap&#39;</span>,
+</span></span><span style="display:flex;"><span>    width=1024,
+</span></span><span style="display:flex;"><span>    height=600
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>coordinates = [tuple(x) <span style="color:#00f">for</span> x in route_df[[<span style="color:#009c00">&#39;latitude&#39;</span>, <span style="color:#009c00">&#39;longitude&#39;</span>]].to_numpy()]
+</span></span><span style="display:flex;"><span>folium.PolyLine(coordinates, weight=8, color=<span style="color:#009c00">&#39;red&#39;</span>).add_to(route_map)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>display(route_map)
+</span></span></code></pre></div><p><img src="./00000009.png" alt=""></p>
+<p>Folium map plot of a run — Screenshot by the author.</p>
+<p>Which generates a plot of my run using <a href="https://openmaptiles.org/">open street map</a> tiles, giving me a great interactive detailed map of my run.</p>
+<h1 id="data-goals-and-fitness-goal-summary">Data goals and fitness goal summary</h1>
+<p>Did I get get closer to my goal of analysis my Fitbit device data — absolutely! DuckDB proved to be an ideal flexible lightweight analytical tool for wrangling my extensive and chaotic Fitbit data achieve. Blazing through literally millions of records in seconds with the extensive SQL support and flexible file parsing options locally into dataframes makes DuckDB ideal for building my own personal data warehouse.</p>
+<p>As for my fitness goal — I have some work to do. I think I should leave this blog now as I’m short of my step goal target for today</p>
+<h1 id="code">Code</h1>
+<p>🛠️Code for Fitbit activity analysis with DuckDB — <a href="https://github.com/saubury/duckdb-fitbit">https://github.com/saubury/duckdb-fitbit</a></p>
+
+      </article>
+      
+    </main>
+    <nav class="end-nav side-padding">
+      
+      <a ontouchstart="cardPressed.call(this)" ontouchend="cardReleased.call(this)" ontouchmove="cardReleased.call(this)" 
+  href="https://simonaubury.com/posts/202302_mastodon_duckdb/" class="card blog-card bc-next" rel="bookmark" >
+  
+  <div class="card-img-container">
+    <p class="card-img-overlay">Next Article</p>
+    <picture>
+      
+      
+      
+      <source srcset="https://simonaubury.com/posts/202302_mastodon_duckdb/00000000_hu97bfc9e4029d3fb5b4a83a7140d8f696_215608_400x0_resize_lanczos_3.png 1x, https://simonaubury.com/posts/202302_mastodon_duckdb/00000000_hu97bfc9e4029d3fb5b4a83a7140d8f696_215608_800x0_resize_lanczos_3.png 2x, https://simonaubury.com/posts/202302_mastodon_duckdb/00000000_hu97bfc9e4029d3fb5b4a83a7140d8f696_215608_1200x0_resize_lanczos_3.png 3x">
+      <img src="https://simonaubury.com/posts/202302_mastodon_duckdb/00000000_hu97bfc9e4029d3fb5b4a83a7140d8f696_215608_400x0_resize_lanczos_3.png" class="card-img" >
+    </picture>
+  </div>
+  
+  <article class="card-body">
+    <h2 class="card-title">Mastodon usage — counting toots with Kafka, DuckDB &amp; Seaborn</h2>
+    <p class="card-text">Counting toots in a decentralized social networking platform 🐘🦆📊</p>
+    <div class="card-subtext muted-text">
+      <p>Posted <time datetime="2023-02-22">Feb 22, 2023</time></p>
+      <p>#Kafka #duckdb </p>
+    </div>
+  </article>
+</a>
+      
+    </nav>
+    <footer class="side-padding" style="background-image: url('https://simonaubury.com/img/home-blob-flip.svg');">
+    <a href="https://simonaubury.com/" class="footer-link">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/home.svg" alt="Home">
+    
+    </a>
+    
+    
+    
+    <a href="https://github.com/saubury" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/github.svg" alt="GitHub"/>
+    
+    </a>
+    
+    
+    
+    <a href="https://www.linkedin.com/in/simonaubury" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/linkedin.svg" alt="LinkedIn"/>
+    
+    </a>
+    
+    
+    <a href="https://simonaubury.com/index.xml" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/rss.svg" alt="RSS"/>
+    
+    </a>
+    
+    
+    
+    
+    
+    
+    
+    
+</footer>
+    
+  <script defer src="https://simonaubury.com/js/katex.min.js"></script>
+
+
+  <script defer src="https://simonaubury.com/js/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+
+<script src="https://simonaubury.com/js/core.min.js"></script>
+
+  </body>
+</html>

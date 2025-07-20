@@ -1,0 +1,28 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>ML - Simon Aubury</title>
+    <link>https://simonaubury.com/categories/ml/</link>
+    <description>Recent content in ML on Simon Aubury</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-au</language>
+    <lastBuildDate>Tue, 09 Jun 2020 12:00:00 +1100</lastBuildDate>
+    
+        <atom:link href="https://simonaubury.com/categories/ml/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Home office ergonomics — with TensorFlow</title>
+      <link>https://simonaubury.com/posts/202006_homeofficeergonomicswithtensorflow/</link>
+      <pubDate>Tue, 09 Jun 2020 12:00:00 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202006_homeofficeergonomicswithtensorflow/</guid>
+      <description>Monitor good posture — with machine learning</description>
+    </item><item>
+      <title>Sorting my socks with deep learning — Part 1</title>
+      <link>https://simonaubury.com/posts/202002_sortingmysockswithdeeplearningpart1/</link>
+      <pubDate>Mon, 10 Feb 2020 12:00:00 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202002_sortingmysockswithdeeplearningpart1/</guid>
+      <description>Can I arrange my sock drawer using machine learning?</description>
+    </item>
+  </channel>
+</rss>

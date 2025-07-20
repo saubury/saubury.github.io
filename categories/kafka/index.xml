@@ -1,0 +1,84 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Kafka - Simon Aubury</title>
+    <link>https://simonaubury.com/categories/kafka/</link>
+    <description>Recent content in Kafka on Simon Aubury</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-au</language>
+    <lastBuildDate>Sun, 15 Jun 2025 10:22:20 +1100</lastBuildDate>
+    
+        <atom:link href="https://simonaubury.com/categories/kafka/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Aviation data with Apache Flink</title>
+      <link>https://simonaubury.com/posts/202506_flink_plane_cep/</link>
+      <pubDate>Sun, 15 Jun 2025 10:22:20 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202506_flink_plane_cep/</guid>
+      <description>When plans change at 500 feet: Complex event processing of ADS-B aviation data with Apache Flink</description>
+    </item><item>
+      <title>Mastodon usage — counting toots with Kafka, DuckDB &amp; Seaborn </title>
+      <link>https://simonaubury.com/posts/202302_mastodon_duckdb/</link>
+      <pubDate>Wed, 22 Feb 2023 10:22:20 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202302_mastodon_duckdb/</guid>
+      <description>Counting toots in a decentralized social networking platform 🐘🦆📊</description>
+    </item><item>
+      <title>Real-Time Wildlife Monitoring with Apache Kafka</title>
+      <link>https://simonaubury.com/posts/202301_wildlife_monitoring/</link>
+      <pubDate>Thu, 19 Jan 2023 10:22:20 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202301_wildlife_monitoring/</guid>
+      <description>Where did I leave the zebra?</description>
+    </item><item>
+      <title>Cleaning messy sensor data in Kafka with ksqlDB</title>
+      <link>https://simonaubury.com/posts/202107_cleaning_messy_sensor_data_kafka/</link>
+      <pubDate>Sun, 25 Jul 2021 12:00:00 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202107_cleaning_messy_sensor_data_kafka/</guid>
+      <description>Cats make messy data</description>
+    </item><item>
+      <title>Oracle to Kafka — Playing with Confluent’s new Oracle CDC Source Connector in Docker</title>
+      <link>https://simonaubury.com/posts/202102_oracle_cdc_kafka/</link>
+      <pubDate>Thu, 18 Feb 2021 12:00:00 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202102_oracle_cdc_kafka/</guid>
+      <description>Streaming Oracle data into Kafka</description>
+    </item><item>
+      <title>Kafka with AVRO vs., Kafka with Protobuf vs., Kafka with JSON Schema</title>
+      <link>https://simonaubury.com/posts/202004_kafkawithavrovskafkawithprotobuf/</link>
+      <pubDate>Sat, 02 May 2020 12:00:00 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202004_kafkawithavrovskafkawithprotobuf/</guid>
+      <description>Kafka serialisation schemes</description>
+    </item><item>
+      <title>Kafka stream processing: sorting socks with ksqlDB - Part 2</title>
+      <link>https://simonaubury.com/posts/202003_kafkastreamprocessingsortingsockswithksqldb/</link>
+      <pubDate>Sun, 23 Feb 2020 12:00:00 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202003_kafkastreamprocessingsortingsockswithksqldb/</guid>
+      <description>Sorting socks with a streaming solution</description>
+    </item><item>
+      <title>Kafka Connect Secrets Management with ksqlDB</title>
+      <link>https://simonaubury.com/posts/202001_kafkaconnectsecretsmanagementwithksqldb/</link>
+      <pubDate>Tue, 14 Jan 2020 12:00:00 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202001_kafkaconnectsecretsmanagementwithksqldb/</guid>
+      <description>Keeping the secrets, sectret</description>
+    </item><item>
+      <title>Kafka Summit 2019 San Francisco: a review</title>
+      <link>https://simonaubury.com/posts/201910_kafkasummit_2019sanfranciscoareview/</link>
+      <pubDate>Sat, 12 Oct 2019 12:00:00 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/201910_kafkasummit_2019sanfranciscoareview/</guid>
+      <description>Kafka Summit 2019 San Francisco</description>
+    </item><item>
+      <title>Confluent Kafka Kubernetes Operator — Setup and Playing!</title>
+      <link>https://simonaubury.com/posts/201908_confluentkafkakubernetesoperatorsetupandplaying/</link>
+      <pubDate>Sat, 03 Aug 2019 12:00:00 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/201908_confluentkafkakubernetesoperatorsetupandplaying/</guid>
+      <description>Kafka Kubernetes Operator</description>
+    </item>
+  </channel>
+</rss>

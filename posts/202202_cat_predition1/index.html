@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en-au" dir="ltr">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Can ML predict where my cat is now — part 1 &middot; Simon Aubury</title>
+  <meta name="description" content="I know I have a cat somewhere ..." />
+  <link rel="apple-touch-icon" sizes="180x180" href="https://simonaubury.com/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://simonaubury.com/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://simonaubury.com/favicon-16x16.png">
+  <link href="https://simonaubury.com/css/katex.min.css" rel="stylesheet">
+  
+  
+  
+  
+  <link href="https://simonaubury.com/css/concated.min.css" rel="stylesheet">
+  
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7N67PMRZ6N"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-7N67PMRZ6N', { 'anonymize_ip': false });
+}
+</script>
+
+  
+</head>
+
+  <body class="single-body">
+    <nav class="nav-bar side-padding">
+  <h1 class="nav-header"><a href="https://simonaubury.com/" class="nav-text">simon aubury</a></h1>
+  <div class="hamburger-menu">
+    <input class="hamburger-menu-button" type="checkbox"
+      onclick="hamburgerMenuPressed.call(this)"
+      aria-label="Hamburger Menu Button"
+    >
+    <div class="hamburger-menu-icon">
+      <span></span>
+      <span></span>
+    </div>
+    <ul id="menu" class="hamburger-menu-overlay">
+      <li><a href="https://simonaubury.com/" class="hamburger-menu-overlay-link">Home</a></li>
+      <li><a href="https://simonaubury.com/slides/" class="hamburger-menu-overlay-link">Presentation slides</a></li>
+      <li><a href="https://simonaubury.com/about-me/" class="hamburger-menu-overlay-link">About Simon</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/cat/" class="hamburger-menu-overlay-link">Cat</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/cdc/" class="hamburger-menu-overlay-link">CDC</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/duckdb/" class="hamburger-menu-overlay-link">duckdb</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/flink/" class="hamburger-menu-overlay-link">flink</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/generativeai/" class="hamburger-menu-overlay-link">GenerativeAI</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/gpt/" class="hamburger-menu-overlay-link">GPT</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/homeassistant/" class="hamburger-menu-overlay-link">homeassistant</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/kafka/" class="hamburger-menu-overlay-link">Kafka</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/ml/" class="hamburger-menu-overlay-link">ML</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/raspberry-pi/" class="hamburger-menu-overlay-link">Raspberry Pi</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/snowflake/" class="hamburger-menu-overlay-link">snowflake</a></li>
+      
+      <li><a href="https://simonaubury.com/index.xml" class="hamburger-menu-overlay-link">rss</a></li>
+    </ul>
+  </div>
+</nav>
+
+    <main class="content side-text-padding">
+      <article class="post dropcase">
+        <header class="post-header">
+          <h1 class="post-title">Can ML predict where my cat is now — part 1</h1>
+          <p class="post-date">Posted <time datetime="2022-02-01">Feb 1, 2022</time></p>
+        </header>
+        <picture class="post-figure">
+          
+          
+          
+          <source srcset="https://simonaubury.com/posts/202202_cat_predition1/00000000_hu19a65958a728d3fdec9c186bf04684c0_493240_711x0_resize_lanczos_3.png 1x, https://simonaubury.com/posts/202202_cat_predition1/00000000_hu19a65958a728d3fdec9c186bf04684c0_493240_1422x0_resize_lanczos_3.png 2x, https://simonaubury.com/posts/202202_cat_predition1/00000000_hu19a65958a728d3fdec9c186bf04684c0_493240_2133x0_resize_lanczos_3.png 3x">
+          <img src="https://simonaubury.com/posts/202202_cat_predition1/00000000_hu19a65958a728d3fdec9c186bf04684c0_493240_711x0_resize_lanczos_3.png" >
+        </picture>
+        
+        
+        <h1 id="can-ml-predict-where-my-cat-is-now--part-1">Can ML predict where my cat is now — part 1</h1>
+<p>It’s 9am on a rainy Tuesday morning — can a simple ML model predict where my cat will be sleeping? How I used a bluetooth tracker, a dozen microcontrollers plus a bit of Python to predict where Snowy the cat would be napping in the next hour.</p>
+<p><img src="202002cat.jpg" alt="Predicting where Snowy the cat is likely to be based on time and weather"></p>
+<p><em>Predicting where Snowy the cat is likely to be based on time and weather</em></p>
+<h2 id="summary">Summary</h2>
+<p>With some inexpensive hardware (and a cat ambivalent to data privacy concerns) I wanted to see if I could train a machine learning (ML) model to predict where Snowy would go throughout her day.</p>
+<p>Home based location &amp; temperature tracking allowed me to build up an extensive history of which room she used for her favourite sleeping spots. I had a theory with sufficient data collected I’d be able to train an ML model to predict where the cat was likely to be.</p>
+<p>This two part blog describes the hardware and software necessary to collect the data, build a prediction model and test the real-world accuracy of cat behaviour estimation. This first blog describes the hardware and data collection, and part 2 describes building the prediction model</p>
+<h2 id="hardware-for-room-level-cat-tracking">Hardware for room level cat tracking</h2>
+<p>The first task was to collect a <em>lot</em> of data on where Snowy historically spent her time — along with environmental factors such as temperature &amp; rainfall. I set an arbitrary target of collecting hourly updates for around three months of movement in and around the house.</p>
+<p><img src="00000001.png" alt="Finding the room Snowy is in relies on a base station in each likely location"></p>
+<p><em>Finding the room Snowy is in relies on a base station in each likely location</em></p>
+<p>Cat’s aren’t great at data entry; so I needed an automated way of collecting her location. I asked Snowy to wear a <a href="https://www.thetileapp.com/en-us/products">Tile</a> — a small, battery powered bluetooth tracker. This simply transmits a regular and unique BLE signal. I then used eight stationary receivers to listen for the BLE Tile signal. These receiver nodes were <a href="https://en.wikipedia.org/wiki/ESP32">ESP32</a> based presence detection nodes each running <a href="https://espresense.com/">ESPresense</a>. The nodes were placed in named rooms in and around the house (6 inside, 2 outside).</p>
+<p><img src="00000002.png" alt="A collection of ESP32 modules and a BLE Tile (white square)"></p>
+<p><em>A collection of ESP32 modules and a BLE Tile (white square)</em></p>
+<p>Each node constantly looking for the unique BLE signal of Snowy’s tile and measuring the received signal strength indicator (<a href="https://en.wikipedia.org/wiki/Received_signal_strength_indication">RSSI</a>). The stronger the signal, the closer Snowy is to that beacon (either that, or she’s messing with the battery). If I got a few seconds of strong signal next to the study sensor for example, I could assume Snowy was likely very close to that room.</p>
+<p>Each ESP32 module is powered by a micro-usb power supply and communicate back to the base station by joining the home WiFi network. The networking is important as multiple receivers can simultaneously receive a signal — and they need to determine which base station has the “strongest” signal.</p>
+<h2 id="hardware-for-logging-environmental-information">Hardware for logging environmental information</h2>
+<p>Snowy avoids the outside garden when it rains, and tends to fall asleep in the warm (but not hot) rooms of the house. I wanted to collect environmental conditions, as I figured temperature and rainfall would play a significant role in determining where Snowy would hang out.</p>
+<p><img src="00000003.png" alt="Xiaomi Aqara Temperature and Humidity Sensors">
+<em>Xiaomi Aqara Temperature and Humidity Sensors</em></p>
+<p>I selected the <a href="https://www.xiaomiproducts.nl/fr/xiaomi-aqara-temperature-and-humidity-sensor.html">Xiaomi Temperature and Humidity Sensor</a> as they run for months on a battery, and communicate over large distances via the <a href="https://en.wikipedia.org/wiki/Zigbee">Zigbee</a> wireless mesh network. I placed these sensors throughout the house and in two external locations to capture outside conditions</p>
+<h2 id="integration--building-a-data-collection-platform">Integration — building a data collection platform</h2>
+<p>For the data collection platform I used <a href="https://www.home-assistant.io/">Home Assistant</a> running on a Raspberry Pi. Home Assistant is a free and open-source software for home automation that is designed to be the central control system for smart home devices. I was able to track Snowy’s location via the <a href="https://espresense.com/home_assistant">binary sensor</a> configuration. Essentially the room based beacon receiving the strongest signal from Snowy’s BLE tile updates an MQTT topic with her current location.</p>
+<p><img src="00000004.png" alt="Home Assistant display of location"></p>
+<p><em>Home Assistant display of location</em></p>
+<p>For temperature and humidity measurements, I used the Xiaomi integration to get a constant update of room level environment conditions. (Worthy of another blog: TL;DR flash the Xiaomi Zigbee hub with <a href="https://tasmota.github.io/docs/Zigbee/">Tasmota</a>)</p>
+<p><img src="00000005.png" alt="Home Assistant display of temperature and humidity"></p>
+<p><em>Home Assistant display of temperature and humidity</em></p>
+<p>The TL;DR summary — with the support of the amazing Home Assistant and Tasmota community I was able to gather accurate cat location along with fine grained temperature and humidity readings.</p>
+<h2 id="data-preparation--extracting-data-from-home-assistant">Data preparation — extracting data from Home Assistant</h2>
+<p>Home Assistant by default uses a SQLite database with a 10 day retention. I actually wanted to retain a lot more historic data to train the model. By modifying the <a href="https://www.home-assistant.io/integrations/recorder/">recorder integration</a> I pushed all the data storage into a Postgres database with 6 months of retention.</p>
+<!-- raw HTML omitted -->
+<p>Home assistant stores each sensor update in the <a href="https://www.home-assistant.io/docs/backend/database/">states</a> table. This is *really *fine-grained, with updates added every few seconds from all the sensors (in my case, around 18,000 sensor updates a day). My goal was to summarise the data into hourly updates — essentially a single (most prevalent) location, along with temperature and humidity readings.</p>
+<p>I extracted the initial three months (SQL <a href="https://github.com/saubury/cat-predictor/blob/master/sql/extract.sql">here</a>) of hourly location and environmental conditions to train the model.</p>
+<p><img src="00000006.png" alt="Extract of hourly location and environmental readings"></p>
+<p><em>Extract of hourly location and environmental readings</em></p>
+<h2 id="whats-next-in-part-2">What’s next in part 2</h2>
+<p>This first blog described the the method for locating Snowy and data collection platform. The next blog will describe building the prediction model, and how accurate can a ML model be when determining where a cat is likely to be.</p>
+<p><img src="00000007.png" alt="Snowy looking forward to reviewing the confusion matrix"></p>
+<p><em>Snowy looking forward to reviewing the confusion matrix</em></p>
+
+      </article>
+      
+    </main>
+    <nav class="end-nav side-padding">
+      
+      <a ontouchstart="cardPressed.call(this)" ontouchend="cardReleased.call(this)" ontouchmove="cardReleased.call(this)" 
+  href="https://simonaubury.com/posts/202107_cleaning_messy_sensor_data_kafka/" class="card blog-card bc-next" rel="bookmark" >
+  
+  <div class="card-img-container">
+    <p class="card-img-overlay">Next Article</p>
+    <picture>
+      
+      
+      
+      <source srcset="https://simonaubury.com/posts/202107_cleaning_messy_sensor_data_kafka/00000001_hu0de1ed944a6b8445f670ef72320495b8_19460_400x0_resize_lanczos_3.png 1x, https://simonaubury.com/posts/202107_cleaning_messy_sensor_data_kafka/00000001_hu0de1ed944a6b8445f670ef72320495b8_19460_800x0_resize_lanczos_3.png 2x, https://simonaubury.com/posts/202107_cleaning_messy_sensor_data_kafka/00000001_hu0de1ed944a6b8445f670ef72320495b8_19460_1200x0_resize_lanczos_3.png 3x">
+      <img src="https://simonaubury.com/posts/202107_cleaning_messy_sensor_data_kafka/00000001_hu0de1ed944a6b8445f670ef72320495b8_19460_400x0_resize_lanczos_3.png" class="card-img" >
+    </picture>
+  </div>
+  
+  <article class="card-body">
+    <h2 class="card-title">Cleaning messy sensor data in Kafka with ksqlDB</h2>
+    <p class="card-text">Cats make messy data</p>
+    <div class="card-subtext muted-text">
+      <p>Posted <time datetime="2021-07-25">Jul 25, 2021</time></p>
+      <p>#Raspberry Pi #Kafka </p>
+    </div>
+  </article>
+</a>
+      
+    </nav>
+    <footer class="side-padding" style="background-image: url('https://simonaubury.com/img/home-blob-flip.svg');">
+    <a href="https://simonaubury.com/" class="footer-link">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/home.svg" alt="Home">
+    
+    </a>
+    
+    
+    
+    <a href="https://github.com/saubury" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/github.svg" alt="GitHub"/>
+    
+    </a>
+    
+    
+    
+    <a href="https://www.linkedin.com/in/simonaubury" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/linkedin.svg" alt="LinkedIn"/>
+    
+    </a>
+    
+    
+    <a href="https://simonaubury.com/index.xml" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/rss.svg" alt="RSS"/>
+    
+    </a>
+    
+    
+    
+    
+    
+    
+    
+    
+</footer>
+    
+  <script defer src="https://simonaubury.com/js/katex.min.js"></script>
+
+
+  <script defer src="https://simonaubury.com/js/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+
+<script src="https://simonaubury.com/js/core.min.js"></script>
+
+  </body>
+</html>
