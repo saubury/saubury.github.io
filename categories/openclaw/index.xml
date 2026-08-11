@@ -1,0 +1,21 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>openclaw - Simon Aubury</title>
+    <link>https://simonaubury.com/categories/openclaw/</link>
+    <description>Recent content in openclaw on Simon Aubury</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-au</language>
+    <lastBuildDate>Sat, 01 Aug 2026 10:22:20 +1100</lastBuildDate>
+    
+        <atom:link href="https://simonaubury.com/categories/openclaw/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Can AI take care of my plant? (because I can’t)</title>
+      <link>https://simonaubury.com/posts/202608_zara_plant/</link>
+      <pubDate>Sat, 01 Aug 2026 10:22:20 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202608_zara_plant/</guid>
+      <description>Twice a day, an AI agent reads my pot-plant’s sensors, looks at a photo of her and then decides which way to rotate her, watering her if required or adjusting the blinds or heater and then posts the result to Instagram</description>
+    </item>
+  </channel>
+</rss>

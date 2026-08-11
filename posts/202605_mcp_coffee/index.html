@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en-au" dir="ltr">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Local LLM financial analysis &middot; Simon Aubury</title>
+  <meta name="description" content="Analysing my personal spending data with a local large language model. Running open LLM models locally with Claude desktop, tool chaining and a local MCP server with data mastered in DuckDB." />
+  <link rel="apple-touch-icon" sizes="180x180" href="https://simonaubury.com/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://simonaubury.com/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://simonaubury.com/favicon-16x16.png">
+  <link href="https://simonaubury.com/css/katex.min.css" rel="stylesheet">
+  
+  
+  
+  
+  <link href="https://simonaubury.com/css/concated.min.css" rel="stylesheet">
+  
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7N67PMRZ6N"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-7N67PMRZ6N', { 'anonymize_ip': false });
+}
+</script>
+
+  
+</head>
+
+  <body class="single-body">
+    <nav class="nav-bar side-padding">
+  <h1 class="nav-header"><a href="https://simonaubury.com/" class="nav-text">simon aubury</a></h1>
+  <div class="hamburger-menu">
+    <input class="hamburger-menu-button" type="checkbox"
+      onclick="hamburgerMenuPressed.call(this)"
+      aria-label="Hamburger Menu Button"
+    >
+    <div class="hamburger-menu-icon">
+      <span></span>
+      <span></span>
+    </div>
+    <ul id="menu" class="hamburger-menu-overlay">
+      <li><a href="https://simonaubury.com/" class="hamburger-menu-overlay-link">Home</a></li>
+      <li><a href="https://simonaubury.com/slides/" class="hamburger-menu-overlay-link">Presentation slides</a></li>
+      <li><a href="https://simonaubury.com/about-me/" class="hamburger-menu-overlay-link">About Simon</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/cat/" class="hamburger-menu-overlay-link">Cat</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/cdc/" class="hamburger-menu-overlay-link">CDC</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/duckdb/" class="hamburger-menu-overlay-link">duckdb</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/flink/" class="hamburger-menu-overlay-link">flink</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/generativeai/" class="hamburger-menu-overlay-link">GenerativeAI</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/gpt/" class="hamburger-menu-overlay-link">GPT</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/homeassistant/" class="hamburger-menu-overlay-link">homeassistant</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/kafka/" class="hamburger-menu-overlay-link">Kafka</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/llm/" class="hamburger-menu-overlay-link">llm</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/ml/" class="hamburger-menu-overlay-link">ML</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/openclaw/" class="hamburger-menu-overlay-link">openclaw</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/raspberry-pi/" class="hamburger-menu-overlay-link">Raspberry Pi</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/snowflake/" class="hamburger-menu-overlay-link">snowflake</a></li>
+      
+      <li><a href="https://simonaubury.com/index.xml" class="hamburger-menu-overlay-link">rss</a></li>
+    </ul>
+  </div>
+</nav>
+
+    <main class="content side-text-padding">
+      <article class="post dropcase">
+        <header class="post-header">
+          <h1 class="post-title">Local LLM financial analysis</h1>
+          <p class="post-date">Posted <time datetime="2026-05-01">May 1, 2026</time></p>
+        </header>
+        <picture class="post-figure">
+          
+          
+          
+          <source srcset="https://simonaubury.com/posts/202605_mcp_coffee/00000001_hu44db996ef4359a58390e66351c6955d4_121478_711x0_resize_lanczos_3.png 1x, https://simonaubury.com/posts/202605_mcp_coffee/00000001_hu44db996ef4359a58390e66351c6955d4_121478_1422x0_resize_lanczos_3.png 2x, https://simonaubury.com/posts/202605_mcp_coffee/00000001_hu44db996ef4359a58390e66351c6955d4_121478_2133x0_resize_lanczos_3.png 3x">
+          <img src="https://simonaubury.com/posts/202605_mcp_coffee/00000001_hu44db996ef4359a58390e66351c6955d4_121478_711x0_resize_lanczos_3.png" >
+        </picture>
+        
+        
+        <h1 id="i-dont-need-an-untrusted-llm-to-tell-me-im-spending-too-much-on-coffee">I don’t need an untrusted LLM to tell me I’m spending too much on coffee</h1>
+<p>Analysing my personal spending data with a local large language model. Running open LLM models locally with Claude desktop, tool chaining and a local MCP server with data mastered in DuckDB.</p>
+<p><img src="./00000000.png" alt="Sharing my dubious coffee habits with the world"><em>Sharing my dubious coffee habits with the world</em></p>
+<p>I’m so enjoying the power of getting agents take care of the dubious grunt work in my life. Need to buy a USB cable in a hurry? Sure I’ll offload that to my <a href="https://openclaw.ai/">OpenClaw</a> server. Ditto I’m happy to get codex to upgrade some very old Java 11 code. But some tasks I’m just a little too wary of throwing my personal data into the void and hoping for the best. So in the spirit of <a href="https://simon-aubury.medium.com/my-data-your-llm-paranoid-analysis-of-imessage-chats-with-openai-llamaindex-duckdb-60e5eb9e23e3">paranoid analysis</a> I’m continuing my adventures in using LLM’s to work on private data sets.</p>
+<p><img src="./00000001.png" alt=""></p>
+<h2 id="so-many-transactions">So many transactions</h2>
+<p>I started using Quicken to track my money and spending since .. sometime in the mid 2000’s I’ve moved through a few personal finance manager applications — but never felt confident centralising all my financial records on a single cloud applications.</p>
+<p><img src="./00000002.png" alt="Yes — really found this in my shed"><em>Yes — really found this in my shed</em></p>
+<p>For the last few years I’ve been a very happy <a href="https://moneydance.com/">Moneydance</a> user — but I’m still transacting on a bunch of specialised local data. I’ve some 30,506 (!) transactions with a lifetime of spending behaviour which I’ve always wanted to run some interesting analysis on. I got inspired to see what I could discover running an LLM locally — and wiring it through a local DuckDB</p>
+<h2 id="lets-llm">Let’s LLM</h2>
+<p><a href="https://ollama.com/">Ollama</a> is the “easiest way to build with open models” — and it really is super convenient. A simple command line allows you to pull and run large language models such as gpt-oss, Gemma 3, DeepSeek-R1, Qwen3 etc.,.</p>
+<p>One of the cool party-tricks of Ollama is the built in integration of open models with <a href="https://docs.ollama.com/integrations#coding-agents">other tools</a> such as <a href="https://docs.ollama.com/integrations/claude-code">Claude Code</a>. That is, Ollama provides the model — and it gets integrated within the flow of another application such as coding, chat, automation or assistants. If both the model and the integration supports <a href="https://docs.ollama.com/capabilities/tool-calling">tool calling</a> your model can invoke tools and incorporate their results into its replies. TL;DR — your simple request typed into Claude Code gets routed to a local LLM, and any data required to answer your query can be picked up by a locally configured tool.</p>
+<p>Concepts aside — how did I get an agent to judge my coffee spending habits? Let’s break this down into data export, tool integration and analysis</p>
+<h2 id="mondeydance-data-export">Mondeydance data export</h2>
+<p>I really do love <a href="https://moneydance.com/">Moneydance</a> — it even has it’s own <a href="https://www.jython.org/">Jython</a> console exposing the entire Java object framework of its financial database. With a bit of vibe’ed code (linked below) I manage to build an extractor which can dump all my financial data into a local <a href="https://duckdb.org/">DuckDB</a> database.</p>
+<p><img src="./00000003.png" alt=""></p>
+<p>This is a one-time export — I’m not keeping this export updated so I can close Moneydance once all my transactions have been loaded into DuckDB. Let’s now get into the tool chaining.</p>
+<h2 id="tool-integration">Tool integration</h2>
+<p>The MotherDuck <a href="https://github.com/motherduckdb/mcp-server-motherduck">DuckDB local MCP server</a> “connects AI assistants to your data using DuckDB’s powerful analytical SQL engine”. In short — my coding agent can be given a hook into my queryable snapshot of my financial data.</p>
+<p>Adding this to <code>.claude/settings.json</code> is all that’s need to wire up the MCP server. SQL analytics processing with just a sprinkle of configuration magic, neat!</p>
+<pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;duckdb&quot;: {
+      &quot;command&quot;: &quot;uvx&quot;,
+      &quot;args&quot;: [
+        &quot;mcp-server-motherduck&quot;,
+        &quot;--db-path&quot;,
+        &quot;/Users/saubury/Library/Containers/com.infinitekind.MoneydanceOSX/Data/Moneydance-export.db&quot;,
+        &quot;--allow-switch-databases&quot;
+      ]
+    }
+  }
+}
+</code></pre>
+<p>To connect a local Ollama model to a MCP servers you need a “host” that implements the MCP client protocol and bridges it to the Ollama API. Claude Code fills that role: launched against a local Ollama model with tool-calling support, it acts as the MCP host. If during a query such as “<em>how much did I spend on coffee</em>” some data needs to be found … the request gets routed out to the MCP to locate. That’s what this configuration does — presenting a route between the model (which doesn’t know any of my financial secrets) to a MCP “router” that can go dig into data to get what’s required. Some SQL gets created on the fly — but TLDR; data gets extracted</p>
+<p>Neat! Now we’ve got the plumbing sorted we’re set to do some data analytics …</p>
+<h2 id="analysis">Analysis</h2>
+<p>We can launch Claude code with via ollama and a model with one pretty simple command</p>
+<pre><code>ollama launch claude --model qwen3.5:27b
+</code></pre>
+<p>And yes, we’re now in Claude Code — but note the model is a local one …</p>
+<p><img src="./00000004.png" alt=""></p>
+<p>And now we’re good to pester the agent will all sorts of silly queries.</p>
+<p><img src="./00000005.png" alt=""></p>
+<p>It’s worth adding you can bust this local paranoia if your requests get a bit too complex for your local model. If you skip ollama you can run claude code “normally” with it’s more powerful cloud model. The MCP server is still there querying your data — but all bets are off at this point for where your data actually goes.</p>
+<h2 id="so--what-did-i-learn">So … what did I learn</h2>
+<p>Local models are slow — very very slow. I found as a proof of concept the idea of running LLM models locally with Claude desktop, throwing in tool chaining and hooking up a local MCP server for my DuckDB database was a blast. It’s so cool how accessible this tech is — but I think I need to go a bigger machine before I can turn off my Anthropic monthly subscription. At least I know where to put that transaction …</p>
+<h2 id="moneydancemcp-code">MoneydanceMCP Code</h2>
+<p><a href="https://github.com/saubury/MoneydanceMCP">https://github.com/saubury/MoneydanceMCP</a></p>
+
+      </article>
+      
+    </main>
+    <nav class="end-nav side-padding">
+      
+      <a ontouchstart="cardPressed.call(this)" ontouchend="cardReleased.call(this)" ontouchmove="cardReleased.call(this)" 
+  href="https://simonaubury.com/posts/202506_flink_plane_cep/" class="card blog-card bc-next" rel="bookmark" >
+  
+  <div class="card-img-container">
+    <p class="card-img-overlay">Next Article</p>
+    <picture>
+      
+      
+      
+      <source srcset="https://simonaubury.com/posts/202506_flink_plane_cep/00000000_hu188497275596c51248c64688136cbd0f_679095_400x0_resize_lanczos_3.png 1x, https://simonaubury.com/posts/202506_flink_plane_cep/00000000_hu188497275596c51248c64688136cbd0f_679095_800x0_resize_lanczos_3.png 2x, https://simonaubury.com/posts/202506_flink_plane_cep/00000000_hu188497275596c51248c64688136cbd0f_679095_1200x0_resize_lanczos_3.png 3x">
+      <img src="https://simonaubury.com/posts/202506_flink_plane_cep/00000000_hu188497275596c51248c64688136cbd0f_679095_400x0_resize_lanczos_3.png" class="card-img" >
+    </picture>
+  </div>
+  
+  <article class="card-body">
+    <h2 class="card-title">Aviation data with Apache Flink</h2>
+    <p class="card-text">When plans change at 500 feet: Complex event processing of ADS-B aviation data with Apache Flink</p>
+    <div class="card-subtext muted-text">
+      <p>Posted <time datetime="2025-06-15">Jun 15, 2025</time></p>
+      <p>#flink #kafka </p>
+    </div>
+  </article>
+</a>
+      
+    </nav>
+    <footer class="side-padding" style="background-image: url('https://simonaubury.com/img/home-blob-flip.svg');">
+    <a href="https://simonaubury.com/" class="footer-link">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/home.svg" alt="Home">
+    
+    </a>
+    
+    
+    
+    <a href="https://github.com/saubury" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/github.svg" alt="GitHub"/>
+    
+    </a>
+    
+    
+    
+    <a href="https://www.linkedin.com/in/simonaubury" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/linkedin.svg" alt="LinkedIn"/>
+    
+    </a>
+    
+    
+    <a href="https://simonaubury.com/index.xml" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/rss.svg" alt="RSS"/>
+    
+    </a>
+    
+    
+    
+    
+    
+    
+    
+    
+</footer>
+    
+  <script defer src="https://simonaubury.com/js/katex.min.js"></script>
+
+
+  <script defer src="https://simonaubury.com/js/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+
+<script src="https://simonaubury.com/js/core.min.js"></script>
+
+  </body>
+</html>

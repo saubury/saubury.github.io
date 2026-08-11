@@ -1,0 +1,21 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts - Simon Aubury</title>
+    <link>https://simonaubury.com/posts/</link>
+    <description>Recent content in Posts on Simon Aubury</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-au</language>
+    <lastBuildDate>Sat, 01 Aug 2026 10:22:20 +1100</lastBuildDate>
+    
+        <atom:link href="https://simonaubury.com/posts/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Using KSQL, Apache Kafka, a Raspberry Pi and a software defined radio to find the plane that wakes Snowy the cat</title>
+      <link>https://simonaubury.com/posts/201805_usingksqlapachekafkafindtheplanethatwakessnowy/</link>
+      <pubDate>Sun, 20 May 2018 17:53:07 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/201805_usingksqlapachekafkafindtheplanethatwakessnowy/</guid>
+      <description>Map the correlation between aircraft traffic and cat behaviour</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en-au" dir="ltr">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Can AI take care of my plant? (because I can’t) &middot; Simon Aubury</title>
+  <meta name="description" content="Twice a day, an AI agent reads my pot-plant’s sensors, looks at a photo of her and then decides which way to rotate her, watering her if required or adjusting the blinds or heater and then posts the result to Instagram" />
+  <link rel="apple-touch-icon" sizes="180x180" href="https://simonaubury.com/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://simonaubury.com/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://simonaubury.com/favicon-16x16.png">
+  <link href="https://simonaubury.com/css/katex.min.css" rel="stylesheet">
+  
+  
+  
+  
+  <link href="https://simonaubury.com/css/concated.min.css" rel="stylesheet">
+  
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7N67PMRZ6N"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-7N67PMRZ6N', { 'anonymize_ip': false });
+}
+</script>
+
+  
+</head>
+
+  <body class="single-body">
+    <nav class="nav-bar side-padding">
+  <h1 class="nav-header"><a href="https://simonaubury.com/" class="nav-text">simon aubury</a></h1>
+  <div class="hamburger-menu">
+    <input class="hamburger-menu-button" type="checkbox"
+      onclick="hamburgerMenuPressed.call(this)"
+      aria-label="Hamburger Menu Button"
+    >
+    <div class="hamburger-menu-icon">
+      <span></span>
+      <span></span>
+    </div>
+    <ul id="menu" class="hamburger-menu-overlay">
+      <li><a href="https://simonaubury.com/" class="hamburger-menu-overlay-link">Home</a></li>
+      <li><a href="https://simonaubury.com/slides/" class="hamburger-menu-overlay-link">Presentation slides</a></li>
+      <li><a href="https://simonaubury.com/about-me/" class="hamburger-menu-overlay-link">About Simon</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/cat/" class="hamburger-menu-overlay-link">Cat</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/cdc/" class="hamburger-menu-overlay-link">CDC</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/duckdb/" class="hamburger-menu-overlay-link">duckdb</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/flink/" class="hamburger-menu-overlay-link">flink</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/generativeai/" class="hamburger-menu-overlay-link">GenerativeAI</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/gpt/" class="hamburger-menu-overlay-link">GPT</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/homeassistant/" class="hamburger-menu-overlay-link">homeassistant</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/kafka/" class="hamburger-menu-overlay-link">Kafka</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/llm/" class="hamburger-menu-overlay-link">llm</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/ml/" class="hamburger-menu-overlay-link">ML</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/openclaw/" class="hamburger-menu-overlay-link">openclaw</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/raspberry-pi/" class="hamburger-menu-overlay-link">Raspberry Pi</a></li>
+      
+      <li><a href="https://simonaubury.com/categories/snowflake/" class="hamburger-menu-overlay-link">snowflake</a></li>
+      
+      <li><a href="https://simonaubury.com/index.xml" class="hamburger-menu-overlay-link">rss</a></li>
+    </ul>
+  </div>
+</nav>
+
+    <main class="content side-text-padding">
+      <article class="post dropcase">
+        <header class="post-header">
+          <h1 class="post-title">Can AI take care of my plant? (because I can’t)</h1>
+          <p class="post-date">Posted <time datetime="2026-08-01">Aug 1, 2026</time></p>
+        </header>
+        <picture class="post-figure">
+          
+          
+          
+          <source srcset="https://simonaubury.com/posts/202608_zara_plant/00000001_hu39e72ea695f0a7c67df0b169bec5fe7e_1432889_711x0_resize_lanczos_3.png 1x, https://simonaubury.com/posts/202608_zara_plant/00000001_hu39e72ea695f0a7c67df0b169bec5fe7e_1432889_1422x0_resize_lanczos_3.png 2x, https://simonaubury.com/posts/202608_zara_plant/00000001_hu39e72ea695f0a7c67df0b169bec5fe7e_1432889_2133x0_resize_lanczos_3.png 3x">
+          <img src="https://simonaubury.com/posts/202608_zara_plant/00000001_hu39e72ea695f0a7c67df0b169bec5fe7e_1432889_711x0_resize_lanczos_3.png" >
+        </picture>
+        
+        
+        <h1 id="can-ai-take-care-of-my-plant-because-i-cant">Can AI take care of my plant? (because I can’t)</h1>
+<p>Twice a day, an AI agent reads my pot-plant’s sensors, looks at a photo of her and then decides which way to rotate her, watering her if required or adjusting the blinds or heater and then posts the result to Instagram. Using a ridiculous amount of hardware and software to take care of Zara the pot-plant.</p>
+<p>OK — so I’m a bit jaded reading post after post about the power of AI and how it can do so much, so easily, so readily. This may all be true for software — but sometimes I want to see things happen in the real world.</p>
+<p>Here’s a crazy idea — can I get Claude, OpenClaw and a bunch of hardware to take care of a pot-plant? A true challenge — because I know I surely can’t take care of a pot-plant … so perhaps AI can?</p>
+
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+  <iframe src="https://www.youtube.com/embed/0gGmECh8yb4" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video"></iframe>
+</div>
+
+<h2 id="the-setup">The setup</h2>
+<p>Yes of course — I need to start with the pot plant. This was a gift I received — and according to a bit of reverse image search magic I can tell you it’s a Poinsettia. I’m naming her Zara as that’s easier to type (and remember). I hope my AI takes good care of her.</p>
+<p><img src="./00000000.jpeg" alt="Zara the Poinsettia — before her AI makeover"><em>Zara the Poinsettia — before her AI makeover</em></p>
+<h3 id="what-does-the-ai-gardener-need-to-care-about">What does the AI “gardener” need to care about?</h3>
+<p>This might be obvious to most folk — but in my “research” (read: random search query) it seems like plant health is affected by Light, Watering, Temperature, Humidity and Pests. Let’s see how I can get my agent to measure and control these factors.</p>
+<p><img src="./00000001.png" alt=""></p>
+<p>Here’s my initial thinking of my approach to interfacing the real world needs of Zara for my AI gardener</p>
+<p><img src="./00000002.png" alt=""></p>
+<ul>
+<li>
+<p>Light — I can use a <a href="https://www.aliexpress.com/item/1005005569578672.html?spm=a2g0o.order_list.order_list_main.46.4d0b18026N0qsa">light sensor</a> to measure light — and a smart blind controller to open and close the blinds</p>
+</li>
+<li>
+<p>Watering — how about a <a href="https://www.amazon.com.au/Peristaltic-Liquid-Dosing-Aquarium-Analytical/dp/B0C6M7ZR5J/ref=asc_df_B0C6M7ZR5J?mcid=5e6050d2e1c63327a54adef62de66cef&amp;hvadid=712358850935&amp;hvpos=&amp;hvnetw=g&amp;hvrand=9188761703555411487&amp;hvpone=&amp;hvptwo=&amp;hvqmt=&amp;hvdev=c&amp;hvdvcmdl=&amp;hvlocint=&amp;hvlocphy=9071761&amp;hvtargid=pla-2189078930778&amp;hvocijid=9188761703555411487-B0C6M7ZR5J-&amp;hvexpln=0">water pump</a> that can be operated to dispense water</p>
+</li>
+<li>
+<p>Temperature and Humidity — there’s a bluetooth <a href="https://www.amazon.com.au/Moisture-Bluetooth-Notifications-Wireless-Monitoring/dp/B0FNVDJGCT/ref=asc_df_B0FNVDJGCT?mcid=dd96c27fe34634f79035c7f2a27be0a1&amp;hvadid=771951571576&amp;hvpos=">sensor</a> for measuring and I can use an <a href="https://www.amazon.com.au/Broadlink-RM-Mini3-Universal-Controller-Compatible/dp/B01FK2SDOC">IR blaster</a> to control the room air conditioner</p>
+</li>
+<li>
+<p>Pests and disease — might need a camera or two view Zara health</p>
+</li>
+<li>
+<p>Orientation — how about a motorised <a href="https://www.amazon.com.au/Rotating-Turntable-Direction-Adjustable-Photography/dp/B0CTKKBFCJ/ref=asc_df_B0CTKKBFCJ?mcid=16d0570c4e9633ee957c4e6d51bd4d35&amp;hvadid=712357576268&amp;hvpos=&amp;hvnetw=g&amp;hvrand=6080171228495539329&amp;hvpone=&amp;hvptwo=&amp;hvqmt=&amp;hvdev=c&amp;hvdvcmdl=&amp;hvlocint=&amp;hvlocphy=9071761&amp;hvtargid=pla-2394660217164&amp;hvocijid=6080171228495539329-B0CTKKBFCJ-&amp;hvexpln=0">rotating display stand</a> to rotate Zara to face the sun</p>
+</li>
+</ul>
+<p>Having a bunch of sensors and controllers isn’t much much use unless I can control them. So let’s move into a quick introduction of home automation.</p>
+<h3 id="home-assistant-and-esphome">Home Assistant and ESPHome</h3>
+<p><a href="https://www.home-assistant.io/">Home Assistant</a> is a truly incredible local, free and open-source home automation platform that acts as the central hub tying together smart home devices. I run the software on a local server and it’s a great platform to build out home automation (and plant care) hardware.</p>
+<p><img src="./00000003.png" alt=""></p>
+<p>I’m also making extensive use of <a href="https://esphome.io/">ESPHome</a> for creating custom firmware for my ESP32 microcontrollers to be a cheap “smart home” bridge electronic gardener. That is — a quick way to enable sensors, switches, relays and stepper motors. With the platform sorted let’s look at the sensors and control hardware.</p>
+<h2 id="hardware-overview">Hardware overview</h2>
+<h3 id="light-sensor">Light sensor</h3>
+<p>I wanted a fairly accurate light sensor so a BH1750 ambient light sensor was purchased to give a digital “lux” reading. It’s <a href="https://en.wikipedia.org/wiki/I2C">I2C</a>, dead simple to wire with just 3 wires.</p>
+<p><img src="./00000004.png" alt=""></p>
+<p>The ESPHome configuration looks like</p>
+<pre><code>i2c:
+  sda: 21
+  scl: 22
+  scan: true
+
+sensor:
+  - platform: bh1750
+    name: &quot;Light Level&quot;
+    address: 0x23
+    update_interval: 10s
+</code></pre>
+<p>I added an integration (Riemann sum) helper — which turns the ESP light sensor’s instantaneous readings into a cumulative “light dose” over time. Every time the BH1750 source sensor reports a new value, the integration sensor multiplies that reading by the time elapsed since the last update and adds it to a running total. The result accumulates in “<em>kilolux‑hours</em>” — essentially a measure of total light energy the plant has received over time (not just an instantaneous brightness value). Finally a template sensor called “Plant DLI” converts the klxh figure into mol/m² (daily light integral units). It’s all a bit hacky and approximate — but it works for giving a reasonable “light” measurement.</p>
+<h3 id="rotation">Rotation</h3>
+<p>Zara doesn’t want to be stuck in a single position — so I added a turntable which can be controlled by Home Assistant. A cheap motorised <a href="https://www.amazon.com.au/Rotating-Turntable-Direction-Adjustable-Photography/dp/B0CTKKBFCJ/ref=asc_df_B0CTKKBFCJ?mcid=16d0570c4e9633ee957c4e6d51bd4d35&amp;hvadid=712357576268&amp;hvpos=&amp;hvnetw=g&amp;hvrand=6080171228495539329&amp;hvpone=&amp;hvptwo=&amp;hvqmt=&amp;hvdev=c&amp;hvdvcmdl=&amp;hvlocint=&amp;hvlocphy=9071761&amp;hvtargid=pla-2394660217164&amp;hvocijid=6080171228495539329-B0CTKKBFCJ-&amp;hvexpln=0">rotating display stand</a> to had a small stepper mote which is perfect to help rotate Zara to face the sun. Cracking open the stand I found a 28BYJ-48 stepper motor. A ULN2003 driver board (very cheap, ~$1) provides an interface to the stepper motor and is supported by ESPHome. The wiring involves the 4 control pins from ULN2003 to GPIO pins on the ESP32 and looks absolutely beautiful during construction.</p>
+<p><img src="./00000005.png" alt="Initial bread-boarding for stepper motor"><em>Initial bread-boarding for stepper motor</em></p>
+<p><img src="./00000006.png" alt="The rotating platform with motor driver board"><em>The rotating platform with motor driver board</em></p>
+<pre><code>stepper:
+  - platform: uln2003
+    id: my_stepper
+    pin_a: GPIO16
+    pin_b: GPIO17
+    pin_c: GPIO18
+    pin_d: GPIO19
+    max_speed: 50 steps/s
+    sleep_when_done: true 
+</code></pre>
+<p><img src="./00000007.png" alt="Assembled motorised base"><em>Assembled motorised base</em></p>
+<p><img src="./00000008.png" alt="Zara read to rotate toward the sun"><em>Zara read to rotate toward the sun</em></p>
+<h3 id="water-pump">Water pump</h3>
+<p>I had a spare peristaltic pump (left over from my dubious <a href="https://simonaubury.com/posts/202310_ginai/">GinAI project</a>) so this felt like an easy way to add some hydration for a thirsty Zara. This is a 12volt pump, so I purchased a <a href="https://www.aliexpress.com/item/1005005441548962.html?src=google&amp;src=google&amp;albch=shopping&amp;acnt=742-864-1166&amp;isdl=y&amp;slnk=&amp;plac=&amp;mtctp=&amp;albbt=Google_7_shopping&amp;aff_platform=google&amp;aff_short_key=UneMJZVf&amp;gclsrc=aw.ds&amp;albagn=888888&amp;ds_e_adid=&amp;ds_e_matchtype=&amp;ds_e_device=c&amp;ds_e_network=x&amp;ds_e_product_group_id=&amp;ds_e_product_id=en1005005441548962&amp;ds_e_product_merchant_id=653207740&amp;ds_e_product_country=AU&amp;ds_e_product_language=en&amp;ds_e_product_channel=online&amp;ds_e_product_store_id=&amp;ds_url_v=2&amp;albcp=21819463808&amp;albag=&amp;isSmbAutoCall=false&amp;needSmbHouyi=false&amp;gad_source=1&amp;gad_campaignid=21819486122&amp;gbraid=0AAAAA99aYpdHk-vdQUrIn1nBDLAQ0tMUI">relay module</a> so the digital control GPIO pins of the ESP32 can control the higher power requirements of the water pump.</p>
+<pre><code>switch:
+  - platform: gpio
+    pin: GPIO2
+    name: &quot;Plant Water Pump&quot;
+    id: plant_water_pump
+    icon: &quot;mdi:water-pump&quot;
+</code></pre>
+<p><img src="./00000009.png" alt="Sophisticated watering system"><em>Sophisticated watering system</em></p>
+<p><img src="./00000010.png" alt="Zara having a quick drink"><em>Zara having a quick drink</em></p>
+<h3 id="blinds">Blinds</h3>
+<p>To open and close the blinds I purchased an <a href="https://www.alibaba.com/product-detail/AM43-Tuya-Bluetooth-Electric-Zigbee-Curtain_1600704373783.html">AM43 Tuya bluetooth smart blind controller</a>. Some very clever people have worked out how to use an <a href="https://community.home-assistant.io/t/am43-blinds-control-through-mqtt/166708/119">ESP32 to bridge these controllers</a> to home assistant. TL;DR — another ESP32 and Zara can now adjust the blinds as required</p>
+<p><img src="./00000011.png" alt="AM43 smart blind controller"><em>AM43 smart blind controller</em></p>
+<pre><code>cover:
+  - platform: am43
+    name: &quot;Study blinds&quot;
+    ble_client_id: am43_study
+</code></pre>
+<h3 id="heating-and-cooling--ir-blaster">Heating and cooling — IR blaster</h3>
+<p>To set the temperature of the room I needed a way for Home Assistant to control the reverse cycle air-condition (so I can both heat or cool). I had a <a href="https://www.aliexpress.com/item/33007260333.html?src=google&amp;src=google&amp;albch=shopping&amp;acnt=742-864-1166&amp;isdl=y&amp;slnk=&amp;plac=&amp;mtctp=&amp;albbt=Google_7_shopping&amp;aff_platform=google&amp;aff_short_key=UneMJZVf&amp;albagn=888888&amp;ds_e_adid=&amp;ds_e_matchtype=&amp;ds_e_device=c&amp;ds_e_network=x&amp;ds_e_product_group_id=&amp;ds_e_product_id=en33007260333&amp;ds_e_product_merchant_id=107331591&amp;ds_e_product_country=AU&amp;ds_e_product_language=en&amp;ds_e_product_channel=online&amp;ds_e_product_store_id=&amp;ds_url_v=2&amp;albcp=22895403347&amp;albag=&amp;isSmbAutoCall=false&amp;needSmbHouyi=false">Broadlink RM Mini 3 IR blaster</a> integrated via the broadlink integration in Home Assistant. It’s a bit fiddly to “record” the signals of the existing remote control to preset temperature targets — but once all setup it’s easy for the RM Mini to masquerade these infra-red commands later to control the AC</p>
+<p><img src="./00000012.png" alt="Broadlink RM Mini 3 IR blaster"><em>Broadlink RM Mini 3 IR blaster</em></p>
+<p>The only other hardware were two RTSP web cameras for taking photos. One overhead and one from below. OK — that’s a lot of hardware. With the sensors, motors and other controls setup let’s move onto the agent control.</p>
+<h2 id="openclaw">OpenClaw</h2>
+<p>The agent behind all this is <a href="https://openclaw.ai/">OpenClaw</a> — a personal, config-driven agent platform running on a spare laptop next to Zara. It connects one core LLM agent (“MrClaw”) to Telegram, Discord, a browser, a credit card (!), a cron scheduler and a shell. In short MrClaw has enough tool access to actually do things. I created an OpenClaw cron job to execute the twice daily “Plant Care” job. Basically I gave the persona and goal of the agent — and told it which tools were available.</p>
+<p>OpenClaw isn’t a compiled app — it’s a single JSON config plus a set of running processes it wires together:</p>
+<ul>
+<li>
+<p><strong>Gateway</strong> — a local router bound to loopback only. Every inbound message (Telegram, Discord, a cron job firing) and every tool call the agent makes passes through it</p>
+</li>
+<li>
+<p><strong>Agent sessions</strong> — each context the agent talks in (a Telegram DM, a Discord channel, a cron job) gets its own isolated session with its own history.</p>
+</li>
+<li>
+<p>**Tool profile: **full execute (shell), file read/write, web search, browser automation, and messaging tools are all available, gated by an allowlist-based exec policy rather than a per-call confirmation prompt.</p>
+</li>
+</ul>
+<h3 id="zara-job">Zara job</h3>
+<p>The job’s prompt is written entirely in first person, as Zara. It’s not “generate a caption for a plant” instead it’s a persona with a voice with a set of instructions executed by an agent that’s been handed local shell access.</p>
+<p><img src="./00000013.png" alt=""></p>
+<h3 id="step-1-read-the-sensors">Step 1— read the sensors</h3>
+<p>Query my local Home Assistant instance via curl to get live soil humidity, soil temperature, air humidity, light level etc.,</p>
+<h3 id="step-2-capture-a-photo">Step 2— capture a photo</h3>
+<p>The goal sounds simple — use two fixed RTSP cameras to grab still images of Zara. However, this is the fiddliest part of the whole system due to OpenClaw sandboxing. The exec sandbox the agent runs in can’t open raw TCP connections to arbitrary LAN devices. The “fix” is a small Python relay the capture script spawns in the background (bound to127.0.0.1).</p>
+<p>This is the general pattern for giving a sandboxed agent access to anything on my private network without loosening the sandbox itself: use a tiny, relay process that <em>is</em> allowed to reach the LAN which bridges to a loopback port the agent <em>is</em> allowed to reach. The agent’s effective permissions never change — only the address it’s told to use. Messy — but works!</p>
+<h3 id="step-3-look-at-it">Step 3— look at it</h3>
+<p>The MrClaw agent reads the captured images directly, looking for leaf colour, wilt, which side is lit, whether a blind is blocking the sun, soil surface dryness etc.,</p>
+<h3 id="step-4-agent-action">Step 4— agent action</h3>
+<p>MrClaw combines that visual read with the sensor numbers from Step 1 into agent actions. For example we can rotate the plant, open the blind, turn on the water pump. All of this is invoked via web-hooks (more on that below).</p>
+<h3 id="step-5-post-to-discord-web-and-instagram">Step 5— post to Discord, web and Instagram</h3>
+<p>A quick Discord update is sent via the OpenClawmessage send command — followed by the photo(s) as media attachments. A longer message is posted to the web journal and to Instagram (with stylised photos).</p>
+<h3 id="the-instagram-pipeline">The Instagram pipeline</h3>
+<p>To add a bit of visual pop I asked <a href="https://www.anthropic.com/claude/fable">Claude Fable</a> to create a script dedicated to posting a visually interesting Instagram posts. I generated a library of 36 layout templates (Film Noir, Tarot Card, Cereal Box, Vinyl LP, Trading Card etc) each one a small <a href="https://pypi.org/project/pillow/">Python Pillow</a> program that knows how to draw exactly one kind of graphic design. The style is selected at random — with the data and images are added just prior to posting to the Meta API. Zara is now a plant influencer?</p>
+<p><img src="./00000014.png" alt="Selection of Instagram posts from Zara"><em>Selection of Instagram posts from Zara</em></p>
+<h3 id="web-hooks--for-when-you-dont-trust-your-agent">Web-hooks — for when you don’t trust your agent</h3>
+<p>OpenClaw is running quite happily trying its best to take care of Zara. I wanted to give the agent enough access to Home Assistant to control the rotation, water pump etc., However, I didn’t want to give permissions to unnecessary things (such as the dishwasher). I needed a way to give OpenClaw “enough” control of Home Assistant without giving it access to every device. Unfortunately there is no “fine grained” access control in Home Assistant — once you grant a access token you get access to all the entities so I needed to find another way to connect the smart home to the agent</p>
+<p>Home Assistant allows actions to be invoked with webhooks. A webhook trigger in Home Assistant is a way to fire an automation by sending an HTTP request to it from <em>outside</em> HA — no HA-specific client or integration needed, just something that can POST to a URL.</p>
+<p><img src="./00000015.png" alt="Webhook to give Zara 100mL of watering"><em>Webhook to give Zara 100mL of watering</em></p>
+<p>TL;DR — OpenClaw calls the web-hook (with an optional goal such as direction or amount) and Home Assistant will perform the action.</p>
+<h2 id="auto-shopping">Auto shopping</h2>
+<p>One cool (and frankly quite scary) thing I wanted to try was giving OpenClaw enough agency to buy necessary products for the health of Zara. I asked OpenClaw to create an Amazon account and gave it a “capped/virtual” credit card to use for limited shopping.</p>
+<p>MrClaw decided that Zara needed some plant feed — and promptly ordered this (I have no idea if this is the right product for Zara)</p>
+<p><img src="./00000016.png" alt="OpenClaw buying plant products"><em>OpenClaw buying plant products</em></p>
+<p>Amazingly — the order did actually go through, and a box containing “mist and feed for house plants” turned up at my door.</p>
+<p><img src="./00000017.png" alt="Plan feeder arriving for real"><em>Plan feeder arriving for real</em></p>
+<p>This is a tiny glimpse of a fascinating future — agents doing my shopping for me. Both amazing and terrifying</p>
+<h2 id="iteration">Iteration</h2>
+<p>OK — so this project has been running for over two months now, and I’m constantly find weird edge cases and fixing small issues.</p>
+<p>For example — the day I added the water pump I simply asked MrClaw to add this tool into the the existing Zara plant job.</p>
+<p><img src="./00000018.png" alt=""></p>
+<p>It is fascinating to see an application evolve over time — and an agent helping to update itself is a weird experience!</p>
+<h2 id="debugging">Debugging</h2>
+<p>I have found asking OpenClaw to fix minor issues actually is quite productive too. One example I recently discovered was the Instagram text had embedded escaped character sequences (eg., I’\’’m ).</p>
+<p>I could ask OpenClaw to fix these issues — here’s an example of a correction performed over Telegram whilst travelling on a bus!</p>
+<p><img src="./00000019.png" alt=""></p>
+<h2 id="conclusions">Conclusions</h2>
+<p>So I started off by asking “Can AI take care of my plant?” — and the answer is “<em>yes … but</em>”. Zara is definitely technically fed, watered and rotated by AI — and she’s not dead. However, comparing her foliage images between June and August shows a less health plant from where I started.</p>
+<p><img src="./00000020.png" alt="3 months of AI gardening"></p>
+<p><em>3 months of AI gardening</em></p>
+<p>It is the middle of winter here in the southern hemishphere — so this might just be a natural thing so fingers crossed things improve when it starts warming up. I’ll keep my AI gardenerer running for now, however I’m not yet convinced I should pass control of my entire garden to AI just yet!</p>
+<p>You can follow Zara at</p>
+<ul>
+<li>
+<p><a href="https://www.instagram.com/zaratheplant/">https://www.instagram.com/zaratheplant/</a></p>
+</li>
+<li>
+<p><a href="https://plantjournal.netlify.app/">https://plantjournal.netlify.app/</a></p>
+</li>
+</ul>
+
+      </article>
+      
+    </main>
+    <nav class="end-nav side-padding">
+      
+      <a ontouchstart="cardPressed.call(this)" ontouchend="cardReleased.call(this)" ontouchmove="cardReleased.call(this)" 
+  href="https://simonaubury.com/posts/202605_mcp_coffee/" class="card blog-card bc-next" rel="bookmark" >
+  
+  <div class="card-img-container">
+    <p class="card-img-overlay">Next Article</p>
+    <picture>
+      
+      
+      
+      <source srcset="https://simonaubury.com/posts/202605_mcp_coffee/00000001_hu44db996ef4359a58390e66351c6955d4_121478_400x0_resize_lanczos_3.png 1x, https://simonaubury.com/posts/202605_mcp_coffee/00000001_hu44db996ef4359a58390e66351c6955d4_121478_800x0_resize_lanczos_3.png 2x, https://simonaubury.com/posts/202605_mcp_coffee/00000001_hu44db996ef4359a58390e66351c6955d4_121478_1200x0_resize_lanczos_3.png 3x">
+      <img src="https://simonaubury.com/posts/202605_mcp_coffee/00000001_hu44db996ef4359a58390e66351c6955d4_121478_400x0_resize_lanczos_3.png" class="card-img" >
+    </picture>
+  </div>
+  
+  <article class="card-body">
+    <h2 class="card-title">Local LLM financial analysis</h2>
+    <p class="card-text">Analysing my personal spending data with a local large language model. Running open LLM models locally with Claude desktop, tool chaining and a local MCP server with data mastered in DuckDB.</p>
+    <div class="card-subtext muted-text">
+      <p>Posted <time datetime="2026-05-01">May 1, 2026</time></p>
+      <p>#llm #duckdb </p>
+    </div>
+  </article>
+</a>
+      
+    </nav>
+    <footer class="side-padding" style="background-image: url('https://simonaubury.com/img/home-blob-flip.svg');">
+    <a href="https://simonaubury.com/" class="footer-link">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/home.svg" alt="Home">
+    
+    </a>
+    
+    
+    
+    <a href="https://github.com/saubury" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/github.svg" alt="GitHub"/>
+    
+    </a>
+    
+    
+    
+    <a href="https://www.linkedin.com/in/simonaubury" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/linkedin.svg" alt="LinkedIn"/>
+    
+    </a>
+    
+    
+    <a href="https://simonaubury.com/index.xml" class="footer-link" target="_blank" rel="noopener noreferrer">
+    
+        <img class="footer-icon" src="https://simonaubury.com/icons/rss.svg" alt="RSS"/>
+    
+    </a>
+    
+    
+    
+    
+    
+    
+    
+    
+</footer>
+    
+  <script defer src="https://simonaubury.com/js/katex.min.js"></script>
+
+
+  <script defer src="https://simonaubury.com/js/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+
+<script src="https://simonaubury.com/js/core.min.js"></script>
+
+  </body>
+</html>

@@ -1,0 +1,21 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>flink - Simon Aubury</title>
+    <link>https://simonaubury.com/categories/flink/</link>
+    <description>Recent content in flink on Simon Aubury</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-au</language>
+    <lastBuildDate>Sun, 15 Jun 2025 10:22:20 +1100</lastBuildDate>
+    
+        <atom:link href="https://simonaubury.com/categories/flink/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Aviation data with Apache Flink</title>
+      <link>https://simonaubury.com/posts/202506_flink_plane_cep/</link>
+      <pubDate>Sun, 15 Jun 2025 10:22:20 +1100</pubDate>
+      
+      <guid>https://simonaubury.com/posts/202506_flink_plane_cep/</guid>
+      <description>When plans change at 500 feet: Complex event processing of ADS-B aviation data with Apache Flink</description>
+    </item>
+  </channel>
+</rss>
